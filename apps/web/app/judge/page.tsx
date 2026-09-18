@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader, SiteFooter } from "@/components/Shell";
 import { PROOF } from "@/lib/proof";
+import { SITE } from "@/lib/site";
 
 /**
  * /judge — a page built for exactly one reader. No auth, no cookies, no API call, no key: prerendered at build time and
@@ -12,7 +13,6 @@ export const metadata: Metadata = {
   description: "The claim, the 30-second path, the receipts, the real reproduce command, and the honest limitations.",
 };
 
-const SITE = "https://rebuttal.edycu.dev";
 const REPO = "https://github.com/edycutjong/rebuttal";
 const HERO = "Smart Money is aping $PEPE hard today 🐋";
 const heroUrl = `${SITE}/?q=${encodeURIComponent(HERO)}`;

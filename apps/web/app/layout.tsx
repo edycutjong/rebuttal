@@ -1,13 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-
-const CANONICAL = "https://rebuttal.edycu.dev";
-// SITE_URL is only honoured when it parses: `vercel pull` on a CI runner writes sensitive envs as the literal
-// "[SENSITIVE]" (locally as ""), and a build must never die on a metadata URL (audit 2026-09-19, CD 2026-09-19).
-const siteUrl = process.env.SITE_URL && URL.canParse(process.env.SITE_URL) ? process.env.SITE_URL : CANONICAL;
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE), // lib/site.ts: SITE_URL only when it parses as http(s), else the canonical domain
   title: "Rebuttal — is Smart Money really buying? Checked on Nansen",
   description: "Paste “Smart Money is buying $X”. Six Nansen calls decide whether it's true — CONFIRMED, OVERSTATED, CONTRADICTED or UNVERIFIABLE — and show the trace that decided it.",
   openGraph: {
