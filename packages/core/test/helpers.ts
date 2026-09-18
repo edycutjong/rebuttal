@@ -1,6 +1,6 @@
-import { NansenClient, type ClientOptions } from "../src/client.js";
-import type { Evidence, FlowSnapshot } from "../src/decide.js";
-import type { Claim } from "../src/claim.js";
+import { NansenClient, type ClientOptions } from "../src/client";
+import type { Evidence, FlowSnapshot } from "../src/decide";
+import type { Claim } from "../src/claim";
 
 /** A NansenClient whose network is a lookup table: (endpoint, body) → JSON. Records calls like the real one. */
 export function fakeClient(routes: (endpoint: string, body: Record<string, unknown>) => unknown, opts: ClientOptions = {}) {

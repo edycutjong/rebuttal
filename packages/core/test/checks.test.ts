@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { runChecks, planChecks } from "../src/checks.js";
-import { fakeClient, pepeRoutes, claim, PEPE_ETH } from "./helpers.js";
-import type { Resolved } from "../src/resolve.js";
+import { runChecks, planChecks } from "../src/checks";
+import { fakeClient, pepeRoutes, claim, PEPE_ETH } from "./helpers";
+import type { Resolved } from "../src/resolve";
 
 const resolved: Resolved = { chain: "ethereum", address: PEPE_ETH, symbol: "PEPE", name: "Pepe", marketCap: 1.5e9, sameName: 3, by: "test", others: [] };
 const NOW = Date.UTC(2026, 8, 18, 12, 30);

@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { extractClaim, mergeClaims, validClaim, findType, findToken } from "../src/claim.js";
-import { resolveToken } from "../src/resolve.js";
-import { decide } from "../src/decide.js";
-import { rebut } from "../src/rebut.js";
-import { fakeClient, pepeRoutes, searchTokens, evidence, claim, snap, PEPE_ETH } from "./helpers.js";
+import { extractClaim, mergeClaims, validClaim, findType, findToken } from "../src/claim";
+import { resolveToken } from "../src/resolve";
+import { decide } from "../src/decide";
+import { rebut } from "../src/rebut";
+import { fakeClient, pepeRoutes, searchTokens, evidence, claim, snap, PEPE_ETH } from "./helpers";
 
 /** Independent audit, 2026-09-19 — defects found on the live site with unseen claims. Each test is the live input that broke. */
 

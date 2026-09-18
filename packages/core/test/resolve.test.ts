@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { resolveToken, NOT_A_NANSEN_CHAIN } from "../src/resolve.js";
-import { fakeClient, pepeRoutes, searchTokens, PEPE_ETH } from "./helpers.js";
+import { resolveToken, NOT_A_NANSEN_CHAIN } from "../src/resolve";
+import { fakeClient, pepeRoutes, searchTokens, PEPE_ETH } from "./helpers";
 
 describe("resolveToken", () => {
   it("PEPE: the most-traded token among the top-ranked, not the bridge with the bigger cap, not the perp market", async () => {

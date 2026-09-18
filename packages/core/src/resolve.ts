@@ -1,6 +1,6 @@
-import type { NansenClient, CallOptions } from "./client.js";
-import { searchTokens, type TokenSearchResult } from "./nansen.js";
-import { SCORABLE_CHAINS } from "./claim.js";
+import type { NansenClient, CallOptions } from "./client";
+import { searchTokens, type TokenSearchResult } from "./nansen";
+import { SCORABLE_CHAINS } from "./claim";
 
 export type Resolved = {
   chain: string;

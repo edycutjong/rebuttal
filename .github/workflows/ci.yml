@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch: # release.yml dispatches a run on main after the version commit ([skip ci]) so production carries the tag
 
 # Cancel in-progress runs for the same PR/branch
 concurrency:
@@ -140,7 +141,7 @@ jobs:
     name: "Stage 5 · Deploy Gate"
     needs: [build, e2e, secret-scan, dependency-audit]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     steps:
       - name: All gates passed
         run: |
@@ -158,11 +159,12 @@ jobs:
   # output — Vercel never builds from git for this project. The only secret is VERCEL_TOKEN; the
   # org/project ids are plain repository variables. Skipped on PRs and on forks. The last step points
   # the stable alias at the new deployment; the custom domain follows production automatically.
+  # Also runs on workflow_dispatch: release.yml dispatches it after the version commit, so the footer shows the tag.
   deploy:
     name: "Stage 6 · Production Deploy"
     needs: [deploy-gate]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'edycutjong/rebuttal'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' && github.repository == 'edycutjong/rebuttal'
     concurrency:
       group: production-deploy
       cancel-in-progress: false

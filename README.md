@@ -17,7 +17,7 @@
 
 <br/>
 
-![Next.js](https://img.shields.io/badge/Next.js_15-black?style=flat&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js_16-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Nansen API](https://img.shields.io/badge/Nansen_API-7_endpoints-7c3aed?style=flat&labelColor=0a0e13)
 ![tests](https://img.shields.io/badge/tests-216%20passing-22c55e?style=flat)
@@ -25,7 +25,6 @@
 ![fixtures](https://img.shields.io/badge/fixtures-13%2F13%20replay%20offline-22c55e?style=flat)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 [![CI](https://github.com/edycutjong/rebuttal/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/rebuttal/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/edycutjong/rebuttal/actions/workflows/codeql.yml/badge.svg)](https://github.com/edycutjong/rebuttal/actions/workflows/codeql.yml)
 [![Release](https://img.shields.io/github/v/release/edycutjong/rebuttal?sort=semver&style=flat)](https://github.com/edycutjong/rebuttal/releases/latest)
 
 </div>
@@ -102,7 +101,7 @@ flowchart LR
 | Engine | `packages/core` — `rebut()`: extract → resolve → checks → `decide()` → prose | one function for the CLI, the web route and the permalink |
 | Nansen client | fetch + `apikey`, 5 rps bucket, 8 s timeout, 1 retry on 429/5xx/timeout, sha256 `responseHash` on every call, credit table, read-through cache (1 h), `NANSEN_OFFLINE` replay | provenance and credits are exact by construction |
 | LLM | Groq `openai/gpt-oss-120b`, OpenAI-compatible tool calling; keys rotated on 429 / restricted; 3 s extraction budget, 4 s prose budget | outside the verified path — `verify`, the tests and CI never need it |
-| Web | Next.js 15 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
+| Web | Next.js 16 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
 | Guard | 10 checks / IP / min · 2,000 live credits / day then labelled fixture replay · agent 2 / IP / day, 4 / day | a public key-holding route cannot be drained |
 | Tests | vitest + fast-check: 216 tests, 23,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
 
@@ -194,7 +193,7 @@ Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-1
 
 **Pipeline (`ci.yml`, CI/CD Pipeline):** Quality (typecheck core + web · 216 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key, bundle budget) → E2E smoke (`npm run e2e` against the built app, no key) → Deploy gate → **Production deploy** on every push to `main`: `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod` → alias, into the `production` environment at [rebuttal.edycu.dev](https://rebuttal.edycu.dev). No API key anywhere in CI — the only secret is the Vercel token. Until GitHub Actions is enabled on the account, the same steps run locally (`npm run ci:full`, then `vercel build && vercel deploy --prebuilt --prod`).
 
-**Security:** CodeQL (`codeql.yml`) · gitleaks on the full history (`gitleaks.yml`) · TruffleHog · Dependabot (npm + actions, grouped) · `npm audit` — 0 open alerts, 0 vulnerabilities.
+**Security:** CodeQL (GitHub default setup — code scanning on every push and PR) · gitleaks on the full history (`gitleaks.yml`, `.gitleaks.toml` allowlists public token addresses) · TruffleHog · Dependabot (npm + actions, grouped) · `npm audit` — 0 open alerts, 0 vulnerabilities.
 
 **Releases:** `release.yml` — semantic tags from Conventional Commits (feat → minor · fix/perf → patch · `!`/BREAKING CHANGE → major), cut after the CI/CD Pipeline passes on main: every package.json bumped, `chore(release): vX.Y.Z [skip ci]`, annotated tag, GitHub Release with generated notes. The same algorithm runs locally as `npm run release` (`--dry-run` to preview) when Actions is unavailable — see [CONTRIBUTING.md](.github/CONTRIBUTING.md). The footer of every page shows the deployed version.
 

@@ -7,7 +7,8 @@
 // Routes and what "green" means without a key: `/` and `/judge` render (200, the brand + the footer version), `/api/og`
 // is a PNG (the data-free card), `/c?q=` renders the shell, `/api/rebut` answers 400 without a claim and a JSON error —
 // never a stack trace — without a key, `/api/agent` refuses GET (405). With `--live` the hero claim must come back as a
-// verdict: one of the four labels, a 64-hex hash, a numeric credit count, and a trace with at least one Nansen row.
+// verdict: one of the four labels, a 64-hex hash, numeric credits and calls, and at least one check row. The hero claim
+// runs FIRST so the OG card (same claim) is a cache hit — one live rebuttal per cold instance, not two.
 import { spawn } from "node:child_process";
 import { readFileSync } from "node:fs";
 import net from "node:net";
@@ -60,12 +61,24 @@ async function waitFor(base, ms = 60_000) {
 }
 
 async function run(base, { live, hasKey }) {
+  if (live) {
+    const t0 = Date.now();
+    const r = await get(base, `/api/rebut?q=${encodeURIComponent(HERO)}`);
+    let v = {};
+    try {
+      v = JSON.parse(r.text);
+    } catch {
+      /* not JSON */
+    }
+    const ok = r.status === 200 && LABELS.has(v.label) && /^[0-9a-f]{64}$/.test(v.hash ?? "") && typeof v.credits === "number" && typeof v.calls === "number" && Array.isArray(v.checks) && v.checks.length > 0;
+    check("hero claim → verdict (live)", ok, `${r.status} ${v.label ?? v.error ?? ""} ${v.ruleId ?? ""} · ${v.credits ?? "?"} credits · ${v.calls ?? "?"} calls · ${v.checks?.length ?? 0} checks · ${Date.now() - t0} ms`);
+  }
   const home = await get(base, "/");
   check("GET / renders", home.status === 200 && /rebuttal/i.test(home.text), `${home.status}`);
   check("GET / footer shows the package version", home.text.includes(version), version);
   const judge = await get(base, "/judge");
   check("GET /judge renders", judge.status === 200 && /judge/i.test(judge.text), `${judge.status}`);
-  const og = await get(base, "/api/og");
+  const og = await get(base, `/api/og?q=${encodeURIComponent(HERO)}`);
   check("GET /api/og is a PNG", og.status === 200 && og.type.startsWith("image/png") && og.buf.length > 1000, `${og.status} ${og.type} ${og.buf.length} B`);
   const c = await get(base, `/c?q=${encodeURIComponent(HERO)}`);
   check("GET /c?q= renders", c.status === 200 && /rebuttal/i.test(c.text), `${c.status}`);
@@ -82,18 +95,6 @@ async function run(base, { live, hasKey }) {
       /* not JSON */
     }
     check("GET /api/rebut without a key is an honest JSON 500", r.status === 500 && /NANSEN_API_KEY/.test(body.error ?? ""), `${r.status} ${body.error ?? r.text.slice(0, 80)}`);
-  }
-  if (live) {
-    const t0 = Date.now();
-    const r = await get(base, `/api/rebut?q=${encodeURIComponent(HERO)}`);
-    let v = {};
-    try {
-      v = JSON.parse(r.text);
-    } catch {
-      /* not JSON */
-    }
-    const ok = r.status === 200 && LABELS.has(v.label) && /^[0-9a-f]{64}$/.test(v.hash ?? "") && typeof v.credits === "number" && Array.isArray(v.trace) && v.trace.length > 0;
-    check("hero claim → verdict (live)", ok, `${r.status} ${v.label ?? v.error ?? ""} · ${v.credits ?? "?"} credits · ${v.trace?.length ?? 0} rows · ${Date.now() - t0} ms`);
   }
 }
 

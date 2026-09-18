@@ -10,3 +10,6 @@ coverage/
 .vercel/
 *.tsbuildinfo
 .vercel
+
+# the example is the one .env.* file that belongs in the repo
+!.env.example

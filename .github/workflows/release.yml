@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write # push the version commit + tag, create the Release
+  actions: write # dispatch the CI/CD Pipeline on the version commit so production carries the new tag
 
 concurrency:
   group: release
@@ -74,3 +75,9 @@ jobs:
           git push origin "${NEXT}"
           gh release create "${NEXT}" --generate-notes --title "${NEXT}"
           echo "## Released ${NEXT} (${{ steps.ver.outputs.bump }})" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Deploy the tagged commit (the [skip ci] version commit does not trigger the pipeline by itself)
+        if: steps.ver.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run ci.yml --ref main

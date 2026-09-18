@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { decide, threshold, totalFlow, presence, RULES, fmtUsd } from "../src/decide.js";
-import { evidence, snap, claim } from "./helpers.js";
+import { decide, threshold, totalFlow, presence, RULES, fmtUsd } from "../src/decide";
+import { evidence, snap, claim } from "./helpers";
 
 const sm = (net: number, wallets: number, more: Record<string, { net: number | null; wallets: number | null }> = {}) => snap({ smart_trader: { net, wallets }, ...more });
 

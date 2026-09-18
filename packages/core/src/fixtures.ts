@@ -1,8 +1,8 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { MemoryCache, type CacheEntry } from "./cache.js";
-import type { Claim } from "./claim.js";
-import type { Verdict } from "./rebut.js";
+import { MemoryCache, type CacheEntry } from "./cache";
+import type { Claim } from "./claim";
+import type { Verdict } from "./rebut";
 
 /**
  * A recorded live run: every raw Nansen response the rebuttal touched (keyed by cache key, byte-for-byte as sent), the

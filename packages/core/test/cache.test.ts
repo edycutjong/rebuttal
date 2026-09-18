@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { CachedNansenClient, MemoryCache, cacheKey } from "../src/cache.js";
+import { CachedNansenClient, MemoryCache, cacheKey } from "../src/cache";
 
 const KEY = "nsn_test_key_0000000000000000000000";
 function cached(routes: () => unknown, opts: Partial<ConstructorParameters<typeof CachedNansenClient>[1]> = {}) {

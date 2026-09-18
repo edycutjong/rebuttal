@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { isTweetUrl, fetchTweetText } from "../src/tweet.js";
-import { rebut } from "../src/rebut.js";
-import { fakeClient, pepeRoutes } from "./helpers.js";
+import { isTweetUrl, fetchTweetText } from "../src/tweet";
+import { rebut } from "../src/rebut";
+import { fakeClient, pepeRoutes } from "./helpers";
 
 const oembed = (html: string, author = "lookonchain") => new Response(JSON.stringify({ html, author_name: author }), { status: 200 });
 

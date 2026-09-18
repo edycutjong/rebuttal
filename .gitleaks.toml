@@ -1,0 +1,14 @@
+# gitleaks config — extends the default rules. The only allowlist: public on-chain token contract / mint addresses.
+# `token_address": "0x6982…"` in the recorded fixtures trips the generic-api-key rule (the word "token" beside a
+# 40-hex string) 111 times; a contract address is public by definition. The Nansen key shape (nsn_…) can never
+# match either pattern below, so a real key still fails the scan.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Public token contract / mint addresses are not secrets"
+regexTarget = "secret"
+regexes = [
+  '''^0x[0-9a-fA-F]{40}$''',
+  '''^[1-9A-HJ-NP-Za-km-z]{32,44}$''',
+]

@@ -3,8 +3,8 @@
  * text, and paraphrasing a decided verdict in two sentences. Both have a deterministic fallback; neither can change a label.
  * Keys come from GROQ_API_KEYS (comma-separated) or GROQ_API_KEY; on 429 the next key is tried.
  */
-import type { Claim } from "./claim.js";
-import { SCORABLE_CHAINS } from "./claim.js";
+import type { Claim } from "./claim";
+import { SCORABLE_CHAINS } from "./claim";
 
 export type LlmOptions = { keys: string[]; model?: string; timeoutMs?: number; fetchImpl?: typeof fetch; baseUrl?: string };
 export type LlmStatus = { used: boolean; ms: number; error?: string; model: string };
