@@ -15,7 +15,7 @@ import { CachedNansenClient, fixtureStore, listFixtures, readFixture, rebut, typ
  * Counters live in instance memory: a ceiling, not accounting. Vercel may run several instances, so the true daily
  * spend is bounded by the ceilings × instances — still two orders of magnitude under the balance.
  */
-export const IP_PER_MIN = Number(process.env.GUARD_IP_PER_MIN ?? 6);
+export const IP_PER_MIN = Number(process.env.GUARD_IP_PER_MIN ?? 10); // 0-credit refusals count too, and a judge who types garbage five times still deserves a live run
 export const DAILY_CREDITS = Number(process.env.GUARD_DAILY_CREDITS ?? 2000);
 export const AGENT_IP_PER_DAY = Number(process.env.GUARD_AGENT_IP_PER_DAY ?? 2);
 export const AGENT_PER_DAY = Number(process.env.GUARD_AGENT_PER_DAY ?? 4);

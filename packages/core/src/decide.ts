@@ -106,7 +106,8 @@ export function decide(claim: Claim, e: Evidence, rules: Rules = RULES): Decisio
 
   // selling is the mirror image of buying: flip the sign once, reuse the rules
   const sign = type === "selling" ? -1 : 1;
-  const net = p.net * sign;
+  // a fraction of a dollar is zero (whale holders: 0.3 tokens × price), otherwise "net sold $0 … real but small" (seen live on HYPE)
+  const net = Math.abs(p.net) < 1 ? 0 : p.net * sign;
   const verb = type === "selling" ? "sold" : "bought";
   const anti = type === "selling" ? "bought" : "sold";
   const net7 = e.flow7d?.[cls]?.net;

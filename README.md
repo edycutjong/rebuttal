@@ -101,7 +101,7 @@ flowchart LR
 | Nansen client | fetch + `apikey`, 5 rps bucket, 8 s timeout, 1 retry on 429/5xx/timeout, sha256 `responseHash` on every call, credit table, read-through cache (1 h), `NANSEN_OFFLINE` replay | provenance and credits are exact by construction |
 | LLM | Groq `openai/gpt-oss-120b`, OpenAI-compatible tool calling; keys rotated on 429 / restricted; 3 s extraction budget, 4 s prose budget | outside the verified path — `verify`, the tests and CI never need it |
 | Web | Next.js 15 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
-| Guard | 6 checks / IP / min · 2,000 live credits / day then labelled fixture replay · agent 2 / IP / day, 4 / day | a public key-holding route cannot be drained |
+| Guard | 10 checks / IP / min · 2,000 live credits / day then labelled fixture replay · agent 2 / IP / day, 4 / day | a public key-holding route cannot be drained |
 | Tests | vitest + fast-check: 168 tests, 20,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the as-shipped detail.

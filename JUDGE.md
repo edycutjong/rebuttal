@@ -23,7 +23,7 @@ One sentence in → one of four words out (CONFIRMED · OVERSTATED · CONTRADICT
 | Nansen endpoints | `search/general` · `tgm/flow-intelligence` (1d + 7d) · `tgm/who-bought-sold` (BUY + SELL, Smart Money label filter) · `smart-money/netflow` · `tgm/token-ohlcv` · `tgm/holders` · `agent/fast` (button only) — every rule input is one of their response fields |
 | Tests | **168 tests** (vitest): the extractor on every spike claim, every rule with live-shaped evidence, the client's retry and cache, the SSE parser, the oEmbed path, a route boundary suite · **20,000 generated cases** on `decide()` and `extractClaim()` (fast-check: purity, the buying/selling mirror, never-throws) |
 | Determinism | 13 recorded rebuttals replay offline with the same label, rule and hash, zero network, zero credits, zero LLM (`npm run verify`) |
-| Spend guard | 6 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (`apps/web/lib/guard.ts`) |
+| Spend guard | 10 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (`apps/web/lib/guard.ts`) |
 
 ## Reproduce (real Nansen calls, one env var)
 

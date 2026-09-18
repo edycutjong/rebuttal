@@ -57,7 +57,7 @@ sequenceDiagram
 | Route | What | Guard |
 |---|---|---|
 | `/` | the ONE flow; idle state shows the recorded hero fixture (0 credits, labelled) | — |
-| `/api/rebut?q=[&chain=][&stream=1]` | JSON verdict, or NDJSON `input · claim · resolved · check×N · verdict · prose · asOf` | 400 on bad input before any fetch; 6 / IP / min → 429; 2,000 live credits / day then a labelled fixture replay or 503 |
+| `/api/rebut?q=[&chain=][&stream=1]` | JSON verdict, or NDJSON `input · claim · resolved · check×N · verdict · prose · asOf` | 400 on bad input before any fetch; 10 / IP / min → 429; 2,000 live credits / day then a labelled fixture replay or 503 |
 | `/c?q=` | the permalink: server-rendered verdict (cache → live → replay) with Open Graph tags; `React.cache` so metadata and page share one run | same daily ceiling |
 | `/api/og?q=` | 1200×630 card: claim, verdict word in its colour, two reasons, hash; edge-cached 30 min | never 4xx — falls back to a replay or a data-free card |
 | `/api/agent` (POST) | NDJSON relay of `agent/fast`: tool_call · delta · finish · done | 2 / IP / day, 4 / day; GET → 405 |

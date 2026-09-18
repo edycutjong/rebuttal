@@ -114,7 +114,7 @@ export default function Judge() {
             <tr>
               <th>Spend guard</th>
               <td>
-                6 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (
+                10 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (
                 <code>apps/web/lib/guard.ts</code>)
               </td>
             </tr>

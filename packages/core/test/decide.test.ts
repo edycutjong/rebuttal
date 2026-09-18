@@ -148,3 +148,10 @@ describe("fmtUsd", () => {
     expect(fmtUsd(42)).toBe("$42");
   });
 });
+
+describe("live QA 2026-09-18: a sub-dollar net is zero, not 'real but small'", () => {
+  it("whale holders' 0.3 tokens × price on a selling claim → O-FLAT, not O-SMALL", () => {
+    const d = decide(claim({ subject: "whales", type: "selling" }), evidence({ flow1d: snap({ whale: { net: 0, wallets: 1 } }), price: { open: 40, close: 41, change: 0.025, candles: 25 }, holders: { count: 7, delta24: -0.008, delta7d: -2000, valueUsd: 1e6, top: [] } }));
+    expect(d.ruleId).toBe("O-FLAT");
+  });
+});

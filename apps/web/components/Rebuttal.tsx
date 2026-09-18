@@ -235,6 +235,24 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
           {error}
         </div>
       )}
+      {!idle && !claim && !error && (
+        <div className="flow" aria-busy="true">
+          {/* the reading skeleton: without it the page is empty between Enter and the claim card and the footer jumps up (seen frame by frame in the clip) */}
+          <section className="claimcard" aria-label="reading the claim">
+            <span>
+              <span className="k">claim</span>
+              <span style={{ color: "var(--muted)" }}>{input?.fromUrl ? `tweet by @${input.author} — reading…` : "reading the claim…"}</span>
+            </span>
+          </section>
+          <section className="trace" aria-label="tool trace">
+            <h2>
+              <span>Tool trace</span>
+              <small>planning…</small>
+            </h2>
+          </section>
+          <VerdictCard verdict={null} pending />
+        </div>
+      )}
       {!idle && claim && (
         <div className="flow">
           <ClaimCard claim={claim} resolved={resolved} plan={plan.length ? plan : null} text={input?.text} author={input?.author} fromUrl={input?.fromUrl} />
