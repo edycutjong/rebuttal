@@ -1,6 +1,6 @@
 {
   "name": "rebuttal",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Paste \"Smart Money is buying $X\". Rebuttal checks it against Nansen — six calls, one verdict, the trace that decided it.",
   "license": "MIT",
