@@ -25,6 +25,8 @@
 ![fixtures](https://img.shields.io/badge/fixtures-13%2F13%20replay%20offline-22c55e?style=flat)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 [![CI](https://github.com/edycutjong/rebuttal/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/rebuttal/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/edycutjong/rebuttal/actions/workflows/codeql.yml/badge.svg)](https://github.com/edycutjong/rebuttal/actions/workflows/codeql.yml)
+[![Release](https://img.shields.io/github/v/release/edycutjong/rebuttal?sort=semver&style=flat)](https://github.com/edycutjong/rebuttal/releases/latest)
 
 </div>
 
@@ -191,6 +193,10 @@ Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-1
 ## 🧪 Testing & CI
 
 **Pipeline:** Quality (typecheck · 216 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key) → Deploy gate. No API key anywhere in CI.
+
+**Security:** CodeQL (`codeql.yml`) · gitleaks on the full history (`gitleaks.yml`) · TruffleHog · Dependabot (npm + actions, grouped) · `npm audit` — 0 open alerts, 0 vulnerabilities.
+
+**Releases:** `release.yml` — semantic tags from Conventional Commits (feat → minor · fix/perf → patch · `!`/BREAKING CHANGE → major), cut after the CI/CD Pipeline passes on main: every package.json bumped, `chore(release): vX.Y.Z [skip ci]`, annotated tag, GitHub Release with generated notes. The same algorithm runs locally as `npm run release` (`--dry-run` to preview) when Actions is unavailable — see [CONTRIBUTING.md](.github/CONTRIBUTING.md). The footer of every page shows the deployed version.
 
 ```bash
 npm run typecheck      # tsc strict, core + scripts + web
