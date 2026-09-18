@@ -61,7 +61,7 @@ const onProgress = (e: RebutEvent) => {
 
 const v: Verdict = await rebut(client, input, { chain: val("--chain"), llm, onProgress });
 if (flag("--ask-nansen") && v.resolved) {
-  console.log(paint(`\nasking Nansen's agent (agent/fast, ${AGENT_CREDITS} credits)…`, "90"));
+  if (!json) console.log(paint(`\nasking Nansen's agent (agent/fast, ${AGENT_CREDITS} credits)…`, "90"));
   v.agent = await askNansenAgent(process.env.NANSEN_API_KEY as string, v.claim.raw, {
     onEvent: (e) => {
       if (!json && e.type === "tool_call") console.log(paint(`  agent tool_call: ${e.name}`, "35"));

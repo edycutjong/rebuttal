@@ -27,7 +27,7 @@ for (const path of files) {
   const liveCalls = v.provenance.filter((c) => !c.cached).length;
   if (same && liveCalls === 0) ok++;
   else if (update) {
-    writeFixture({ ...f, verdict: v });
+    writeFixture({ ...f, verdict: { ...v, agent: f.verdict.agent } }); // a recorded agent/fast run (the hero fixture) is kept across updates
     console.log(`  updated ${f.slug}: ${f.verdict.label}/${f.verdict.ruleId} ${f.verdict.hash.slice(0, 12)} → ${v.label}/${v.ruleId} ${v.hash.slice(0, 12)}`);
     ok++;
   }

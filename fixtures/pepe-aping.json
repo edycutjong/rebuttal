@@ -1,10 +1,10 @@
 {
   "slug": "pepe-aping",
-  "edge": "hero · Smart Money buying · 14 same-name tokens · SM idle for 24 h while on the table",
-  "input": "Smart Money is aping $PEPE hard today 🐋",
+  "edge": "hero \u00b7 Smart Money buying \u00b7 14 same-name tokens \u00b7 SM idle for 24 h while on the table",
+  "input": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
   "source": "idea card phrasing of OKX Insight 2026-09-14 (PEPE smart money +307%)",
   "claim": {
-    "raw": "Smart Money is aping $PEPE hard today 🐋",
+    "raw": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
     "token": "PEPE",
     "type": "buying",
     "subject": "smart_money",
@@ -157,9 +157,9 @@
     }
   },
   "verdict": {
-    "input": "Smart Money is aping $PEPE hard today 🐋",
+    "input": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
     "claim": {
-      "raw": "Smart Money is aping $PEPE hard today 🐋",
+      "raw": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
       "token": "PEPE",
       "type": "buying",
       "subject": "smart_money",
@@ -292,8 +292,8 @@
         "traders": 89
       },
       "price": {
-        "open": 0.00000346515471648103,
-        "close": 0.00000375161589813731,
+        "open": 3.46515471648103e-06,
+        "close": 3.75161589813731e-06,
         "change": 0.08266908842303877,
         "candles": 25
       },
@@ -307,7 +307,7 @@
         "endpoint": "tgm/flow-intelligence",
         "window": "1d",
         "credits": 1,
-        "decides": "Smart Money net flow and wallet count, last 24 h — the primary signal",
+        "decides": "Smart Money net flow and wallet count, last 24 h \u2014 the primary signal",
         "ok": true,
         "ms": 313,
         "cached": false,
@@ -323,7 +323,7 @@
         "endpoint": "tgm/flow-intelligence",
         "window": "7d",
         "credits": 1,
-        "decides": "Smart Money net flow over the week — blip or trend",
+        "decides": "Smart Money net flow over the week \u2014 blip or trend",
         "ok": true,
         "ms": 322,
         "cached": false,
@@ -381,22 +381,22 @@
       {
         "id": "price",
         "endpoint": "tgm/token-ohlcv",
-        "window": "1h × 24",
+        "window": "1h \u00d7 24",
         "credits": 1,
-        "decides": "did the price already move — is the claim late",
+        "decides": "did the price already move \u2014 is the claim late",
         "ok": true,
         "ms": 1582,
         "cached": false,
         "values": {
           "candles": 25,
-          "open": 0.00000346515471648103,
-          "close": 0.00000375161589813731,
+          "open": 3.46515471648103e-06,
+          "close": 3.75161589813731e-06,
           "change_24h": 0.0827
         }
       }
     ],
     "prose": {
-      "text": "No Smart Money wallet bought PEPE in the past 24 hours, showing a net flow of $0 despite 89 traders listed. Over the last seven days the total Smart Money net flow was only $5 K, far below “hard aping.”",
+      "text": "No Smart Money wallet bought PEPE in the past 24 hours, showing a net flow of $0 despite 89 traders listed. Over the last seven days the total Smart Money net flow was only $5 K, far below \u201chard aping.\u201d",
       "source": "llm",
       "ms": 697
     },
@@ -638,7 +638,7 @@
     "ms": 3655,
     "hash": "0f5da7e87546e0ff27962355a8791f85c0e4673aad9fb6d66c6ddfea09b50b46",
     "warnings": [
-      "14 tokens named PEPE on Nansen — checked the most traded of the top-ranked"
+      "14 tokens named PEPE on Nansen \u2014 checked the most traded of the top-ranked"
     ],
     "llm": {
       "extract": {
@@ -662,6 +662,19 @@
       "minHolders": 5,
       "minChecks": 2
     },
-    "now": 1789726929083
+    "now": 1789726929083,
+    "agent": {
+      "text": "The relevant token is Ethereum [PEPE](https://app.nansen.ai/token-god-mode?tokenAddress=0x6982508145454ce325ddbe47a25d4ec3d2311933&chain=ethereum), not the Hyperliquid perp or similarly named tokens.\n\nSmart Money is **not aping PEPE hard today**: smart-trader/fund netflow was **$0 over 24h** and only **+$4.6K over 7 days**. The stronger signal is distribution risk\u2014exchange wallets received **$1.5M over 1 day** (2.2\u00d7 average), while fresh wallets received **$1.4M**. Price rose **12.44% over 7 days**, with RSI at **55.9**, but the onchain data does not confirm aggressive smart-money accumulation.",
+      "toolCalls": [
+        "smart_traders_and_funds_netflow",
+        "token_recent_flows_summary",
+        "token_technical_indicators",
+        "token_ohlcv"
+      ],
+      "ms": 7899,
+      "credits": 200,
+      "timedOut": false,
+      "firstByteMs": 3150
+    }
   }
 }
