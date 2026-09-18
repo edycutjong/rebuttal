@@ -132,3 +132,15 @@ describe("audit · a flat verdict names the who-bought-sold rows the flow row hi
     expect(d.reasons.some((r) => r.startsWith("who-bought-sold names"))).toBe(false);
   });
 });
+
+describe("audit · the Smart Money table line is the token's own row or nothing", () => {
+  it("a netflow response whose rows are other tokens (filter ignored) reads 'not on the table', never another token's numbers", async () => {
+    const c = fakeClient((endpoint, body) => {
+      if (endpoint === "smart-money/netflow") return { data: [{ token_address: "0xsomeoneelse", token_symbol: "WIF", chain: "ethereum", net_flow_1h_usd: 0, net_flow_24h_usd: 9_999_999, net_flow_7d_usd: 0, net_flow_30d_usd: 0, trader_count: 500, token_age_days: 1, market_cap_usd: 1 }] };
+      return pepeRoutes()(endpoint, body);
+    });
+    const v = await rebut(c, "Smart Money is aping $PEPE", { llm: null });
+    expect(v.evidence.table).toEqual({ inTable: false, net24: null, net7d: null, traders: null });
+    expect(v.reasons.join(" ")).not.toContain("500 traders");
+  });
+});

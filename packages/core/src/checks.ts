@@ -103,7 +103,8 @@ export async function runChecks(
     },
     table: async () => {
       const rows = await smartMoneyNetflow(client, chain, address, { tag: "table" });
-      const hit = rows.find((r) => r.token_address.toLowerCase() === address.toLowerCase()) ?? rows[0] ?? null;
+      // only the token's own row counts: a filter Nansen ignored would otherwise put another token's numbers on the card (audit 2026-09-19)
+      const hit = rows.find((r) => r.token_address.toLowerCase() === address.toLowerCase()) ?? null;
       evidence.table = { inTable: !!hit, net24: hit?.net_flow_24h_usd ?? null, net7d: hit?.net_flow_7d_usd ?? null, traders: hit?.trader_count ?? null };
       return { in_table: hit ? "yes" : "no", net_flow_24h_usd: hit?.net_flow_24h_usd ?? null, net_flow_7d_usd: hit?.net_flow_7d_usd ?? null, trader_count: hit?.trader_count ?? null };
     },
