@@ -1,0 +1,80 @@
+{
+  "slug": "zec-not-a-nansen-chain",
+  "edge": "coin whose home chain Nansen does not index → UNVERIFIABLE U-CHAIN, 0 credits",
+  "input": "Zcash whales accumulate: three fresh wallets pull 28,759 $ZEC ($41.43M) from Binance and other exchanges",
+  "source": "Lookonchain 72956 · 2026-09-18",
+  "claim": {
+    "raw": "Zcash whales accumulate: three fresh wallets pull 28,759 $ZEC ($41.43M) from Binance and other exchanges",
+    "token": "ZEC",
+    "type": "buying",
+    "subject": "whales",
+    "extractor": "llm"
+  },
+  "options": {},
+  "now": 1789726980554,
+  "recordedAt": "2026-09-18T10:23:00.554Z",
+  "live": {
+    "calls": 0,
+    "credits": 0,
+    "ms": 574
+  },
+  "responses": {},
+  "verdict": {
+    "input": "Zcash whales accumulate: three fresh wallets pull 28,759 $ZEC ($41.43M) from Binance and other exchanges",
+    "claim": {
+      "raw": "Zcash whales accumulate: three fresh wallets pull 28,759 $ZEC ($41.43M) from Binance and other exchanges",
+      "token": "ZEC",
+      "type": "buying",
+      "subject": "whales",
+      "extractor": "llm"
+    },
+    "resolved": null,
+    "label": "UNVERIFIABLE",
+    "ruleId": "U-CHAIN",
+    "reasons": [
+      "Zcash is not a chain Nansen indexes — only bridged copies of ZEC exist here, and they are not what the post is about (name a chain to check one)"
+    ],
+    "threshold": 0,
+    "evidence": {
+      "flow1d": null,
+      "flow7d": null,
+      "named": null,
+      "table": null,
+      "price": null,
+      "holders": null,
+      "checksOk": 0,
+      "checksTotal": 0
+    },
+    "checks": [],
+    "prose": {
+      "text": "This claim about ZEC cannot be checked against Nansen. Zcash is not a chain Nansen indexes — only bridged copies of ZEC exist here, and they are not what the post is about (name a chain to check one).",
+      "source": "template",
+      "ms": 0
+    },
+    "provenance": [],
+    "credits": 0,
+    "calls": 0,
+    "ms": 574,
+    "hash": "0bbb67c2cbc06d22326db3333f83ec98d2bf1c966635ecba20c2112c2e15bac0",
+    "warnings": [],
+    "llm": {
+      "extract": {
+        "used": true,
+        "ms": 574,
+        "model": "openai/gpt-oss-120b"
+      },
+      "narrate": null
+    },
+    "rules": {
+      "floorUsd": 5000,
+      "shareOfFlow": 0.01,
+      "freshMult": 3,
+      "staleMove": 0.2,
+      "minWallets": 3,
+      "minWhales": 1,
+      "minHolders": 5,
+      "minChecks": 2
+    },
+    "now": 1789726980554
+  }
+}

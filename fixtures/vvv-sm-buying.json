@@ -1,0 +1,641 @@
+{
+  "slug": "vvv-sm-buying",
+  "edge": "CONFIRMED · SM net buying 24 h and 7 d, ≥ 3 wallets",
+  "input": "Smart Money is buying $VVV on Base — net inflows all week",
+  "source": "synthetic from the smart-money/netflow top rows, 2026-09-18 12:40 UTC",
+  "claim": {
+    "raw": "Smart Money is buying $VVV on Base — net inflows all week",
+    "token": "VVV",
+    "chain": "base",
+    "type": "buying",
+    "subject": "smart_money",
+    "extractor": "llm"
+  },
+  "options": {},
+  "now": 1789726932739,
+  "recordedAt": "2026-09-18T10:22:12.739Z",
+  "live": {
+    "calls": 7,
+    "credits": 10,
+    "ms": 3753
+  },
+  "responses": {
+    "586a7afd337e6d3e2f3fc9d872c16057": {
+      "storedAt": "2026-09-18T10:22:14.402Z",
+      "ttlMs": 0,
+      "endpoint": "search/general",
+      "body": {
+        "search_query": "VVV",
+        "result_type": "token",
+        "limit": 50
+      },
+      "text": "{\"tokens\":[{\"name\":\"VVV\",\"symbol\":\"VVV\",\"chain\":\"hyperliquid\",\"address\":\"VVV\",\"price\":27.656,\"volume_24h\":37037008.14054,\"market_cap\":1325148347.23363,\"rank\":48},{\"name\":\"Venice Token\",\"symbol\":\"VVV\",\"chain\":\"base\",\"address\":\"0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf\",\"price\":27.392767495582,\"volume_24h\":14232260.61183333,\"market_cap\":1325148347.23363,\"rank\":347},{\"name\":\"Venice Deity\",\"symbol\":\"VVVEITY\",\"chain\":\"base\",\"address\":\"0x85635006d808030e97f3174c8ea1b4aa1f1feba3\",\"price\":9.88471551863634e-7,\"volume_24h\":14493.175009195533,\"market_cap\":97843.1783,\"rank\":4326}],\"entities\":[],\"total_results\":3}"
+    },
+    "37228a1b6bc23d13744f924f8d2c3346": {
+      "storedAt": "2026-09-18T10:22:15.175Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/who-bought-sold",
+      "body": {
+        "chain": "base",
+        "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+        "buy_or_sell": "BUY",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        },
+        "filters": {
+          "include_smart_money_labels": [
+            "Smart Trader",
+            "Fund",
+            "30D Smart Trader",
+            "90D Smart Trader",
+            "180D Smart Trader"
+          ]
+        },
+        "order_by": [
+          {
+            "field": "bought_volume_usd",
+            "direction": "DESC"
+          }
+        ]
+      },
+      "text": "{\"data\":[{\"address\":\"0xbf567b7c88b73f2c5ada6f352452641a94c47fe4\",\"address_label\":\"erking.eth*\",\"bought_token_volume\":2571.898163002111,\"sold_token_volume\":0.0,\"token_trade_volume\":2571.898163002111,\"bought_volume_usd\":69412.22332305199,\"sold_volume_usd\":0.0,\"trade_volume_usd\":69412.22332305199},{\"address\":\"0x840514b8c7bcab1ada9d7f01db24ddc915cfa8cc\",\"address_label\":\"\",\"bought_token_volume\":621.9336738297816,\"sold_token_volume\":0.0,\"token_trade_volume\":621.9336738297816,\"bought_volume_usd\":15888.426083134116,\"sold_volume_usd\":0.0,\"trade_volume_usd\":15888.426083134116},{\"address\":\"0xe87b933e326195d399725a8d4f7abde743bcfb1a\",\"address_label\":\"High Balance\",\"bought_token_volume\":571.7829404465587,\"sold_token_volume\":0.0,\"token_trade_volume\":571.7829404465587,\"bought_volume_usd\":14380.362292640222,\"sold_volume_usd\":0.0,\"trade_volume_usd\":14380.362292640222}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true}}"
+    },
+    "73a808acbc98b4488772f6867a0cf30c": {
+      "storedAt": "2026-09-18T10:22:15.176Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/who-bought-sold",
+      "body": {
+        "chain": "base",
+        "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+        "buy_or_sell": "SELL",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        },
+        "filters": {
+          "include_smart_money_labels": [
+            "Smart Trader",
+            "Fund",
+            "30D Smart Trader",
+            "90D Smart Trader",
+            "180D Smart Trader"
+          ]
+        },
+        "order_by": [
+          {
+            "field": "sold_volume_usd",
+            "direction": "DESC"
+          }
+        ]
+      },
+      "text": "{\"data\":[{\"address\":\"0xff11196ca1c02692bac52e7bd179f2385a4bf91e\",\"address_label\":\"\",\"bought_token_volume\":0.0,\"sold_token_volume\":0.1545307691170611,\"token_trade_volume\":0.1545307691170611,\"bought_volume_usd\":0.0,\"sold_volume_usd\":3.809363070500868,\"trade_volume_usd\":3.809363070500868}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true}}"
+    },
+    "23d63d7523d8efd43aeb8ec916eb2516": {
+      "storedAt": "2026-09-18T10:22:15.383Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/flow-intelligence",
+      "body": {
+        "chain": "base",
+        "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+        "timeframe": "1d"
+      },
+      "text": "{\"data\":[{\"public_figure_net_flow_usd\":-124282.05379898686,\"public_figure_avg_flow_usd\":19698.704977941252,\"public_figure_wallet_count\":3,\"top_pnl_net_flow_usd\":-1496390.5893267316,\"top_pnl_avg_flow_usd\":256728.40761065815,\"top_pnl_wallet_count\":30,\"whale_net_flow_usd\":13412.173550896247,\"whale_avg_flow_usd\":3880.6289205384346,\"whale_wallet_count\":1,\"smart_trader_net_flow_usd\":99701.51755118334,\"smart_trader_avg_flow_usd\":29735.43393641138,\"smart_trader_wallet_count\":4,\"exchange_net_flow_usd\":4607091.803238784,\"exchange_avg_flow_usd\":1742599.3774635098,\"exchange_wallet_count\":0,\"fresh_wallets_net_flow_usd\":73914416.71167924,\"fresh_wallets_avg_flow_usd\":1574897.6060019904,\"fresh_wallets_wallet_count\":0}],\"warnings\":[\"exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.\",\"fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero.\"]}"
+    },
+    "c64dc55502423601d8c6e59b07d9b6b9": {
+      "storedAt": "2026-09-18T10:22:15.394Z",
+      "ttlMs": 0,
+      "endpoint": "smart-money/netflow",
+      "body": {
+        "chains": [
+          "base"
+        ],
+        "filters": {
+          "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+          "include_stablecoins": true,
+          "include_native_tokens": true
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 10
+        }
+      },
+      "text": "{\"data\":[{\"token_address\":\"0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf\",\"token_symbol\":\"VVV\",\"net_flow_1h_usd\":0.0,\"net_flow_24h_usd\":99701.51755118334,\"net_flow_7d_usd\":115135.91983096013,\"net_flow_30d_usd\":32627.095676247707,\"chain\":\"base\",\"token_sectors\":[],\"trader_count\":21,\"token_age_days\":603,\"market_cap_usd\":1324010530.24453}],\"pagination\":{\"page\":1,\"per_page\":10,\"is_last_page\":true}}"
+    },
+    "8ab9d68d953b2790e0b8269e6d7bf561": {
+      "storedAt": "2026-09-18T10:22:15.469Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/flow-intelligence",
+      "body": {
+        "chain": "base",
+        "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+        "timeframe": "7d"
+      },
+      "text": "{\"data\":[{\"public_figure_net_flow_usd\":-141827.48532608303,\"public_figure_avg_flow_usd\":359084.97185108275,\"public_figure_wallet_count\":6,\"top_pnl_net_flow_usd\":-2173743.9866377637,\"top_pnl_avg_flow_usd\":3206175.460504732,\"top_pnl_wallet_count\":59,\"whale_net_flow_usd\":28652.91625614332,\"whale_avg_flow_usd\":28800.431897548293,\"whale_wallet_count\":1,\"smart_trader_net_flow_usd\":115135.91983096013,\"smart_trader_avg_flow_usd\":82118.00435300163,\"smart_trader_wallet_count\":10,\"exchange_net_flow_usd\":11238220.835766966,\"exchange_avg_flow_usd\":4873384.802742273,\"exchange_wallet_count\":0,\"fresh_wallets_net_flow_usd\":84423318.5861852,\"fresh_wallets_avg_flow_usd\":65690013.21263644,\"fresh_wallets_wallet_count\":0}],\"warnings\":[\"exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.\",\"fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero.\"]}"
+    },
+    "866b4822a813c5941f39b459a8594800": {
+      "storedAt": "2026-09-18T10:22:15.750Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/token-ohlcv",
+      "body": {
+        "chain": "base",
+        "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+        "timeframe": "1h",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        }
+      },
+      "text": "{\"chain\":\"base\",\"token_address\":\"0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf\",\"timeframe\":\"1h\",\"data\":[{\"interval_start\":\"2026-09-17T10:00:00Z\",\"open\":25.2936883478365,\"high\":25.3819458802118,\"low\":25.0324154339695,\"close\":25.19870808559235,\"volume\":18945.412260785433,\"volume_usd\":478379.154525339,\"market_cap\":{\"open\":1207441420.38751,\"high\":1214987724.09716,\"low\":1201051349.06337,\"close\":1209494834.53498}},{\"interval_start\":\"2026-09-17T11:00:00Z\",\"open\":25.19870808559235,\"high\":25.4870743477583,\"low\":25.0442851549509,\"close\":25.1416028112708,\"volume\":19274.51007509828,\"volume_usd\":487664.59112998476,\"market_cap\":{\"open\":1209494834.53498,\"high\":1224868351.17589,\"low\":1205001518.662,\"close\":1207185484.18211}},{\"interval_start\":\"2026-09-17T12:00:00Z\",\"open\":25.1416028112708,\"high\":25.0826979157789,\"low\":24.7932617411873,\"close\":24.8871083706231,\"volume\":17141.703307535176,\"volume_usd\":427932.1390452221,\"market_cap\":{\"open\":1207185484.18211,\"high\":1210349058.72286,\"low\":1190031205.31202,\"close\":1194985506.05015}},{\"interval_start\":\"2026-09-17T13:00:00Z\",\"open\":24.8871083706231,\"high\":25.0730054900157,\"low\":24.5349495611422,\"close\":25.0730054900157,\"volume\":16594.118722318908,\"volume_usd\":410993.7377988768,\"market_cap\":{\"open\":1194985506.05015,\"high\":1204304499.86705,\"low\":1177049925.04416,\"close\":1204304499.86705}},{\"interval_start\":\"2026-09-17T14:00:00Z\",\"open\":25.0730054900157,\"high\":25.2851150775948,\"low\":24.6511623042216,\"close\":24.6511623042216,\"volume\":17598.665308799893,\"volume_usd\":437648.38601328334,\"market_cap\":{\"open\":1204304499.86705,\"high\":1213082152.67705,\"low\":1183742821.33508,\"close\":1183742821.33508}},{\"interval_start\":\"2026-09-17T15:00:00Z\",\"open\":24.6511623042216,\"high\":24.581235664354452,\"low\":24.2679601666022,\"close\":24.294890910279,\"volume\":44857.72122623534,\"volume_usd\":1091400.685583756,\"market_cap\":{\"open\":1183742821.33508,\"high\":1181507147.96152,\"low\":1165859704.33588,\"close\":1166527655.17935}},{\"interval_start\":\"2026-09-17T16:00:00Z\",\"open\":24.294890910279,\"high\":24.5498717882425,\"low\":24.3124270415147,\"close\":24.4256602127466,\"volume\":18730.854012932545,\"volume_usd\":458055.5718646035,\"market_cap\":{\"open\":1166527655.17935,\"high\":1179803948.70133,\"low\":1167270033.89319,\"close\":1172436631.50644}},{\"interval_start\":\"2026-09-17T17:00:00Z\",\"open\":24.4256602127466,\"high\":24.7803106233058,\"low\":24.3676475828984,\"close\":24.4231625407493,\"volume\":38168.094629289015,\"volume_usd\":937800.6258037278,\"market_cap\":{\"open\":1172436631.50644,\"high\":1189965672.88261,\"low\":1165938750.19046,\"close\":1173074620.38454}},{\"interval_start\":\"2026-09-17T18:00:00Z\",\"open\":24.4231625407493,\"high\":25.09272148735245,\"low\":24.4095824446531,\"close\":25.09272148735245,\"volume\":32892.936738050055,\"volume_usd\":818031.4163372348,\"market_cap\":{\"open\":1173074620.38454,\"high\":1202547187.67715,\"low\":1172089913.42934,\"close\":1202547187.67715}},{\"interval_start\":\"2026-09-17T19:00:00Z\",\"open\":25.09272148735245,\"high\":25.434366675760053,\"low\":25.0949596415411,\"close\":25.1952711126233,\"volume\":16021.9942750421,\"volume_usd\":404734.54192311375,\"market_cap\":{\"open\":1202547187.67715,\"high\":1219606931.46014,\"low\":1200515986.81799,\"close\":1210136845.72155}},{\"interval_start\":\"2026-09-17T20:00:00Z\",\"open\":25.1952711126233,\"high\":25.31919627905355,\"low\":24.8043638536787,\"close\":25.038300370216348,\"volume\":27515.259560565464,\"volume_usd\":690741.1366447131,\"market_cap\":{\"open\":1210136845.72155,\"high\":1216068590.68287,\"low\":1187060690.71694,\"close\":1201746269.01285}},{\"interval_start\":\"2026-09-17T21:00:00Z\",\"open\":25.038300370216348,\"high\":25.188201983635,\"low\":25.0563454033451,\"close\":25.1098100811449,\"volume\":7216.527860556659,\"volume_usd\":181274.01846188944,\"market_cap\":{\"open\":1201746269.01285,\"high\":1207949448.58115,\"low\":1203368280.9604,\"close\":1205810703.1151}},{\"interval_start\":\"2026-09-17T22:00:00Z\",\"open\":25.1098100811449,\"high\":25.2129654663012,\"low\":25.0670707705765,\"close\":25.1965471538845,\"volume\":4635.778742288796,\"volume_usd\":116623.680903708,\"market_cap\":{\"open\":1205810703.1151,\"high\":1211001376.29626,\"low\":1203952057.83768,\"close\":1210212790.00563}},{\"interval_start\":\"2026-09-17T23:00:00Z\",\"open\":25.1965471538845,\"high\":25.8260889996162,\"low\":25.2477722892862,\"close\":25.7511980550283,\"volume\":15530.65012557075,\"volume_usd\":397572.14826792455,\"market_cap\":{\"open\":1210212790.00563,\"high\":1240501373.84291,\"low\":1210212790.00563,\"close\":1236996421.14636}},{\"interval_start\":\"2026-09-18T00:00:00Z\",\"open\":25.7511980550283,\"high\":25.6446456062941,\"low\":25.1702254685216,\"close\":25.1702254685216,\"volume\":33084.32393294901,\"volume_usd\":836801.0012826263,\"market_cap\":{\"open\":1236996421.14636,\"high\":1236996421.14636,\"low\":1201505277.01824,\"close\":1201505277.01824}},{\"interval_start\":\"2026-09-18T01:00:00Z\",\"open\":25.1702254685216,\"high\":25.9409390207708,\"low\":24.851531042609253,\"close\":25.7703024055586,\"volume\":34058.609648963095,\"volume_usd\":865990.1782612217,\"market_cap\":{\"open\":1201505277.01824,\"high\":1245967087.01668,\"low\":1199754235.22585,\"close\":1237443797.14793}},{\"interval_start\":\"2026-09-18T02:00:00Z\",\"open\":25.7703024055586,\"high\":25.7641102495396,\"low\":25.45969145655905,\"close\":25.5551803651717,\"volume\":8194.98332133537,\"volume_usd\":209876.47554638603,\"market_cap\":{\"open\":1237443797.14793,\"high\":1237511969.07734,\"low\":1219540621.68413,\"close\":1227765128.512}},{\"interval_start\":\"2026-09-18T03:00:00Z\",\"open\":25.5551803651717,\"high\":25.42857039846185,\"low\":25.1142496302124,\"close\":25.42857039846185,\"volume\":15222.183937238784,\"volume_usd\":384894.4125681654,\"market_cap\":{\"open\":1227765128.512,\"high\":1221464004.57844,\"low\":1205066661.73163,\"close\":1221464004.57844}},{\"interval_start\":\"2026-09-18T04:00:00Z\",\"open\":25.42857039846185,\"high\":25.3365507132278,\"low\":24.3826663487239,\"close\":24.764095338279,\"volume\":32542.432152077283,\"volume_usd\":802512.8291253183,\"market_cap\":{\"open\":1221464004.57844,\"high\":1217131341.64072,\"low\":1166653713.12675,\"close\":1189491829.11331}},{\"interval_start\":\"2026-09-18T05:00:00Z\",\"open\":24.764095338279,\"high\":25.1382658114835,\"low\":24.7789398217282,\"close\":25.1233356833284,\"volume\":13969.512892365661,\"volume_usd\":348575.22370260523,\"market_cap\":{\"open\":1189491829.11331,\"high\":1207660876.88032,\"low\":1185428256.85129,\"close\":1207660876.88032}},{\"interval_start\":\"2026-09-18T06:00:00Z\",\"open\":25.1233356833284,\"high\":25.5670204782847,\"low\":25.1488869680746,\"close\":25.5670204782847,\"volume\":18604.832701736716,\"volume_usd\":472397.47570351744,\"market_cap\":{\"open\":1207660876.88032,\"high\":1228082060.38505,\"low\":1208951013.50652,\"close\":1228082060.38505}},{\"interval_start\":\"2026-09-18T07:00:00Z\",\"open\":25.5670204782847,\"high\":27.1468878292838,\"low\":25.514741421901952,\"close\":26.7936588902536,\"volume\":67142.86914560263,\"volume_usd\":1780925.7248760734,\"market_cap\":{\"open\":1228082060.38505,\"high\":1311774084.04094,\"low\":1224828038.51093,\"close\":1278674246.23734}},{\"interval_start\":\"2026-09-18T08:00:00Z\",\"open\":26.7936588902536,\"high\":27.438280371681998,\"low\":26.80617339907315,\"close\":27.438280371681998,\"volume\":21796.56871625847,\"volume_usd\":589764.6954605348,\"market_cap\":{\"open\":1278674246.23734,\"high\":1321783104.23843,\"low\":1280935427.4366,\"close\":1321783104.23843}},{\"interval_start\":\"2026-09-18T09:00:00Z\",\"open\":27.438280371681998,\"high\":27.57595034416935,\"low\":27.25432091085635,\"close\":27.56249609927675,\"volume\":23434.06192089615,\"volume_usd\":643240.9997102318,\"market_cap\":{\"open\":1321783104.23843,\"high\":1325148347.23363,\"low\":1302161412.02956,\"close\":1315780377.8784}},{\"interval_start\":\"2026-09-18T10:00:00Z\",\"open\":27.56249609927675,\"high\":27.5643618482917,\"low\":27.16836925004085,\"close\":27.3214964841319,\"volume\":10659.157288757668,\"volume_usd\":290413.6806368164,\"market_cap\":{\"open\":1315780377.8784,\"high\":1324010530.24453,\"low\":1304869742.96736,\"close\":1307422088.58861}}],\"truncated\":false,\"truncation_note\":null}"
+    }
+  },
+  "verdict": {
+    "input": "Smart Money is buying $VVV on Base — net inflows all week",
+    "claim": {
+      "raw": "Smart Money is buying $VVV on Base — net inflows all week",
+      "token": "VVV",
+      "chain": "base",
+      "type": "buying",
+      "subject": "smart_money",
+      "extractor": "llm"
+    },
+    "resolved": {
+      "chain": "base",
+      "address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+      "symbol": "VVV",
+      "name": "Venice Token",
+      "marketCap": 1325148347.23363,
+      "sameName": 1,
+      "by": "chain hint (base)",
+      "others": []
+    },
+    "label": "CONFIRMED",
+    "ruleId": "A-FLOW",
+    "reasons": [
+      "Smart Money net bought $100K in 24 h (flow-intelligence 1d, 4 wallets; threshold $17K)",
+      "7 d agrees: $115K",
+      "on the Smart Money net-flow table (24 h $100K, 21 traders)",
+      "fresh wallets net bought $73.91M — retail is the bigger buyer",
+      "price +8.0% over the last 24 h"
+    ],
+    "threshold": 17338,
+    "evidence": {
+      "flow1d": {
+        "smart_trader": {
+          "net": 99701.51755118334,
+          "wallets": 4
+        },
+        "whale": {
+          "net": 13412.173550896247,
+          "wallets": 1
+        },
+        "exchange": {
+          "net": 4607091.803238784,
+          "wallets": 0
+        },
+        "fresh_wallets": {
+          "net": 73914416.71167924,
+          "wallets": 0
+        },
+        "top_pnl": {
+          "net": -1496390.5893267316,
+          "wallets": 30
+        },
+        "public_figure": {
+          "net": -124282.05379898686,
+          "wallets": 3
+        }
+      },
+      "flow7d": {
+        "smart_trader": {
+          "net": 115135.91983096013,
+          "wallets": 10
+        },
+        "whale": {
+          "net": 28652.91625614332,
+          "wallets": 1
+        },
+        "exchange": {
+          "net": 11238220.835766966,
+          "wallets": 0
+        },
+        "fresh_wallets": {
+          "net": 84423318.5861852,
+          "wallets": 0
+        },
+        "top_pnl": {
+          "net": -2173743.9866377637,
+          "wallets": 59
+        },
+        "public_figure": {
+          "net": -141827.48532608303,
+          "wallets": 6
+        }
+      },
+      "named": {
+        "buyUsd": 99681.01169882632,
+        "sellUsd": 3.809363070500868,
+        "buyRows": 3,
+        "sellRows": 1,
+        "buyers": [
+          {
+            "address": "0xbf567b7c88b73f2c5ada6f352452641a94c47fe4",
+            "label": "erking.eth*",
+            "usd": 69412.22332305199
+          },
+          {
+            "address": "0x840514b8c7bcab1ada9d7f01db24ddc915cfa8cc",
+            "label": "",
+            "usd": 15888.426083134116
+          },
+          {
+            "address": "0xe87b933e326195d399725a8d4f7abde743bcfb1a",
+            "label": "High Balance",
+            "usd": 14380.362292640222
+          }
+        ],
+        "sellers": [
+          {
+            "address": "0xff11196ca1c02692bac52e7bd179f2385a4bf91e",
+            "label": "",
+            "usd": 3.809363070500868
+          }
+        ]
+      },
+      "table": {
+        "inTable": true,
+        "net24": 99701.51755118334,
+        "net7d": 115135.91983096013,
+        "traders": 21
+      },
+      "price": {
+        "open": 25.2936883478365,
+        "close": 27.3214964841319,
+        "change": 0.08017051955448985,
+        "candles": 25
+      },
+      "holders": null,
+      "checksOk": 6,
+      "checksTotal": 6
+    },
+    "checks": [
+      {
+        "id": "flow1d",
+        "endpoint": "tgm/flow-intelligence",
+        "window": "1d",
+        "credits": 1,
+        "decides": "Smart Money net flow and wallet count, last 24 h — the primary signal",
+        "ok": true,
+        "ms": 0,
+        "cached": true,
+        "values": {
+          "smart_trader_net_flow_usd": 99701.51755118334,
+          "smart_trader_wallet_count": 4,
+          "fresh_wallets_net_flow_usd": 73914416.71167924,
+          "exchange_net_flow_usd": 4607091.803238784
+        }
+      },
+      {
+        "id": "flow7d",
+        "endpoint": "tgm/flow-intelligence",
+        "window": "7d",
+        "credits": 1,
+        "decides": "Smart Money net flow over the week — blip or trend",
+        "ok": true,
+        "ms": 0,
+        "cached": true,
+        "values": {
+          "smart_trader_net_flow_usd": 115135.91983096013,
+          "smart_trader_wallet_count": 10
+        }
+      },
+      {
+        "id": "buyers",
+        "endpoint": "tgm/who-bought-sold",
+        "window": "BUY 24h",
+        "credits": 1,
+        "decides": "who among Smart Money bought, by USD",
+        "ok": true,
+        "ms": 0,
+        "cached": true,
+        "values": {
+          "bought_volume_usd": 99681,
+          "rows": 3,
+          "top": "erking.eth* 69412"
+        }
+      },
+      {
+        "id": "sellers",
+        "endpoint": "tgm/who-bought-sold",
+        "window": "SELL 24h",
+        "credits": 1,
+        "decides": "who among Smart Money sold, by USD",
+        "ok": true,
+        "ms": 0,
+        "cached": true,
+        "values": {
+          "sold_volume_usd": 4,
+          "rows": 1,
+          "top": " 4"
+        }
+      },
+      {
+        "id": "table",
+        "endpoint": "smart-money/netflow",
+        "window": "token filter",
+        "credits": 5,
+        "decides": "is the token on the Smart Money net-flow table at all",
+        "ok": true,
+        "ms": 0,
+        "cached": true,
+        "values": {
+          "in_table": "yes",
+          "net_flow_24h_usd": 99701.51755118334,
+          "net_flow_7d_usd": 115135.91983096013,
+          "trader_count": 21
+        }
+      },
+      {
+        "id": "price",
+        "endpoint": "tgm/token-ohlcv",
+        "window": "1h × 24",
+        "credits": 1,
+        "decides": "did the price already move — is the claim late",
+        "ok": true,
+        "ms": 0,
+        "cached": true,
+        "values": {
+          "candles": 25,
+          "open": 25.2936883478365,
+          "close": 27.3214964841319,
+          "change_24h": 0.0802
+        }
+      }
+    ],
+    "prose": {
+      "text": "Nansen agrees: Smart Money are buying VVV on base. Smart Money net bought $100K in 24 h (flow-intelligence 1d, 4 wallets; threshold $17K) — 7 d agrees: $115K.",
+      "source": "template",
+      "ms": 0
+    },
+    "provenance": [
+      {
+        "endpoint": "search/general",
+        "body": {
+          "search_query": "VVV",
+          "result_type": "token",
+          "limit": 50
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "tokens[].symbol",
+          "tokens[].name",
+          "tokens[].chain",
+          "tokens[].address",
+          "tokens[].rank",
+          "tokens[].volume_24h",
+          "tokens[].market_cap"
+        ],
+        "responseHash": "83c301e838a0f909d87447fbb1246c0c1998c588794910f598514ce30b5001d7",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/flow-intelligence",
+        "body": {
+          "chain": "base",
+          "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+          "timeframe": "1d"
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[0].smart_trader_net_flow_usd (1d)",
+          "data[0].smart_trader_wallet_count (1d)",
+          "data[0].whale_net_flow_usd (1d)",
+          "data[0].whale_wallet_count (1d)",
+          "data[0].exchange_net_flow_usd (1d)",
+          "data[0].exchange_wallet_count (1d)",
+          "data[0].fresh_wallets_net_flow_usd (1d)",
+          "data[0].fresh_wallets_wallet_count (1d)",
+          "data[0].top_pnl_net_flow_usd (1d)",
+          "data[0].top_pnl_wallet_count (1d)",
+          "data[0].public_figure_net_flow_usd (1d)",
+          "data[0].public_figure_wallet_count (1d)"
+        ],
+        "responseHash": "25235b48b80cfca7c4a53fafa329d3cc027524c28d8e342ec7d7d632c0f7370c",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/flow-intelligence",
+        "body": {
+          "chain": "base",
+          "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+          "timeframe": "7d"
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[0].smart_trader_net_flow_usd (7d)",
+          "data[0].smart_trader_wallet_count (7d)",
+          "data[0].whale_net_flow_usd (7d)",
+          "data[0].whale_wallet_count (7d)",
+          "data[0].exchange_net_flow_usd (7d)",
+          "data[0].exchange_wallet_count (7d)",
+          "data[0].fresh_wallets_net_flow_usd (7d)",
+          "data[0].fresh_wallets_wallet_count (7d)",
+          "data[0].top_pnl_net_flow_usd (7d)",
+          "data[0].top_pnl_wallet_count (7d)",
+          "data[0].public_figure_net_flow_usd (7d)",
+          "data[0].public_figure_wallet_count (7d)"
+        ],
+        "responseHash": "c7421946cbd1d933ff106dabd75f9c011e6cffe2238437140560b04a72d24799",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "base",
+          "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+          "buy_or_sell": "BUY",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Smart Trader",
+              "Fund",
+              "30D Smart Trader",
+              "90D Smart Trader",
+              "180D Smart Trader"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "bought_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].bought_volume_usd (BUY 24h)",
+          "data[].address (BUY 24h)",
+          "data[].address_label (BUY 24h)",
+          "pagination.is_last_page (BUY 24h)"
+        ],
+        "responseHash": "b33a3511d44d86fe784c093bc5f464120a4e522ffd14f2528951c99e443246c5",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "base",
+          "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+          "buy_or_sell": "SELL",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Smart Trader",
+              "Fund",
+              "30D Smart Trader",
+              "90D Smart Trader",
+              "180D Smart Trader"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "sold_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].sold_volume_usd (SELL 24h)",
+          "data[].address (SELL 24h)",
+          "data[].address_label (SELL 24h)",
+          "pagination.is_last_page (SELL 24h)"
+        ],
+        "responseHash": "453e2913d1e53d51106c6812efa5dac151c5d719012d5a80caaadd49a5a3a4ee",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      },
+      {
+        "endpoint": "smart-money/netflow",
+        "body": {
+          "chains": [
+            "base"
+          ],
+          "filters": {
+            "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+            "include_stablecoins": true,
+            "include_native_tokens": true
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 10
+          }
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].net_flow_24h_usd",
+          "data[].net_flow_7d_usd",
+          "data[].trader_count",
+          "data[].token_symbol"
+        ],
+        "responseHash": "3615279ede3e9d71b2a8e4bca25a332efc4451d102cc78ab3225f18cbcd7e755",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/token-ohlcv",
+        "body": {
+          "chain": "base",
+          "token_address": "0xacfe6019ed1a7dc6f7b508c02d1b04ec88cc21bf",
+          "timeframe": "1h",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          }
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].open",
+          "data[].close",
+          "data[].interval_start"
+        ],
+        "responseHash": "6ed6692cc985d9ccf3a20f908031cc0d9c0d10e467aadd02a852fc15424c0100",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true
+      }
+    ],
+    "credits": 0,
+    "calls": 7,
+    "ms": 0,
+    "hash": "b552549078478a8450403a6db0d7f9e454880343b10ece664345abbd15f32608",
+    "warnings": [],
+    "llm": {
+      "extract": null,
+      "narrate": null
+    },
+    "rules": {
+      "floorUsd": 5000,
+      "shareOfFlow": 0.01,
+      "staleMove": 0.2,
+      "minWallets": 3,
+      "minWhales": 1,
+      "minHolders": 5,
+      "minChecks": 2
+    },
+    "now": 1789726932739
+  }
+}

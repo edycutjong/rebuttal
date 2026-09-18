@@ -1,0 +1,118 @@
+{
+  "slug": "xqzplm-unknown",
+  "edge": "no token by that name → UNVERIFIABLE U-TOKEN, 0 credits",
+  "input": "SM is loading $XQZPLM",
+  "source": "synthetic",
+  "claim": {
+    "raw": "SM is loading $XQZPLM",
+    "token": "XQZPLM",
+    "type": "buying",
+    "subject": "smart_money",
+    "extractor": "llm"
+  },
+  "options": {},
+  "now": 1789726974813,
+  "recordedAt": "2026-09-18T10:22:54.813Z",
+  "live": {
+    "calls": 1,
+    "credits": 0,
+    "ms": 1015
+  },
+  "responses": {
+    "f57014206b145de09f4ed59e07ae5598": {
+      "storedAt": "2026-09-18T10:22:55.827Z",
+      "ttlMs": 0,
+      "endpoint": "search/general",
+      "body": {
+        "search_query": "XQZPLM",
+        "result_type": "token",
+        "limit": 50
+      },
+      "text": "{\"tokens\":[],\"entities\":[],\"total_results\":0}"
+    }
+  },
+  "verdict": {
+    "input": "SM is loading $XQZPLM",
+    "claim": {
+      "raw": "SM is loading $XQZPLM",
+      "token": "XQZPLM",
+      "type": "buying",
+      "subject": "smart_money",
+      "extractor": "llm"
+    },
+    "resolved": null,
+    "label": "UNVERIFIABLE",
+    "ruleId": "U-TOKEN",
+    "reasons": [
+      "no token named XQZPLM on Nansen"
+    ],
+    "threshold": 0,
+    "evidence": {
+      "flow1d": null,
+      "flow7d": null,
+      "named": null,
+      "table": null,
+      "price": null,
+      "holders": null,
+      "checksOk": 0,
+      "checksTotal": 0
+    },
+    "checks": [],
+    "prose": {
+      "text": "This claim about XQZPLM cannot be checked against Nansen. No token named XQZPLM on Nansen.",
+      "source": "template",
+      "ms": 0
+    },
+    "provenance": [
+      {
+        "endpoint": "search/general",
+        "body": {
+          "search_query": "XQZPLM",
+          "result_type": "token",
+          "limit": 50
+        },
+        "credits": 0,
+        "ms": 436,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "tokens[].symbol",
+          "tokens[].name",
+          "tokens[].chain",
+          "tokens[].address",
+          "tokens[].rank",
+          "tokens[].volume_24h",
+          "tokens[].market_cap"
+        ],
+        "responseHash": "7b618709926104ef1e68ea865edbf638e1e0ab6511ad44e6943ad98f4a73c1ec",
+        "attempts": 1,
+        "totalMs": 436,
+        "ok": true
+      }
+    ],
+    "credits": 0,
+    "calls": 1,
+    "ms": 1015,
+    "hash": "837f8a54cd2cf5cadd1388a79cbbbd7cbce6daa743f01580dab73c91f09273cd",
+    "warnings": [],
+    "llm": {
+      "extract": {
+        "used": true,
+        "ms": 576,
+        "model": "openai/gpt-oss-120b"
+      },
+      "narrate": null
+    },
+    "rules": {
+      "floorUsd": 5000,
+      "shareOfFlow": 0.01,
+      "freshMult": 3,
+      "staleMove": 0.2,
+      "minWallets": 3,
+      "minWhales": 1,
+      "minHolders": 5,
+      "minChecks": 2
+    },
+    "now": 1789726974813
+  }
+}

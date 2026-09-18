@@ -34,8 +34,10 @@ export async function askNansenAgent(
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = "";
+    // the timer must also cut a stream that is still trickling deltas past the budget, not only the initial fetch
+    const aborted = new Promise<never>((_, rej) => ctrl.signal.addEventListener("abort", () => rej(Object.assign(new Error("aborted"), { name: "AbortError" }))));
     for (;;) {
-      const { value, done } = await reader.read();
+      const { value, done } = await Promise.race([reader.read(), aborted]);
       if (done) break;
       if (run.firstByteMs == null) run.firstByteMs = Date.now() - t0;
       buf += dec.decode(value, { stream: true });
@@ -76,6 +78,7 @@ export async function askNansenAgent(
       }
     }
   } catch (e) {
+    ctrl.abort();
     if ((e as Error).name === "AbortError") {
       run.timedOut = true;
       run.error = `Nansen's agent did not finish in ${Math.round(timeoutMs / 1000)} s`;

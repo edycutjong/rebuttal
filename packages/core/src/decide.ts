@@ -29,10 +29,8 @@ export type Evidence = {
 export const RULES = {
   /** a class net flow below this is noise on any token */
   floorUsd: 5_000,
-  /** … and below this share of the token's total label-class flow (Σ|net| over the six classes) it is noise on a big token */
+  /** … and below this share of the token's labelled flow (Σ|net| over Smart Trader, Whale, Top PnL, Public Figure) it is noise on a big token */
   shareOfFlow: 0.01,
-  /** fresh wallets buying ≥ this × the subject's net flow → "fresh wallets are the buyers" */
-  freshMult: 3,
   /** |price move over 24 h| ≥ this → the claim is late */
   staleMove: 0.2,
   /** fewer Smart Money wallets than this → a desk, not the class ("a whale" is singular by nature: 1) */
@@ -59,10 +57,13 @@ export function subjectClass(subject: Subject | undefined): "smart_trader" | "wh
 }
 export const subjectName = (subject: Subject | undefined) => (subject === "whales" ? "Whales" : "Smart Money");
 
-/** Σ|net| over the six classes — the scale a threshold is measured against. */
+/** Labelled cohorts: the "who" classes. Exchange and fresh-wallet flows are venue/anonymous volume and dwarf them (VVV: fresh $74M vs SM $100K). */
+export const LABELLED: ReadonlyArray<keyof FlowSnapshot> = ["smart_trader", "whale", "top_pnl", "public_figure"];
+
+/** Σ|net| over the labelled classes — the scale a threshold is measured against. */
 export function totalFlow(s: FlowSnapshot | null): number {
   if (!s) return 0;
-  return Object.values(s).reduce((n, c) => n + Math.abs(c.net ?? 0), 0);
+  return LABELLED.reduce((n, k) => n + Math.abs(s[k].net ?? 0), 0);
 }
 
 export function threshold(s: FlowSnapshot | null, rules: Rules = RULES): number {
@@ -110,27 +111,28 @@ export function decide(claim: Claim, e: Evidence, rules: Rules = RULES): Decisio
   const anti = type === "selling" ? "bought" : "sold";
   const net7 = e.flow7d?.[cls]?.net;
   const fresh = e.flow1d?.fresh_wallets.net ?? null;
+  // context, never a verdict: on a hot token fresh wallets always out-buy every labelled class
+  const freshLine = fresh != null && Math.abs(fresh) >= rules.floorUsd ? `fresh wallets net ${fresh >= 0 ? "bought" : "sold"} ${fmtUsd(Math.abs(fresh))}${net >= T && fresh * sign >= 3 * Math.abs(p.net) ? ` — retail is the bigger ${type === "selling" ? "seller" : "buyer"}` : ""}` : null;
   const priceLine = e.price ? `price ${pct(e.price.change)} over the last 24 h` : null;
   const tableLine = e.table ? (e.table.inTable ? `on the Smart Money net-flow table (24 h ${fmtUsd(e.table.net24 ?? 0)}, ${e.table.traders ?? "?"} traders)` : "not on the Smart Money net-flow table") : null;
   const wallets = p.wallets;
   const base = `${who} net ${net >= 0 ? verb : anti} ${fmtUsd(Math.abs(p.net))} in 24 h (${p.source}${wallets != null ? `, ${wallets} wallet${wallets === 1 ? "" : "s"}` : ""}; threshold ${fmtUsd(T)})`;
 
-  if (net <= -T) return R("CONTRADICTED", "C-SIGN", [base, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(tableLine ? [tableLine] : [])]);
+  if (net <= -T) return R("CONTRADICTED", "C-SIGN", [base, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(freshLine ? [freshLine] : []), ...(tableLine ? [tableLine] : [])]);
   if (Math.abs(net) < rules.floorUsd && (wallets ?? 0) === 0 && (e.named ? e.named.buyRows + e.named.sellRows === 0 : true)) {
     if (!presence(e, cls)) return R("UNVERIFIABLE", "U-NOCLASS", [`Nansen tags no wallet as ${who} in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels`]);
     return R("CONTRADICTED", "C-NOBODY", [`no ${who} wallet traded this token in the last 24 h (net ${fmtUsd(p.net)})`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(tableLine ? [tableLine] : [])]);
   }
-  if (net > 0 && net < T) return R("OVERSTATED", "O-SMALL", [base, `real but small: under ${fmtUsd(T)}, the noise level for a token with ${fmtUsd(totalFlow(e.flow1d))} of labelled flow a day`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : [])]);
+  if (net > 0 && net < T) return R("OVERSTATED", "O-SMALL", [base, `real but small: under ${fmtUsd(T)}, the noise level for a token with ${fmtUsd(totalFlow(e.flow1d))} of labelled flow a day`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(freshLine ? [freshLine] : [])]);
   if (net >= T) {
-    if (type === "buying" && fresh != null && fresh >= rules.freshMult * net)
-      return R("OVERSTATED", "O-FRESH", [base, `fresh wallets bought ${fmtUsd(fresh)} — ${(fresh / net).toFixed(1)}× the ${who} flow; they are the buyers`]);
     if (net7 != null && net7 * sign <= -T7) return R("OVERSTATED", "O-7D", [base, `but over 7 d ${who} net ${anti} ${fmtUsd(Math.abs(net7))} — a one-day blip against the week`]);
     if (e.price && e.price.change * sign >= rules.staleMove) return R("OVERSTATED", "O-STALE", [base, `${priceLine} — the move already happened; the claim is late`]);
     const minW = cls === "whale" ? rules.minWhales : rules.minWallets;
     if (wallets != null && wallets < minW) return R("OVERSTATED", "O-FEW", [base, `${wallets} wallet${wallets === 1 ? "" : "s"} — one desk, not the class`]);
     const reasons = [base];
-    if (net7 != null) reasons.push(`7 d agrees: ${fmtUsd(net7)}`);
+    if (net7 != null) reasons.push(`7 d ${net7 * sign >= 0 ? "agrees" : "disagrees"}: ${fmtUsd(net7)}`);
     if (tableLine) reasons.push(tableLine);
+    if (freshLine) reasons.push(freshLine);
     if (priceLine) reasons.push(priceLine);
     return R("CONFIRMED", "A-FLOW", reasons);
   }

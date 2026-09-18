@@ -1,0 +1,763 @@
+{
+  "slug": "uni-sm-holding",
+  "edge": "holding claim · tgm/holders smart_money · 15-credit path",
+  "input": "UNI has rallied 2.7-fold from its lows, with smart money logging gains of nearly 1000%.",
+  "source": "Lookonchain 73026 → theblockbeats 367811 · 2026-09-18",
+  "claim": {
+    "raw": "UNI has rallied 2.7-fold from its lows, with smart money logging gains of nearly 1000%.",
+    "token": "UNI",
+    "type": "holding",
+    "subject": "smart_money",
+    "extractor": "llm"
+  },
+  "options": {},
+  "now": 1789726946513,
+  "recordedAt": "2026-09-18T10:22:26.513Z",
+  "live": {
+    "calls": 8,
+    "credits": 15,
+    "ms": 4254
+  },
+  "responses": {
+    "7efc04f7bddd58507c7159437d1187fd": {
+      "storedAt": "2026-09-18T10:22:27.482Z",
+      "ttlMs": 0,
+      "endpoint": "search/general",
+      "body": {
+        "search_query": "UNI",
+        "result_type": "token",
+        "limit": 50
+      },
+      "text": "{\"tokens\":[{\"name\":\"UNI\",\"symbol\":\"UNI\",\"chain\":\"hyperliquid\",\"address\":\"UNI\",\"price\":9.1372,\"volume_24h\":149531057.98715034,\"market_cap\":5641517795.08571,\"rank\":33},{\"name\":\"Uniswap\",\"symbol\":\"UNI\",\"chain\":\"ethereum\",\"address\":\"0x1f9840a85d5af5bf1d1762f925bdaddc4201f984\",\"price\":9.0383356310918,\"volume_24h\":42990539.21263248,\"market_cap\":5641517795.08571,\"rank\":327},{\"name\":\"Uniswap\",\"symbol\":\"UNI\",\"chain\":\"bnb\",\"address\":\"0xbf5140a22578168fd562dccf235e5d43a02ce9b1\",\"price\":9.05692939462542,\"volume_24h\":1231944.0896212962,\"market_cap\":5634708004.82402,\"rank\":328},{\"name\":\"Uniswap\",\"symbol\":\"UNI\",\"chain\":\"solana\",\"address\":\"uniHfuPhEQSrtpzXpJZDCSq53yaejKKpNhFUiKoHKHV\",\"price\":9.09732712848561,\"volume_24h\":3380903.386638063,\"market_cap\":568459.345851044,\"rank\":635},{\"name\":\"United Stables\",\"symbol\":\"U\",\"chain\":\"bnb\",\"address\":\"0xce24439f2d9c6a2289f741120fe202248b666666\",\"price\":1.00061637764823,\"volume_24h\":2474551.132833263,\"market_cap\":1393567187.73931,\"rank\":689},{\"name\":\"Unity USD\",\"symbol\":\"UUSD\",\"chain\":\"bnb\",\"address\":\"0x61a10e8556bed032ea176330e7f17d6a12a10000\",\"price\":1.00006595733844,\"volume_24h\":581958.0628549661,\"market_cap\":99585581.19,\"rank\":700},{\"name\":\"United States Oil Fund • Robinhood Token\",\"symbol\":\"USO\",\"chain\":\"robinhood\",\"address\":\"0xa30fa36db767ad9ed3f7a60fc79526fb4d56d344\",\"price\":154.039784929753,\"volume_24h\":1336742.621557369,\"market_cap\":2229365.91728104,\"rank\":828},{\"name\":\"United Stables\",\"symbol\":\"U\",\"chain\":\"robinhood\",\"address\":\"0xce24439f2d9c6a2289f741120fe202248b666666\",\"price\":0.998822026089438,\"volume_24h\":1496869.3400256317,\"market_cap\":1393167632.23593,\"rank\":852},{\"name\":\"Uniswap\",\"symbol\":\"UNI\",\"chain\":\"base\",\"address\":\"0xc3de830ea07524a0761646a6a4e4be0e114a3c83\",\"price\":8.9745021602043,\"volume_24h\":124864.5025479359,\"market_cap\":1197633.44240822,\"rank\":1226},{\"name\":\"Uniswap\",\"symbol\":\"UNI\",\"chain\":\"arbitrum\",\"address\":\"0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0\",\"price\":9.00873977021114,\"volume_24h\":1279349.5308820396,\"market_cap\":5622873213.94876,\"rank\":1272},{\"name\":\"Solana (Universal)\",\"symbol\":\"USOL\",\"chain\":\"base\",\"address\":\"0x9b8df6e244526ab5f6e6400d331db28c8fdddb55\",\"price\":105.045134664759,\"volume_24h\":680527.1827482468,\"market_cap\":3336981.97058472,\"rank\":1331},{\"name\":\"Uniswap (PoS)\",\"symbol\":\"UNI\",\"chain\":\"polygon\",\"address\":\"0xb33eaad8d922b1083446dc23f610c2567fb5180f\",\"price\":9.03705570102296,\"volume_24h\":349889.4282848456,\"market_cap\":5664000640.99774,\"rank\":1408},{\"name\":\"United States Gold Reserve\",\"symbol\":\"USGR\",\"chain\":\"solana\",\"address\":\"1FQBBKgz7BmKxXSwUN9WzGVdrtL9KpQMri5UJEvpump\",\"price\":0.007473526679305659,\"volume_24h\":194502.4006427161,\"market_cap\":7421279.31022361,\"rank\":1505},{\"name\":\"United States Dividend Fund\",\"symbol\":\"USDF\",\"chain\":\"solana\",\"address\":\"ireZB2cgtfvFcVQGLYRAzaugVapAzsjgJ1cMetQpump\",\"price\":0.008750003322475613,\"volume_24h\":183075.22718717525,\"market_cap\":8746886.80149184,\"rank\":1518},{\"name\":\"UnifAI\",\"symbol\":\"UAI\",\"chain\":\"bnb\",\"address\":\"0x3e5d4f8aee0d9b3082d5f6da5d6e225d17ba9ea0\",\"price\":0.420372727964712,\"volume_24h\":129293.70596707803,\"market_cap\":100404620.1548,\"rank\":1603},{\"name\":\"United Founders Group\",\"symbol\":\"UFG\",\"chain\":\"robinhood\",\"address\":\"0xefab538cf3c29237a47c6afb145d50ddf204a0a3\",\"price\":0.0014192822417706,\"volume_24h\":85372.27491263318,\"market_cap\":1303493.28054565,\"rank\":1658},{\"name\":\"Cardano (Universal)\",\"symbol\":\"UADA\",\"chain\":\"base\",\"address\":\"0xa3a34a0d9a08ccddb6ed422ac0a28a06731335aa\",\"price\":0.215824921575551,\"volume_24h\":30864.05316243339,\"market_cap\":30.6380387306905,\"rank\":1950},{\"name\":\"Unicorn Fart Dust\",\"symbol\":\"UFD\",\"chain\":\"solana\",\"address\":\"eL5fUxj2J4CiQsmW85k5FG9DvuQjjUoBHoQBi2Kpump\",\"price\":0.007322045747813408,\"volume_24h\":28167.64987864715,\"market_cap\":7319100.5801555,\"rank\":1988},{\"name\":\"Dogecoin (Universal)\",\"symbol\":\"UDOGE\",\"chain\":\"base\",\"address\":\"0x12e96c2bfea6e835cf8dd38a5834fa61cf723736\",\"price\":0.0853977073342411,\"volume_24h\":19132.938189060944,\"market_cap\":318753.976369704,\"rank\":2007},{\"name\":\"XRP (Universal)\",\"symbol\":\"UXRP\",\"chain\":\"base\",\"address\":\"0x2615a94df961278dcbc41fb0a54fec5f10a693ae\",\"price\":1.3305945413483,\"volume_24h\":19147.686537203706,\"market_cap\":2453371.3334946,\"rank\":2048},{\"name\":\"United States Water Supply\",\"symbol\":\"USWS\",\"chain\":\"solana\",\"address\":\"8e1sqPsXchqMoY4oVBME9Fq2WZasicG162GkDoACuSWs\",\"price\":0.0008998735456621829,\"volume_24h\":21299.418199277767,\"market_cap\":8998735.45662183,\"rank\":2093},{\"name\":\"Universal ETH\",\"symbol\":\"UNIETH\",\"chain\":\"ethereum\",\"address\":\"0xf1376bcef0f78459c0ed0ba5ddce976f1ddf51f4\",\"price\":2804.93318826473,\"volume_24h\":8126.754977636458,\"market_cap\":25266233.4839817,\"rank\":2371},{\"name\":\"Unibot\",\"symbol\":\"UNIBOT\",\"chain\":\"ethereum\",\"address\":\"0xf819d9cb1c2a819fd991781a822de3ca8607c3c9\",\"price\":0.763802790825784,\"volume_24h\":7828.150652442261,\"market_cap\":773782.0839,\"rank\":2380},{\"name\":\"Unicorn Meat\",\"symbol\":\"W🍖\",\"chain\":\"ethereum\",\"address\":\"0xdfa208bb0b811cfbb5fa3ea98ec37aa86180e668\",\"price\":0.00755130796082221,\"volume_24h\":24.421909476901327,\"market_cap\":755061.138531122,\"rank\":2984},{\"name\":\"Unity Wallet Token\",\"symbol\":\"UNT\",\"chain\":\"solana\",\"address\":\"UNTyTuyNPhLufn4K4SMsW6BxbvfYEMgQ4qUT9orPapp\",\"price\":0.12631735864354304,\"volume_24h\":1.3725341692975437,\"market_cap\":83025392.6290375,\"rank\":3180},{\"name\":\"UNISWAP\",\"symbol\":\"PAWSINU\",\"chain\":\"robinhood\",\"address\":\"0xbcc948e70f1d5dcdc8986147257bf4b6c40105f1\",\"price\":0.0000309912271544808,\"volume_24h\":125535.28188764001,\"market_cap\":30991.2271544808,\"rank\":3600},{\"name\":\"United Parcel Service - Backpack Securities\",\"symbol\":\"UPS\",\"chain\":\"solana\",\"address\":\"UPSqUeMHcWbkdg784XuBUEF9DtySSnW9ur5LAVdcuB9\",\"price\":99.59861605293173,\"volume_24h\":81041.12103123142,\"market_cap\":83860.3038918188,\"rank\":3706},{\"name\":\"United Stables\",\"symbol\":\"U\",\"chain\":\"ethereum\",\"address\":\"0xce24439f2d9c6a2289f741120fe202248b666666\",\"price\":0.967280685058439,\"volume_24h\":0.0,\"market_cap\":23523950.1640736,\"rank\":3743},{\"name\":\"United States Dividend Fund\",\"symbol\":\"USDF\",\"chain\":\"solana\",\"address\":\"DRMnFyekQiCTMrajtgsTycqp4ie6r1tZnh6qpAGjpump\",\"price\":0.0022956178236419587,\"volume_24h\":58325.48059486103,\"market_cap\":2229558.35446827,\"rank\":3768},{\"name\":\"NEAR (Universal)\",\"symbol\":\"UNEAR\",\"chain\":\"base\",\"address\":\"0x5ed25e305e08f58afd7995eac72563e6be65a617\",\"price\":3.53069661733953,\"volume_24h\":38217.766345771015,\"market_cap\":120010.418603186,\"rank\":3810},{\"name\":\"Sui (Universal)\",\"symbol\":\"USUI\",\"chain\":\"base\",\"address\":\"0xb0505e5a99abd03d94a1169e638b78edfed26ea4\",\"price\":0.789731567799314,\"volume_24h\":22445.406332235405,\"market_cap\":485159.839835463,\"rank\":4025},{\"name\":\"Unicorn Pegasus\",\"symbol\":\"UNIPEG\",\"chain\":\"robinhood\",\"address\":\"0xd3d5be6558f84e628ee091b511df92b4e461a53b\",\"price\":0.0000890604692507358,\"volume_24h\":23519.342328208822,\"market_cap\":89473.96265,\"rank\":4062},{\"name\":\"Uniswap\",\"symbol\":\"UNI\",\"chain\":\"optimism\",\"address\":\"0x6fd9d7ad17242c41f7131d257212c54a0e816691\",\"price\":8.89180600851471,\"volume_24h\":17006.819129299838,\"market_cap\":5522776180.61062,\"rank\":4264},{\"name\":\"Uniswap (Wormhole)\",\"symbol\":\"UNI\",\"chain\":\"solana\",\"address\":\"8FU95xFJhUUkyyCLU13HSzDLs7oC4QZdXQHL6SCeab36\",\"price\":8.72091024419298,\"volume_24h\":16019.523546218348,\"market_cap\":288856.962710065,\"rank\":4284},{\"name\":\"Universal ETH\",\"symbol\":\"UNIETH\",\"chain\":\"arbitrum\",\"address\":\"0x3d15fd46ce9e551498328b1c83071d9509e2c3a0\",\"price\":2852.0122491026104,\"volume_24h\":15479.5379621839,\"market_cap\":25688990.0,\"rank\":4344},{\"name\":\"Unicorn\",\"symbol\":\"UWU\",\"chain\":\"solana\",\"address\":\"UWUy7J86LUiBv5SjAUZ53LMGhtnqvbQ7QNSSkyupump\",\"price\":0.004292398955972278,\"volume_24h\":13270.112342604534,\"market_cap\":4257361.70653258,\"rank\":4412},{\"name\":\"ZCash (Universal)\",\"symbol\":\"UZEC\",\"chain\":\"base\",\"address\":\"0x83f31af747189c2fa9e5deb253200c505eff6ed2\",\"price\":1481.99783755408,\"volume_24h\":7621.057285803066,\"market_cap\":422936.559617726,\"rank\":4662},{\"name\":\"Unicorn\",\"symbol\":\"UNICORN\",\"chain\":\"robinhood\",\"address\":\"0xfeacef09be172634bd8cadc2429b92eb4ed73799\",\"price\":0.0000132528740953034,\"volume_24h\":5662.551446606645,\"market_cap\":12978.75027,\"rank\":4832},{\"name\":\"Farting Unicorn\",\"symbol\":\"FUNI\",\"chain\":\"robinhood\",\"address\":\"0xa65d0267c8637fcc46ff91e48de766721c750fe3\",\"price\":20.5802005993154,\"volume_24h\":3749.8726957385015,\"market_cap\":235701.341292,\"rank\":5109},{\"name\":\"UNION Protocol Governance Token\",\"symbol\":\"UNN\",\"chain\":\"ethereum\",\"address\":\"0x226f7b842e0f0120b7e194d05432b3fd14773a9d\",\"price\":0.000242928742722559,\"volume_24h\":1825.1247283079074,\"market_cap\":224781.215131063,\"rank\":5497},{\"name\":\"United States Oil Fund (Ondo Tokenized)\",\"symbol\":\"USOON\",\"chain\":\"bnb\",\"address\":\"0x94174e3d1335db402dd03a092f7aa7ac2cb32be4\",\"price\":161.457631281479,\"volume_24h\":474.18919817472516,\"market_cap\":2957471.35971937,\"rank\":5902},{\"name\":\"Cosmos (Universal)\",\"symbol\":\"UATOM\",\"chain\":\"base\",\"address\":\"0x6e934283dae5d5d1831cbe8d557c44c9b83f30ee\",\"price\":1.65453572726788,\"volume_24h\":527.043421056896,\"market_cap\":18631.2759305754,\"rank\":5927},{\"name\":\"Aptos (Universal)\",\"symbol\":\"UAPT\",\"chain\":\"base\",\"address\":\"0x9c0e042d65a2e1ff31ac83f404e5cb79f452c337\",\"price\":0.651457077800824,\"volume_24h\":828.9687249182434,\"market_cap\":16296.4625278983,\"rank\":6099},{\"name\":\"Chainlink (Universal)\",\"symbol\":\"ULINK\",\"chain\":\"base\",\"address\":\"0xd403d1624daef243fbcbd4a80d8a6f36affe32b2\",\"price\":11.7487965228059,\"volume_24h\":715.488505838703,\"market_cap\":27.02223200244,\"rank\":6204},{\"name\":\"United Microelectronics • Robinhood Token\",\"symbol\":\"UMC\",\"chain\":\"robinhood\",\"address\":\"0x0e6e67ba88e7b5d9b67636a215c76779b948de79\",\"price\":23.4952915467768,\"volume_24h\":704.7367627989483,\"market_cap\":19962.7962235556,\"rank\":6218},{\"name\":\"Uni\",\"symbol\":\"UNI\",\"chain\":\"sui\",\"address\":\"0xaf9e228fd0292e2a27b4859bc57a2f3a9faedb9341b6307c84fef163e44790cc::uni::UNI\",\"price\":0.00003946326608420508,\"volume_24h\":575.3730685944835,\"market_cap\":39443.0,\"rank\":6321},{\"name\":\"Sei (Universal)\",\"symbol\":\"USEI\",\"chain\":\"base\",\"address\":\"0x71a67215a2025f501f386a49858a9ced2fc0249d\",\"price\":0.0466725428242375,\"volume_24h\":595.5727890652144,\"market_cap\":26517.7204719436,\"rank\":6353},{\"name\":\"Avalanche (Universal)\",\"symbol\":\"UAVAX\",\"chain\":\"base\",\"address\":\"0xd6a34b430c05ac78c24985f8abee2616bc1788cb\",\"price\":7.9546295457798,\"volume_24h\":495.2325425464229,\"market_cap\":26691.4981858132,\"rank\":6515},{\"name\":\"United States Oil Fund (Ondo Tokenized)\",\"symbol\":\"USOON\",\"chain\":\"ethereum\",\"address\":\"0x1f5fc5c3c8b0f15c7e21af623936ff2b210b6415\",\"price\":159.415398926304,\"volume_24h\":1047.5830468279692,\"market_cap\":2825200.88732813,\"rank\":6529},{\"name\":\"Universal Basic Compute\",\"symbol\":\"UBC\",\"chain\":\"solana\",\"address\":\"9psiRdn9cXYVps4F1kFuoNjd2EtmqNJXrCPmRppJpump\",\"price\":0.00005988766410265014,\"volume_24h\":350.6122268959723,\"market_cap\":59367.6771868643,\"rank\":6701}],\"entities\":[],\"total_results\":50}"
+    },
+    "58c7488fd9c1616e8e944d7d5b4c0778": {
+      "storedAt": "2026-09-18T10:22:27.813Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/flow-intelligence",
+      "body": {
+        "chain": "ethereum",
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "timeframe": "7d"
+      },
+      "text": "{\"data\":[{\"public_figure_net_flow_usd\":4374.298760288423,\"public_figure_avg_flow_usd\":25513.22071193019,\"public_figure_wallet_count\":2,\"top_pnl_net_flow_usd\":-8040069.749814897,\"top_pnl_avg_flow_usd\":6940379.8505593985,\"top_pnl_wallet_count\":62,\"whale_net_flow_usd\":-462383.09284780174,\"whale_avg_flow_usd\":467826.9001334803,\"whale_wallet_count\":2,\"smart_trader_net_flow_usd\":-38375.280206121744,\"smart_trader_avg_flow_usd\":91576.43232431315,\"smart_trader_wallet_count\":3,\"exchange_net_flow_usd\":-13826854.36716189,\"exchange_avg_flow_usd\":8758525.138129197,\"exchange_wallet_count\":0,\"fresh_wallets_net_flow_usd\":36945980.30129504,\"fresh_wallets_avg_flow_usd\":37844625.773906805,\"fresh_wallets_wallet_count\":0}],\"warnings\":[\"exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.\",\"fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero.\"]}"
+    },
+    "413c052e15573f81cee3a6edd3698e7a": {
+      "storedAt": "2026-09-18T10:22:27.814Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/flow-intelligence",
+      "body": {
+        "chain": "ethereum",
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "timeframe": "1d"
+      },
+      "text": "{\"data\":[{\"public_figure_net_flow_usd\":4384.641901111445,\"public_figure_avg_flow_usd\":4384.64190238497,\"public_figure_wallet_count\":1,\"top_pnl_net_flow_usd\":-7186015.242145505,\"top_pnl_avg_flow_usd\":442119.5542514455,\"top_pnl_wallet_count\":36,\"whale_net_flow_usd\":-474230.06055057194,\"whale_avg_flow_usd\":304482.8558450727,\"whale_wallet_count\":2,\"smart_trader_net_flow_usd\":16587.60122198475,\"smart_trader_avg_flow_usd\":29155.737929758925,\"smart_trader_wallet_count\":2,\"exchange_net_flow_usd\":-3626183.4907448962,\"exchange_avg_flow_usd\":880385.1806901677,\"exchange_wallet_count\":0,\"fresh_wallets_net_flow_usd\":15193350.449605864,\"fresh_wallets_avg_flow_usd\":2450231.1688513504,\"fresh_wallets_wallet_count\":0}],\"warnings\":[\"exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.\",\"fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero.\"]}"
+    },
+    "24beee832d6110ed8110bdf0dcd4eb13": {
+      "storedAt": "2026-09-18T10:22:28.119Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/who-bought-sold",
+      "body": {
+        "chain": "ethereum",
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "buy_or_sell": "SELL",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        },
+        "filters": {
+          "include_smart_money_labels": [
+            "Smart Trader",
+            "Fund",
+            "30D Smart Trader",
+            "90D Smart Trader",
+            "180D Smart Trader"
+          ]
+        },
+        "order_by": [
+          {
+            "field": "sold_volume_usd",
+            "direction": "DESC"
+          }
+        ]
+      },
+      "text": "{\"data\":[{\"address\":\"0xfc2e430725da938704017835626fd15643787e43\",\"address_label\":\"\",\"bought_token_volume\":469.6471311063984,\"sold_token_volume\":469.6471311063984,\"token_trade_volume\":0.0,\"bought_volume_usd\":3605.6469516383404,\"sold_volume_usd\":3605.6469516383404,\"trade_volume_usd\":0.0}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true}}"
+    },
+    "277ac3db59dff2be2b8ae93ce71bfde9": {
+      "storedAt": "2026-09-18T10:22:28.369Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/who-bought-sold",
+      "body": {
+        "chain": "ethereum",
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "buy_or_sell": "BUY",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        },
+        "filters": {
+          "include_smart_money_labels": [
+            "Smart Trader",
+            "Fund",
+            "30D Smart Trader",
+            "90D Smart Trader",
+            "180D Smart Trader"
+          ]
+        },
+        "order_by": [
+          {
+            "field": "bought_volume_usd",
+            "direction": "DESC"
+          }
+        ]
+      },
+      "text": "{\"data\":[{\"address\":\"0x4b69d6081ff943afd0c6561c3da5ac563ce4cdfb\",\"address_label\":\"wenlaunch.eth*\",\"bought_token_volume\":2278.221161516495,\"sold_token_volume\":0.0,\"token_trade_volume\":2278.221161516495,\"bought_volume_usd\":16516.704878058372,\"sold_volume_usd\":0.0,\"trade_volume_usd\":16516.704878058372},{\"address\":\"0xfc2e430725da938704017835626fd15643787e43\",\"address_label\":\"\",\"bought_token_volume\":469.6471311063984,\"sold_token_volume\":469.6471311063984,\"token_trade_volume\":0.0,\"bought_volume_usd\":3605.6469516383404,\"sold_volume_usd\":3605.6469516383404,\"trade_volume_usd\":0.0}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true}}"
+    },
+    "e514fe1ce7cf1479495f85d06ea21061": {
+      "storedAt": "2026-09-18T10:22:28.426Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/token-ohlcv",
+      "body": {
+        "chain": "ethereum",
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "timeframe": "1h",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        }
+      },
+      "text": "{\"chain\":\"ethereum\",\"token_address\":\"0x1f9840a85d5af5bf1d1762f925bdaddc4201f984\",\"timeframe\":\"1h\",\"data\":[{\"interval_start\":\"2026-09-17T10:00:00Z\",\"open\":6.88611329825717,\"high\":6.852544210450195,\"low\":6.75295070245238,\"close\":6.811735418497214,\"volume\":102392.45629389353,\"volume_usd\":695814.2175888177,\"market_cap\":{\"open\":4266402638.23413,\"high\":4261733616.47015,\"low\":4194962842.06351,\"close\":4230749281.05069}},{\"interval_start\":\"2026-09-17T11:00:00Z\",\"open\":6.811735418497214,\"high\":6.87528798674384,\"low\":6.77880147971043,\"close\":6.8452016775900955,\"volume\":54806.271052168704,\"volume_usd\":374101.4366811399,\"market_cap\":{\"open\":4230749281.05069,\"high\":4272616647.70254,\"low\":4211021459.18807,\"close\":4246475604.93428}},{\"interval_start\":\"2026-09-17T12:00:00Z\",\"open\":6.8452016775900955,\"high\":6.97336417688446,\"low\":6.852751505847425,\"close\":6.87522116230363,\"volume\":137100.44380693597,\"volume_usd\":944167.9951852874,\"market_cap\":{\"open\":4246475604.93428,\"high\":4340732523.18931,\"low\":4242281448.16862,\"close\":4265601051.14246}},{\"interval_start\":\"2026-09-17T13:00:00Z\",\"open\":6.87522116230363,\"high\":7.173292982206085,\"low\":6.94528096646902,\"close\":7.173292982206085,\"volume\":143458.1708064778,\"volume_usd\":1009270.2316873268,\"market_cap\":{\"open\":4265601051.14246,\"high\":4452816045.11881,\"low\":4307891324.69563,\"close\":4452816045.11881}},{\"interval_start\":\"2026-09-17T14:00:00Z\",\"open\":7.173292982206085,\"high\":7.3550877736019,\"low\":7.183990912943489,\"close\":7.183990912943489,\"volume\":184260.64096511054,\"volume_usd\":1343542.2024519853,\"market_cap\":{\"open\":4452816045.11881,\"high\":4576796433.90257,\"low\":4466659794.54612,\"close\":4466659794.54612}},{\"interval_start\":\"2026-09-17T15:00:00Z\",\"open\":7.183990912943489,\"high\":7.17845127419802,\"low\":7.10306403533058,\"close\":7.10306403533058,\"volume\":239052.94634040663,\"volume_usd\":1706338.8893894528,\"market_cap\":{\"open\":4466659794.54612,\"high\":4482896579.22816,\"low\":4398983927.52757,\"close\":4411858135.4348}},{\"interval_start\":\"2026-09-17T16:00:00Z\",\"open\":7.10306403533058,\"high\":7.599535441805595,\"low\":7.15218659659088,\"close\":7.599535441805595,\"volume\":238980.66765807645,\"volume_usd\":1772774.0891116378,\"market_cap\":{\"open\":4411858135.4348,\"high\":4734433477.09011,\"low\":4442369161.46917,\"close\":4734433477.09011}},{\"interval_start\":\"2026-09-17T17:00:00Z\",\"open\":7.599535441805595,\"high\":7.735745862603675,\"low\":7.58961739698643,\"close\":7.66660568156269,\"volume\":196777.5298130708,\"volume_usd\":1508187.5540639397,\"market_cap\":{\"open\":4734433477.09011,\"high\":4830145528.17943,\"low\":4709257220.70082,\"close\":4761885360.94326}},{\"interval_start\":\"2026-09-17T18:00:00Z\",\"open\":7.66660568156269,\"high\":7.73413643350405,\"low\":7.54088484767751,\"close\":7.54088484767751,\"volume\":133593.879233025,\"volume_usd\":1023274.413007414,\"market_cap\":{\"open\":4761885360.94326,\"high\":4816715975.81911,\"low\":4686296971.04714,\"close\":4686296971.04714}},{\"interval_start\":\"2026-09-17T19:00:00Z\",\"open\":7.54088484767751,\"high\":7.66807576712031,\"low\":7.52431937331397,\"close\":7.63596770776094,\"volume\":47243.655352353046,\"volume_usd\":359187.2476044525,\"market_cap\":{\"open\":4686296971.04714,\"high\":4770010725.22762,\"low\":4670885894.16544,\"close\":4770010725.22762}},{\"interval_start\":\"2026-09-17T20:00:00Z\",\"open\":7.63596770776094,\"high\":7.80004107133245,\"low\":7.5845573977244,\"close\":7.5845573977244,\"volume\":184035.59334221183,\"volume_usd\":1410542.9943411597,\"market_cap\":{\"open\":4770010725.22762,\"high\":4844702406.25635,\"low\":4710862819.71365,\"close\":4710862819.71365}},{\"interval_start\":\"2026-09-17T21:00:00Z\",\"open\":7.5845573977244,\"high\":7.7727664569924,\"low\":7.63169435699091,\"close\":7.698824268269185,\"volume\":170965.8099553045,\"volume_usd\":1316103.617018827,\"market_cap\":{\"open\":4710862819.71365,\"high\":4827761804.49271,\"low\":4740140170.69896,\"close\":4778463304.31241}},{\"interval_start\":\"2026-09-17T22:00:00Z\",\"open\":7.698824268269185,\"high\":7.744260629075315,\"low\":7.558749199994335,\"close\":7.60466438171564,\"volume\":161762.79285450059,\"volume_usd\":1236901.9452845596,\"market_cap\":{\"open\":4778463304.31241,\"high\":4791000516.20203,\"low\":4670777236.68217,\"close\":4720483991.38707}},{\"interval_start\":\"2026-09-17T23:00:00Z\",\"open\":7.60466438171564,\"high\":7.83984618839105,\"low\":7.61648116324118,\"close\":7.815969944551595,\"volume\":168947.42557051324,\"volume_usd\":1311840.7798884017,\"market_cap\":{\"open\":4720483991.38707,\"high\":4870908139.35728,\"low\":4738817342.60399,\"close\":4870908139.35728}},{\"interval_start\":\"2026-09-18T00:00:00Z\",\"open\":7.815969944551595,\"high\":7.88631842922276,\"low\":7.63597107919489,\"close\":7.743138568985,\"volume\":130830.76482958178,\"volume_usd\":1013140.1675363063,\"market_cap\":{\"open\":4870908139.35728,\"high\":4898290345.03805,\"low\":4742796495.98543,\"close\":4809359555.2002}},{\"interval_start\":\"2026-09-18T01:00:00Z\",\"open\":7.743138568985,\"high\":7.9541310671880705,\"low\":7.708669160053811,\"close\":7.9541310671880705,\"volume\":61219.50749138624,\"volume_usd\":481238.3210943985,\"market_cap\":{\"open\":4809359555.2002,\"high\":4875084009.22922,\"low\":4785215883.1687,\"close\":4871251589.86882}},{\"interval_start\":\"2026-09-18T02:00:00Z\",\"open\":7.9541310671880705,\"high\":8.01642479230666,\"low\":7.86742988833032,\"close\":7.9096039956889,\"volume\":48560.32176611212,\"volume_usd\":384618.0396588136,\"market_cap\":{\"open\":4871251589.86882,\"high\":4979101023.42013,\"low\":4884936496.3364,\"close\":4918317765.72938}},{\"interval_start\":\"2026-09-18T03:00:00Z\",\"open\":7.9096039956889,\"high\":8.777556178297164,\"low\":7.90165233741226,\"close\":8.59615992422485,\"volume\":1285075.575295189,\"volume_usd\":11065232.391274374,\"market_cap\":{\"open\":4918317765.72938,\"high\":5471272247.26734,\"low\":4907814425.90824,\"close\":5335440419.52374}},{\"interval_start\":\"2026-09-18T04:00:00Z\",\"open\":8.59615992422485,\"high\":8.650951993943526,\"low\":8.49023617558952,\"close\":8.49023617558952,\"volume\":385160.89805927186,\"volume_usd\":3318323.855770658,\"market_cap\":{\"open\":5335440419.52374,\"high\":5379158194.8977,\"low\":5285828639.8026,\"close\":5299043853.47863}},{\"interval_start\":\"2026-09-18T05:00:00Z\",\"open\":8.49023617558952,\"high\":8.5502758772682,\"low\":8.449334502129659,\"close\":8.48154709097475,\"volume\":210314.96584423372,\"volume_usd\":1783760.7074991195,\"market_cap\":{\"open\":5299043853.47863,\"high\":5317168428.06516,\"low\":5243647569.1081,\"close\":5285533923.26241}},{\"interval_start\":\"2026-09-18T06:00:00Z\",\"open\":8.48154709097475,\"high\":8.623045561376479,\"low\":8.465142523958331,\"close\":8.623045561376479,\"volume\":206565.83340209883,\"volume_usd\":1765637.184400983,\"market_cap\":{\"open\":5285533923.26241,\"high\":5358361181.3809,\"low\":5256180271.90788,\"close\":5358361181.3809}},{\"interval_start\":\"2026-09-18T07:00:00Z\",\"open\":8.623045561376479,\"high\":8.79128546476882,\"low\":8.579019115490176,\"close\":8.773730893772015,\"volume\":145638.74939377903,\"volume_usd\":1269383.7033314887,\"market_cap\":{\"open\":5358361181.3809,\"high\":5472718869.58982,\"low\":5325732480.49455,\"close\":5416677573.75711}},{\"interval_start\":\"2026-09-18T08:00:00Z\",\"open\":8.773730893772015,\"high\":8.913475228614136,\"low\":8.72922259583398,\"close\":8.82764240415138,\"volume\":278279.47141299787,\"volume_usd\":2465861.1879514665,\"market_cap\":{\"open\":5416677573.75711,\"high\":5543789887.34257,\"low\":5408102757.88421,\"close\":5482923049.042}},{\"interval_start\":\"2026-09-18T09:00:00Z\",\"open\":8.82764240415138,\"high\":9.129272238396926,\"low\":8.893021726408215,\"close\":9.098444686990385,\"volume\":397174.7224270342,\"volume_usd\":3578333.345221665,\"market_cap\":{\"open\":5482923049.042,\"high\":5678622422.3827,\"low\":5519377375.63419,\"close\":5641517795.08571}},{\"interval_start\":\"2026-09-18T10:00:00Z\",\"open\":9.098444686990385,\"high\":9.287781598690561,\"low\":9.107519613400836,\"close\":9.287781598690561,\"volume\":211471.81490786857,\"volume_usd\":1941630.255403774,\"market_cap\":{\"open\":5641517795.08571,\"high\":5795837210.8044,\"low\":5656990771.27867,\"close\":5795837210.8044}}],\"truncated\":false,\"truncation_note\":null}"
+    },
+    "673e099c4ec7cdfcebe941f868fa0854": {
+      "storedAt": "2026-09-18T10:22:29.096Z",
+      "ttlMs": 0,
+      "endpoint": "smart-money/netflow",
+      "body": {
+        "chains": [
+          "ethereum"
+        ],
+        "filters": {
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "include_stablecoins": true,
+          "include_native_tokens": true
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 10
+        }
+      },
+      "text": "{\"data\":[{\"token_address\":\"0x1f9840a85d5af5bf1d1762f925bdaddc4201f984\",\"token_symbol\":\"UNI\",\"net_flow_1h_usd\":0.0,\"net_flow_24h_usd\":16587.60122198475,\"net_flow_7d_usd\":-38375.280206121744,\"net_flow_30d_usd\":-125283.61953391705,\"chain\":\"ethereum\",\"token_sectors\":[\"Decentralised Exchanges\"],\"trader_count\":13,\"token_age_days\":2195,\"market_cap_usd\":5656990771.27867}],\"pagination\":{\"page\":1,\"per_page\":10,\"is_last_page\":true}}"
+    },
+    "694c2607c8afe5a9c195d0fb649b27f4": {
+      "storedAt": "2026-09-18T10:22:29.453Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/holders",
+      "body": {
+        "chain": "ethereum",
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "label_type": "smart_money",
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        }
+      },
+      "text": "{\"data\":[{\"address\":\"0x7d325a9c8f10758188641fe91cfd902499edc782\",\"address_label\":\"Token Millionaire\",\"token_amount\":8000000.121638699,\"total_outflow\":8500000.0,\"total_inflow\":16500000.121638699,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.00799998286921231,\"value_usd\":75178080.33858672},{\"address\":\"0x7f256695627c44e423139ec172393ecdc8a3de24\",\"address_label\":\"Token Millionaire\",\"token_amount\":2749999.9000999997,\"total_outflow\":2250000.1,\"total_inflow\":5000000.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.002749993969578734,\"value_usd\":25842463.784672443},{\"address\":\"0x4c262bdb0ed4d40f1a7b85075762d6058a3b6fed\",\"address_label\":\"Token Millionaire\",\"token_amount\":2499999.9000999997,\"total_outflow\":0.1,\"total_inflow\":2500000.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.002499994508717051,\"value_usd\":23493148.80981256},{\"address\":\"0x67a93a3e126afd52ca06bf3b9be722820c9adfc9\",\"address_label\":\"Token Millionaire\",\"token_amount\":2499999.9000999997,\"total_outflow\":0.1,\"total_inflow\":2500000.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.002499994508717051,\"value_usd\":23493148.80981256},{\"address\":\"0x8608343b7987d903bb720d9425a8be54de48f1d3\",\"address_label\":\"Token Millionaire\",\"token_amount\":2499999.9000999997,\"total_outflow\":0.1,\"total_inflow\":2500000.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.002499994508717051,\"value_usd\":23493148.80981256},{\"address\":\"0xfbeb29a82b4ea5c32edcd0341bbcedb60635f2e5\",\"address_label\":\"Token Millionaire\",\"token_amount\":2400000.0001,\"total_outflow\":4999999.85,\"total_inflow\":7399999.850099999,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0023999948243721616,\"value_usd\":22553423.759594597},{\"address\":\"0xd472fd4d46f295043774e16144e58cff9c4a9424\",\"address_label\":\"Token Millionaire\",\"token_amount\":2400000.0001,\"total_outflow\":4999999.85,\"total_inflow\":7399999.850099999,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0023999948243721616,\"value_usd\":22553423.759594597},{\"address\":\"0x3744da57184575064838bbc87a0fc791f5e39ea2\",\"address_label\":\"High Balance\",\"token_amount\":2038416.0095765009,\"total_outflow\":517737.0,\"total_inflow\":2556153.009576501,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0020384116136237984,\"value_usd\":19155525.0251688},{\"address\":\"0xc33854950a451f5992cc712b370222528b8bcad5\",\"address_label\":\"Token Millionaire\",\"token_amount\":1850000.0001,\"total_outflow\":2449999.8499999996,\"total_inflow\":4299999.850099999,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.001849996010476458,\"value_usd\":17384930.814902857},{\"address\":\"0x20497cdd257569895f7e2c4cdea45e26d3154b6a\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.1501,\"total_outflow\":2500000.8499999996,\"total_inflow\":4300001.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.001799996268303798,\"value_usd\":16915069.229519866},{\"address\":\"0xd879446633614189e2124138372a5846932bcee9\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.0000999998,\"total_outflow\":4999999.85,\"total_inflow\":6799999.8501,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0017999961183041212,\"value_usd\":16915067.81993088},{\"address\":\"0x4211986f857ec9bcd55d4a6bad8ef4d4d60deda6\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.0000999998,\"total_outflow\":1999999.8499999999,\"total_inflow\":3799999.8501,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0017999961183041212,\"value_usd\":16915067.81993088},{\"address\":\"0xdf1b4860d1688ebc8e6b4c6cc1ced03f792511b1\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.0000999998,\"total_outflow\":4999999.85,\"total_inflow\":6799999.8501,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0017999961183041212,\"value_usd\":16915067.81993088},{\"address\":\"0x8a96e905272a0b6558924584e284eb0f009b4ca7\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.0000999998,\"total_outflow\":1999999.8499999999,\"total_inflow\":3799999.8501,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0017999961183041212,\"value_usd\":16915067.81993088},{\"address\":\"0x8890ad35cadd921da1ca5475c5bce0f54148dcc4\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.0000999998,\"total_outflow\":4999999.85,\"total_inflow\":6799999.8501,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0017999961183041212,\"value_usd\":16915067.81993088},{\"address\":\"0x38a466cad6da151832ddb1b3b0de3c617df0db41\",\"address_label\":\"Token Millionaire\",\"token_amount\":1800000.0000999998,\"total_outflow\":1950000.35,\"total_inflow\":3750000.3501000004,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0017999961183041212,\"value_usd\":16915067.81993088},{\"address\":\"0x6c3aad6932d186d4c7ff80b311a04fe0c49ce62e\",\"address_label\":\"Token Millionaire\",\"token_amount\":1000000.0001,\"total_outflow\":0.0,\"total_inflow\":1000000.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0009999978435467338,\"value_usd\":9397259.900379257},{\"address\":\"0x1c036c677f4374b62a1c8e3b8b9de6c25bafdb9c\",\"address_label\":\"Token Millionaire\",\"token_amount\":250000.00009999998,\"total_outflow\":0.0,\"total_inflow\":250000.00009999998,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.0002499994609616833,\"value_usd\":2349314.9757996085},{\"address\":\"0xd1fa9e4df47d6d2690c5941fd98eeb81854f3174\",\"address_label\":\"High Balance\",\"token_amount\":28461.873666413623,\"total_outflow\":0.0,\"total_inflow\":28461.873666413623,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":0.00002846181228686702,\"value_usd\":267463.62406830274},{\"address\":\"0x3244e2dd6c979f35e9b1632eb6e7bd77db5354fb\",\"address_label\":\"Uses \\\"COINGECKOREF\\\" HL Referral Code\",\"token_amount\":10038.355571186332,\"total_outflow\":0.0,\"total_inflow\":10038.355571186332,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":6681.803243790392,\"ownership_percentage\":0.000010038333922937842,\"value_usd\":94333.03626542473},{\"address\":\"0x41502d398e4952419445e8246bf82fae30ad7d44\",\"address_label\":\"\",\"token_amount\":7013.631840664265,\"total_outflow\":0.0,\"total_inflow\":7013.631840664265,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":7013.631840664265,\"ownership_percentage\":7.0136167153936135e-6,\"value_usd\":65908.92124570656},{\"address\":\"0x4b69d6081ff943afd0c6561c3da5ac563ce4cdfb\",\"address_label\":\"wenlaunch.eth*\",\"token_amount\":4506.98230841065,\"total_outflow\":13893.50669342569,\"total_inflow\":18400.48900183634,\"balance_change_24h\":2278.221161516495,\"balance_change_7d\":4506.98230841065,\"balance_change_30d\":4506.98230841065,\"ownership_percentage\":4.5069725888632345e-6,\"value_usd\":42353.28411431081},{\"address\":\"0x1f05d6879c2ba4abc2f9a3b42f4ac30dd4f49935\",\"address_label\":\"Uses \\\"RABBYWALLET\\\" HL Referral Code\",\"token_amount\":3447.1441109399143,\"total_outflow\":500.0,\"total_inflow\":3947.1441109399143,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":3447.1441109399143,\"ownership_percentage\":3.447136676990024e-6,\"value_usd\":32393.70912132479},{\"address\":\"0x1de4dd70b437de2ae7b628b3cae7bf9a0a9b4645\",\"address_label\":\"defireviews.eth\",\"token_amount\":3000.9293489385564,\"total_outflow\":11663.681938000002,\"total_inflow\":14664.611286938556,\"balance_change_24h\":0.0,\"balance_change_7d\":-10198.0,\"balance_change_30d\":2020.1703695798392,\"ownership_percentage\":3.0009228772745685e-6,\"value_usd\":28200.513031831473},{\"address\":\"0x1cc972ff969689873f8010bdd0cf3dc30618397e\",\"address_label\":\"zawazawa.eth\",\"token_amount\":1686.2537368596084,\"total_outflow\":963.531252272083,\"total_inflow\":2649.7849891316914,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.686250100363605e-6,\"value_usd\":15846.164621670856},{\"address\":\"0x4a5bb1c9347a0d4f7e06a29239162f03647d9232\",\"address_label\":\"High Balance\",\"token_amount\":1450.0084032608067,\"total_outflow\":18634.042480739194,\"total_inflow\":20084.050884,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.4500052762404493e-6,\"value_usd\":13626.105821813124},{\"address\":\"0x3112e83d12ce7ce5d8b7ae495bf99cdcefa8d303\",\"address_label\":\"High Balance\",\"token_amount\":1117.0971002588528,\"total_outflow\":0.0,\"total_inflow\":1117.0971002588528,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":1117.0971002588528,\"ownership_percentage\":1.117094691179453e-6,\"value_usd\":10497.651784042699},{\"address\":\"0x5789c571552b4820bfa64efb6f0cad80fd2a9bca\",\"address_label\":\"High Balance\",\"token_amount\":1059.155601,\"total_outflow\":0.0,\"total_inflow\":1059.155601,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.0591533168745296e-6,\"value_usd\":9953.160456544076},{\"address\":\"0xe30a956e5a615d3eab55655f9d42dbe4e1033eb5\",\"address_label\":\"Token Millionaire\",\"token_amount\":832.0001,\"total_outflow\":0.0,\"total_inflow\":832.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":8.319983057474672e-7,\"value_usd\":7818.521176059679},{\"address\":\"0x34fbdb99977699a329460cc37f52a441b39696b8\",\"address_label\":\"High Balance\",\"token_amount\":641.3964135582081,\"total_outflow\":14265.134272763873,\"total_inflow\":14906.53068632208,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":6.413950303526778e-7,\"value_usd\":6027.368796774883},{\"address\":\"0x5cd0ec63687588817044794bf15d4e37991efab3\",\"address_label\":\"High Balance\",\"token_amount\":541.8000999999999,\"total_outflow\":0.0,\"total_inflow\":541.8000999999999,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":5.417989315792248e-7,\"value_usd\":5091.436353242327},{\"address\":\"0x4b4a17fbd2fd65c5ace3e533080147db343a893e\",\"address_label\":\"\",\"token_amount\":513.1588980078322,\"total_outflow\":0.0,\"total_inflow\":513.1588980078322,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":5.131577913533349e-7,\"value_usd\":4822.287534289582},{\"address\":\"0x858da48232ea6731f22573dc711c0cc415c334c5\",\"address_label\":\"Token Millionaire\",\"token_amount\":400.0001,\"total_outflow\":0.0,\"total_inflow\":400.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":3.99999237378478e-7,\"value_usd\":3758.904899501802},{\"address\":\"0xcbaf142e1047142f3b6d2c5b1d0640ece29e4eb0\",\"address_label\":\"\",\"token_amount\":400.0001,\"total_outflow\":0.0,\"total_inflow\":400.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":3.99999237378478e-7,\"value_usd\":3758.904899501802},{\"address\":\"0xb0a23f40de7f776a4f20153e8995ed3e7d7c8487\",\"address_label\":\"\",\"token_amount\":400.0001,\"total_outflow\":0.0,\"total_inflow\":400.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":3.99999237378478e-7,\"value_usd\":3758.904899501802},{\"address\":\"0x18362ade3b9ed475a2bbaf5d83cf80d60771b43b\",\"address_label\":\"\",\"token_amount\":141.20391352000001,\"total_outflow\":400.0,\"total_inflow\":541.20391352,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.4120360900623917e-7,\"value_usd\":1326.9298741654236},{\"address\":\"0x4093fbe60ab50ab79a5bd32fa2adec255372f80e\",\"address_label\":\"\",\"token_amount\":50.996711243567134,\"total_outflow\":310325.0,\"total_inflow\":310375.9967112435,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":5.099660126644296e-8,\"value_usd\":479.2293495724705},{\"address\":\"0xf8371eae0ba28281f350d2fd936f98bf58c31419\",\"address_label\":\"\",\"token_amount\":41.07516629960827,\"total_outflow\":4591313.31643747,\"total_inflow\":4591354.39160377,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":4.1075077718824244e-8,\"value_usd\":385.99401313011884},{\"address\":\"0x82e4d78c6c62d461251fa5a1d4deb9f0fe378e30\",\"address_label\":\"icocheck.eth*\",\"token_amount\":13.693551516106659,\"total_outflow\":15981.624336492428,\"total_inflow\":15995.317888008536,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.3693521985233416e-8,\"value_usd\":128.6818625432185},{\"address\":\"0x00000000a892451ab99290edbf4179f0c90f078f\",\"address_label\":\"\",\"token_amount\":13.353395321713082,\"total_outflow\":0.0,\"total_inflow\":13.353395321713082,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.3353366524404791e-8,\"value_usd\":125.48532637809778},{\"address\":\"0xed0c6079229e2d407672a117c22b62064f4a4312\",\"address_label\":\"Token Millionaire\",\"token_amount\":8.747348493274878,\"total_outflow\":137.4132642934248,\"total_inflow\":146.16061278669966,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":8.747329629151917e-9,\"value_usd\":82.20110722227481},{\"address\":\"0xebef741f393d64e8cd8205e92dd02a87a1362a6a\",\"address_label\":\"High Balance\",\"token_amount\":6.0001,\"total_outflow\":0.0,\"total_inflow\":6.0001,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":6.00008706046475e-9,\"value_usd\":56.384499122627126},{\"address\":\"0xb73612799734df92e3bd10898fdf44412815cc04\",\"address_label\":\"\",\"token_amount\":3.45777323895291,\"total_outflow\":3144.194676106867,\"total_inflow\":3147.65244934582,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":3.457765782080739e-9,\"value_usd\":32.493593799767325},{\"address\":\"0x6cab818daaf4040476e2489a7ed29ca685ad0623\",\"address_label\":\"Uses \\\"RABBYWALLET\\\" HL Referral Code\",\"token_amount\":3.1913587888031945,\"total_outflow\":1.606238112001906,\"total_inflow\":4.7975969008051,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":3.191351906467976e-9,\"value_usd\":29.99002797074417},{\"address\":\"0x4deb3edd991cfd2fcdaa6dcfe5f1743f6e7d16a6\",\"address_label\":\"\",\"token_amount\":2.456062567544365,\"total_outflow\":11399372.924037434,\"total_inflow\":11399375.3801,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":2.456057270914614e-9,\"value_usd\":23.080258276499155},{\"address\":\"0xabe7d66c65b2c921b8bdad85ff3dd7bafaccdc50\",\"address_label\":\"\",\"token_amount\":1.889617151791318,\"total_outflow\":0.0,\"total_inflow\":1.889617151791318,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.8896130767312785e-9,\"value_usd\":17.757223485821694},{\"address\":\"0x2e336836cf0365e899bd511170a7fa57f05e2d9d\",\"address_label\":\"\",\"token_amount\":1.435959463060013,\"total_outflow\":1595.0,\"total_inflow\":1596.4359594630598,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.4359563663369434e-9,\"value_usd\":13.494084279434581},{\"address\":\"0x3ca19474c3d1fe5f826ee078e1857cae97b66120\",\"address_label\":\"High Balance\",\"token_amount\":1.0598143600931655,\"total_outflow\":19550.0,\"total_inflow\":19551.059814360095,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":-19550.0,\"ownership_percentage\":1.0598120745470462e-9,\"value_usd\":9.959350986953671},{\"address\":\"0x9507c04b10486547584c37bcbd931b2a4fee9a41\",\"address_label\":\"High Activity\",\"token_amount\":0.9740081125804351,\"total_outflow\":1943945.4585202977,\"total_inflow\":1943946.43252841,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":9.74006012080059e-10,\"value_usd\":9.153007378080906},{\"address\":\"0x280027dd00ee0050d3f9d168efd6b40090009246\",\"address_label\":\"High Activity\",\"token_amount\":0.8320722497745616,\"total_outflow\":4947013.705886244,\"total_inflow\":4947014.537958493,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":8.32070455366434e-10,\"value_usd\":7.819199186242921},{\"address\":\"0x17ec047622c000df03599026a3b39871ec9384db\",\"address_label\":\"symboliccapital.eth*\",\"token_amount\":0.7169213930731689,\"total_outflow\":1732.0,\"total_inflow\":1732.716921393073,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":7.169198469939974e-10,\"value_usd\":6.7370966581768155},{\"address\":\"0x4c8cfe078a5b989cea4b330197246ced82764c63\",\"address_label\":\"High Balance\",\"token_amount\":0.6659993,\"total_outflow\":1102158.5841894702,\"total_inflow\":1102159.25018877,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":6.659978637370346e-10,\"value_usd\":6.258568514944797},{\"address\":\"0x00514112b64626360445d45dae83327c989face2\",\"address_label\":\"fenbushivc.eth*\",\"token_amount\":0.4801,\"total_outflow\":146538.0,\"total_inflow\":146538.4801,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":4.800989646387771e-10,\"value_usd\":4.511624477720919},{\"address\":\"0x0ed1f91769d6add12f3aca1229f96eea198ac0ed\",\"address_label\":\"mcclick.eth\",\"token_amount\":0.47735729308404756,\"total_outflow\":6.153216055515738,\"total_inflow\":6.6305733485997855,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.47735729308404756,\"ownership_percentage\":4.773562636376182e-10,\"value_usd\":4.485850548003723},{\"address\":\"0xc9d86956cff0cab4c9fae35534c7273fd8353646\",\"address_label\":\"High Activity\",\"token_amount\":0.3868081972624798,\"total_outflow\":6327658.69712576,\"total_inflow\":6327659.083933958,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":3.8680736308999874e-10,\"value_usd\":3.634937160909197},{\"address\":\"0x00164b4783446fde32eddbf7d5a347b85322f201\",\"address_label\":\"Token Millionaire\",\"token_amount\":0.23303734,\"total_outflow\":0.0,\"total_inflow\":0.23303734,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":2.330368374425634e-10,\"value_usd\":2.189912450254056},{\"address\":\"0x4adbfdee6188df8a24eaeee87c9bdebd4dd3fb64\",\"address_label\":\"niggatoshi.eth\",\"token_amount\":0.18293798505244263,\"total_outflow\":6408.078605775566,\"total_inflow\":6408.261543760618,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.8293759053693352e-10,\"value_usd\":1.7191157910175874},{\"address\":\"0xa694068fdfd382fa60c249e9a2b92a5548ad50ef\",\"address_label\":\"High Activity\",\"token_amount\":0.1324655999656613,\"total_outflow\":13953690.881974077,\"total_inflow\":13953691.014439676,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.3246531429653908e-10,\"value_usd\":1.2448136706125073},{\"address\":\"0xd28877162906c4fb4684e9a9f622c8f7d270382c\",\"address_label\":\"\",\"token_amount\":0.12926260344313983,\"total_outflow\":0.0,\"total_inflow\":0.12926260344313983,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":0.0,\"ownership_percentage\":1.2926232468145023e-10,\"value_usd\":1.214714279833372}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true},\"warnings\":null}"
+    }
+  },
+  "verdict": {
+    "input": "UNI has rallied 2.7-fold from its lows, with smart money logging gains of nearly 1000%.",
+    "claim": {
+      "raw": "UNI has rallied 2.7-fold from its lows, with smart money logging gains of nearly 1000%.",
+      "token": "UNI",
+      "type": "holding",
+      "subject": "smart_money",
+      "extractor": "llm"
+    },
+    "resolved": {
+      "chain": "ethereum",
+      "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "symbol": "UNI",
+      "name": "Uniswap",
+      "marketCap": 5641517795.08571,
+      "sameName": 9,
+      "by": "most traded of the top-ranked",
+      "others": [
+        {
+          "chain": "bnb",
+          "address": "0xbf5140a22578168fd562dccf235e5d43a02ce9b1",
+          "marketCap": 5634708004.82402
+        },
+        {
+          "chain": "solana",
+          "address": "uniHfuPhEQSrtpzXpJZDCSq53yaejKKpNhFUiKoHKHV",
+          "marketCap": 568459.345851044
+        },
+        {
+          "chain": "base",
+          "address": "0xc3de830ea07524a0761646a6a4e4be0e114a3c83",
+          "marketCap": 1197633.44240822
+        },
+        {
+          "chain": "arbitrum",
+          "address": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0",
+          "marketCap": 5622873213.94876
+        },
+        {
+          "chain": "polygon",
+          "address": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+          "marketCap": 5664000640.99774
+        },
+        {
+          "chain": "optimism",
+          "address": "0x6fd9d7ad17242c41f7131d257212c54a0e816691",
+          "marketCap": 5522776180.61062
+        },
+        {
+          "chain": "solana",
+          "address": "8FU95xFJhUUkyyCLU13HSzDLs7oC4QZdXQHL6SCeab36",
+          "marketCap": 288856.962710065
+        },
+        {
+          "chain": "sui",
+          "address": "0xaf9e228fd0292e2a27b4859bc57a2f3a9faedb9341b6307c84fef163e44790cc::uni::UNI",
+          "marketCap": 39443
+        }
+      ]
+    },
+    "label": "OVERSTATED",
+    "ruleId": "O-TRIM",
+    "reasons": [
+      "59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens",
+      "7 d Smart Money net flow −$38K (threshold $593K)",
+      "some Smart Money are trimming — holding, but not all of them"
+    ],
+    "threshold": 265008,
+    "evidence": {
+      "flow1d": {
+        "smart_trader": {
+          "net": 16587.60122198475,
+          "wallets": 2
+        },
+        "whale": {
+          "net": -474230.06055057194,
+          "wallets": 2
+        },
+        "exchange": {
+          "net": -3626183.4907448962,
+          "wallets": 0
+        },
+        "fresh_wallets": {
+          "net": 15193350.449605864,
+          "wallets": 0
+        },
+        "top_pnl": {
+          "net": -7186015.242145505,
+          "wallets": 36
+        },
+        "public_figure": {
+          "net": 4384.641901111445,
+          "wallets": 1
+        }
+      },
+      "flow7d": {
+        "smart_trader": {
+          "net": -38375.280206121744,
+          "wallets": 3
+        },
+        "whale": {
+          "net": -462383.09284780174,
+          "wallets": 2
+        },
+        "exchange": {
+          "net": -13826854.36716189,
+          "wallets": 0
+        },
+        "fresh_wallets": {
+          "net": 36945980.30129504,
+          "wallets": 0
+        },
+        "top_pnl": {
+          "net": -8040069.749814897,
+          "wallets": 62
+        },
+        "public_figure": {
+          "net": 4374.298760288423,
+          "wallets": 2
+        }
+      },
+      "named": {
+        "buyUsd": 20122.351829696712,
+        "sellUsd": 3605.6469516383404,
+        "buyRows": 2,
+        "sellRows": 1,
+        "buyers": [
+          {
+            "address": "0x4b69d6081ff943afd0c6561c3da5ac563ce4cdfb",
+            "label": "wenlaunch.eth*",
+            "usd": 16516.704878058372
+          },
+          {
+            "address": "0xfc2e430725da938704017835626fd15643787e43",
+            "label": "",
+            "usd": 3605.6469516383404
+          }
+        ],
+        "sellers": [
+          {
+            "address": "0xfc2e430725da938704017835626fd15643787e43",
+            "label": "",
+            "usd": 3605.6469516383404
+          }
+        ]
+      },
+      "table": {
+        "inTable": true,
+        "net24": 16587.60122198475,
+        "net7d": -38375.280206121744,
+        "traders": 13
+      },
+      "price": {
+        "open": 6.88611329825717,
+        "close": 9.287781598690561,
+        "change": 0.3487697916677086,
+        "candles": 25
+      },
+      "holders": {
+        "count": 59,
+        "delta24": 2278.221161516495,
+        "delta7d": -5691.01769158935,
+        "valueUsd": 383917718.08574265,
+        "top": [
+          {
+            "address": "0x7d325a9c8f10758188641fe91cfd902499edc782",
+            "label": "Token Millionaire",
+            "usd": 75178080.33858672
+          },
+          {
+            "address": "0x7f256695627c44e423139ec172393ecdc8a3de24",
+            "label": "Token Millionaire",
+            "usd": 25842463.784672443
+          },
+          {
+            "address": "0x4c262bdb0ed4d40f1a7b85075762d6058a3b6fed",
+            "label": "Token Millionaire",
+            "usd": 23493148.80981256
+          }
+        ]
+      },
+      "checksOk": 7,
+      "checksTotal": 7
+    },
+    "checks": [
+      {
+        "id": "flow1d",
+        "endpoint": "tgm/flow-intelligence",
+        "window": "1d",
+        "credits": 1,
+        "decides": "Smart Money net flow and wallet count, last 24 h — the primary signal",
+        "ok": true,
+        "ms": 331,
+        "cached": false,
+        "values": {
+          "smart_trader_net_flow_usd": 16587.60122198475,
+          "smart_trader_wallet_count": 2,
+          "fresh_wallets_net_flow_usd": 15193350.449605864,
+          "exchange_net_flow_usd": -3626183.4907448962
+        }
+      },
+      {
+        "id": "flow7d",
+        "endpoint": "tgm/flow-intelligence",
+        "window": "7d",
+        "credits": 1,
+        "decides": "Smart Money net flow over the week — blip or trend",
+        "ok": true,
+        "ms": 330,
+        "cached": false,
+        "values": {
+          "smart_trader_net_flow_usd": -38375.280206121744,
+          "smart_trader_wallet_count": 3
+        }
+      },
+      {
+        "id": "buyers",
+        "endpoint": "tgm/who-bought-sold",
+        "window": "BUY 24h",
+        "credits": 1,
+        "decides": "who among Smart Money bought, by USD",
+        "ok": true,
+        "ms": 887,
+        "cached": false,
+        "values": {
+          "bought_volume_usd": 20122,
+          "rows": 2,
+          "top": "wenlaunch.eth* 16517"
+        }
+      },
+      {
+        "id": "sellers",
+        "endpoint": "tgm/who-bought-sold",
+        "window": "SELL 24h",
+        "credits": 1,
+        "decides": "who among Smart Money sold, by USD",
+        "ok": true,
+        "ms": 637,
+        "cached": false,
+        "values": {
+          "sold_volume_usd": 3606,
+          "rows": 1,
+          "top": " 3606"
+        }
+      },
+      {
+        "id": "table",
+        "endpoint": "smart-money/netflow",
+        "window": "token filter",
+        "credits": 5,
+        "decides": "is the token on the Smart Money net-flow table at all",
+        "ok": true,
+        "ms": 1613,
+        "cached": false,
+        "values": {
+          "in_table": "yes",
+          "net_flow_24h_usd": 16587.60122198475,
+          "net_flow_7d_usd": -38375.280206121744,
+          "trader_count": 13
+        }
+      },
+      {
+        "id": "price",
+        "endpoint": "tgm/token-ohlcv",
+        "window": "1h × 24",
+        "credits": 1,
+        "decides": "did the price already move — is the claim late",
+        "ok": true,
+        "ms": 944,
+        "cached": false,
+        "values": {
+          "candles": 25,
+          "open": 6.88611329825717,
+          "close": 9.287781598690561,
+          "change_24h": 0.3488
+        }
+      },
+      {
+        "id": "holders",
+        "endpoint": "tgm/holders",
+        "window": "smart_money",
+        "credits": 5,
+        "decides": "Smart Money holders and whether their balances grew",
+        "ok": true,
+        "ms": 1971,
+        "cached": false,
+        "values": {
+          "holders": 59,
+          "value_usd": 383917718,
+          "balance_change_7d": -5691,
+          "balance_change_24h": 2278
+        }
+      }
+    ],
+    "prose": {
+      "text": "UNI has not risen 2.7‑fold nor delivered 1000% gains for smart money. Only 59 smart‑money wallets hold $383.92 M, with a 7‑day net outflow of $38 K, well under the $593 K threshold, and many are trimming.",
+      "source": "llm",
+      "ms": 1311
+    },
+    "provenance": [
+      {
+        "endpoint": "search/general",
+        "body": {
+          "search_query": "UNI",
+          "result_type": "token",
+          "limit": 50
+        },
+        "credits": 0,
+        "ms": 438,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "tokens[].symbol",
+          "tokens[].name",
+          "tokens[].chain",
+          "tokens[].address",
+          "tokens[].rank",
+          "tokens[].volume_24h",
+          "tokens[].market_cap"
+        ],
+        "responseHash": "c6b6e4b2e6aa5421f6ac41b78f282f9a31e82200de8345cf5ddde7c56a6cc2fa",
+        "attempts": 1,
+        "totalMs": 438,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/flow-intelligence",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "timeframe": "7d"
+        },
+        "credits": 1,
+        "ms": 329,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[0].smart_trader_net_flow_usd (7d)",
+          "data[0].smart_trader_wallet_count (7d)",
+          "data[0].whale_net_flow_usd (7d)",
+          "data[0].whale_wallet_count (7d)",
+          "data[0].exchange_net_flow_usd (7d)",
+          "data[0].exchange_wallet_count (7d)",
+          "data[0].fresh_wallets_net_flow_usd (7d)",
+          "data[0].fresh_wallets_wallet_count (7d)",
+          "data[0].top_pnl_net_flow_usd (7d)",
+          "data[0].top_pnl_wallet_count (7d)",
+          "data[0].public_figure_net_flow_usd (7d)",
+          "data[0].public_figure_wallet_count (7d)"
+        ],
+        "responseHash": "eda4ef03718f78c7503d3e34488d076a4625477e0353a389de634d94f8b45eaf",
+        "attempts": 1,
+        "totalMs": 330,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/flow-intelligence",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "timeframe": "1d"
+        },
+        "credits": 1,
+        "ms": 329,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[0].smart_trader_net_flow_usd (1d)",
+          "data[0].smart_trader_wallet_count (1d)",
+          "data[0].whale_net_flow_usd (1d)",
+          "data[0].whale_wallet_count (1d)",
+          "data[0].exchange_net_flow_usd (1d)",
+          "data[0].exchange_wallet_count (1d)",
+          "data[0].fresh_wallets_net_flow_usd (1d)",
+          "data[0].fresh_wallets_wallet_count (1d)",
+          "data[0].top_pnl_net_flow_usd (1d)",
+          "data[0].top_pnl_wallet_count (1d)",
+          "data[0].public_figure_net_flow_usd (1d)",
+          "data[0].public_figure_wallet_count (1d)"
+        ],
+        "responseHash": "0076393ace640ac04f3468e66ca5632805f5d5a0cb017bff6d6eeabced398496",
+        "attempts": 1,
+        "totalMs": 330,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "buy_or_sell": "SELL",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Smart Trader",
+              "Fund",
+              "30D Smart Trader",
+              "90D Smart Trader",
+              "180D Smart Trader"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "sold_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 1,
+        "ms": 634,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].sold_volume_usd (SELL 24h)",
+          "data[].address (SELL 24h)",
+          "data[].address_label (SELL 24h)",
+          "pagination.is_last_page (SELL 24h)"
+        ],
+        "responseHash": "a5f69eeb21094103877070435c61ab425a5c3487043ab22fb89ece298674d208",
+        "attempts": 1,
+        "totalMs": 636,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "buy_or_sell": "BUY",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Smart Trader",
+              "Fund",
+              "30D Smart Trader",
+              "90D Smart Trader",
+              "180D Smart Trader"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "bought_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 1,
+        "ms": 884,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].bought_volume_usd (BUY 24h)",
+          "data[].address (BUY 24h)",
+          "data[].address_label (BUY 24h)",
+          "pagination.is_last_page (BUY 24h)"
+        ],
+        "responseHash": "affee52096cd25a0f1619c11796bdb2209d065081ebb9656bcc8cf0709f25aeb",
+        "attempts": 1,
+        "totalMs": 885,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/token-ohlcv",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "timeframe": "1h",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          }
+        },
+        "credits": 1,
+        "ms": 377,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].open",
+          "data[].close",
+          "data[].interval_start"
+        ],
+        "responseHash": "c704caa229a34b1b3333748825ceb3222f539dca2638d13dc54c1aedcc49e550",
+        "attempts": 1,
+        "totalMs": 942,
+        "ok": true
+      },
+      {
+        "endpoint": "smart-money/netflow",
+        "body": {
+          "chains": [
+            "ethereum"
+          ],
+          "filters": {
+            "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+            "include_stablecoins": true,
+            "include_native_tokens": true
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 10
+          }
+        },
+        "credits": 5,
+        "ms": 606,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].net_flow_24h_usd",
+          "data[].net_flow_7d_usd",
+          "data[].trader_count",
+          "data[].token_symbol"
+        ],
+        "responseHash": "cfc3331c2b490ea7c5eeec31f25ab6895a691473d7b4496738bcdf0c9d98272a",
+        "attempts": 1,
+        "totalMs": 1613,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/holders",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "label_type": "smart_money",
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          }
+        },
+        "credits": 5,
+        "ms": 964,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].address_label (smart_money)",
+          "data[].balance_change_24h (smart_money)",
+          "data[].balance_change_7d (smart_money)",
+          "data[].value_usd (smart_money)"
+        ],
+        "responseHash": "981ce2bf286d7c54b372caaccfb66e89421cbd874e2cdc4a97e08b8953ea9ecb",
+        "attempts": 1,
+        "totalMs": 1969,
+        "ok": true
+      }
+    ],
+    "credits": 15,
+    "calls": 8,
+    "ms": 4254,
+    "hash": "5ac89638d050b5605db1e3074cc4ce63c6b5fc203b50b04ec1eca4dff791cc5f",
+    "warnings": [
+      "9 tokens named UNI on Nansen — checked the most traded of the top-ranked"
+    ],
+    "llm": {
+      "extract": {
+        "used": true,
+        "ms": 528,
+        "model": "openai/gpt-oss-120b"
+      },
+      "narrate": {
+        "used": true,
+        "ms": 1311,
+        "model": "openai/gpt-oss-120b"
+      }
+    },
+    "rules": {
+      "floorUsd": 5000,
+      "shareOfFlow": 0.01,
+      "freshMult": 3,
+      "staleMove": 0.2,
+      "minWallets": 3,
+      "minWhales": 1,
+      "minHolders": 5,
+      "minChecks": 2
+    },
+    "now": 1789726946513
+  }
+}

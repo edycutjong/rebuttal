@@ -1,0 +1,699 @@
+{
+  "slug": "ai-robinhood-chain",
+  "edge": "chain hint in the text · (TICKER) extraction · robinhood chain",
+  "input": "Artificial Inu (AI) whale sells off holdings at a high price on Robinhood Chain, pushing the token price down over 12%",
+  "source": "Lookonchain 72973 · 2026-09-18 (chain named explicitly)",
+  "claim": {
+    "raw": "Artificial Inu (AI) whale sells off holdings at a high price on Robinhood Chain, pushing the token price down over 12%",
+    "token": "AI",
+    "chain": "robinhood",
+    "type": "selling",
+    "subject": "whales",
+    "extractor": "llm"
+  },
+  "options": {},
+  "now": 1789726950769,
+  "recordedAt": "2026-09-18T10:22:30.769Z",
+  "live": {
+    "calls": 8,
+    "credits": 15,
+    "ms": 5527
+  },
+  "responses": {
+    "eb62905d5f95bf7a0c0e282a98aa7959": {
+      "storedAt": "2026-09-18T10:22:31.950Z",
+      "ttlMs": 0,
+      "endpoint": "search/general",
+      "body": {
+        "search_query": "AI",
+        "result_type": "token",
+        "limit": 50
+      },
+      "text": "{\"tokens\":[{\"name\":\"Artificial Inu\",\"symbol\":\"AI\",\"chain\":\"robinhood\",\"address\":\"0x2e8c31162b855a2ffa90f6f8634643ad6f111e18\",\"price\":0.353196029459944,\"volume_24h\":19516030.66663702,\"market_cap\":345680441.414578,\"rank\":663},{\"name\":\"DGrid AI\",\"symbol\":\"DGAI\",\"chain\":\"bnb\",\"address\":\"0x10d4183389e99233db3cc981c43443ebd28ebd5e\",\"price\":0.941314808642388,\"volume_24h\":31794443.907147944,\"market_cap\":140583974.595,\"rank\":744},{\"name\":\"AI Powered Finance\",\"symbol\":\"AIPF\",\"chain\":\"polygon\",\"address\":\"0x2c72d25530191ebd244eb6325e1892480b0e6e28\",\"price\":0.400383779112686,\"volume_24h\":464126.49859369337,\"market_cap\":30127112.0249053,\"rank\":926},{\"name\":\"AI Rig Complex\",\"symbol\":\"ARC\",\"chain\":\"solana\",\"address\":\"61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump\",\"price\":0.06938445728775705,\"volume_24h\":422629.90566195396,\"market_cap\":69383255.7398013,\"rank\":927},{\"name\":\"Alchemist AI\",\"symbol\":\"ALCH\",\"chain\":\"solana\",\"address\":\"HNg5PYJmtqcmzXrv6S9zP1CDKk5BgDuyFBxbvNApump\",\"price\":0.03526149143825332,\"volume_24h\":120146.86157795586,\"market_cap\":35259832.9174489,\"rank\":999},{\"name\":\"Freysa AI\",\"symbol\":\"FAI\",\"chain\":\"base\",\"address\":\"0xb33ff54b9f7242ef1593d2c9bcd8f9df46c77935\",\"price\":0.00239465110858491,\"volume_24h\":35563.638448070924,\"market_cap\":19611474.1873773,\"rank\":1059},{\"name\":\"Ai DeFi\",\"symbol\":\"AIFI\",\"chain\":\"bnb\",\"address\":\"0xdb953299588b7a7c38044bcd004b4b1892026333\",\"price\":0.249865510878423,\"volume_24h\":32059.357658744004,\"market_cap\":5235229.3982587,\"rank\":1068},{\"name\":\"Sentism AI Token\",\"symbol\":\"SENTIS\",\"chain\":\"bnb\",\"address\":\"0x8fd0d741e09a98e82256c63f25f90301ea71a83e\",\"price\":0.2254514501723,\"volume_24h\":5491662.539927904,\"market_cap\":44079423.2928,\"rank\":1206},{\"name\":\"Quack AI Token\",\"symbol\":\"Q\",\"chain\":\"bnb\",\"address\":\"0xc07e1300dc138601fa6b0b59f8d0fa477e690589\",\"price\":0.0239903327079579,\"volume_24h\":788360.3371211624,\"market_cap\":107532342.432215,\"rank\":1322},{\"name\":\"Infinity Ground AI\",\"symbol\":\"AIN\",\"chain\":\"bnb\",\"address\":\"0x9558a9254890b2a8b057a789f413631b9084f4a3\",\"price\":0.0210258789365979,\"volume_24h\":443111.92704874894,\"market_cap\":3872971.233947,\"rank\":1374},{\"name\":\"Ava AI\",\"symbol\":\"AVA\",\"chain\":\"solana\",\"address\":\"DKu9kykSfbN5LBfFXtNNDPaX35o4Fv6vJ9FKk7pZpump\",\"price\":0.009675998440505585,\"volume_24h\":186311.58683836355,\"market_cap\":9611047.61598761,\"rank\":1492},{\"name\":\"Federal AI Reserve\",\"symbol\":\"FAIR\",\"chain\":\"solana\",\"address\":\"X2CQUNuAhdhXVUydj77LMrjcKz97RiA6akPUfDspump\",\"price\":0.01007727967350851,\"volume_24h\":186867.34712968452,\"market_cap\":10073826.9384821,\"rank\":1512},{\"name\":\"Figure AI PreStocks\",\"symbol\":\"FIGUREAI\",\"chain\":\"solana\",\"address\":\"PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd\",\"price\":184.80762815586817,\"volume_24h\":176362.6443840072,\"market_cap\":556825.383633631,\"rank\":1549},{\"name\":\"SPECTRE AI\",\"symbol\":\"SPECTRE\",\"chain\":\"ethereum\",\"address\":\"0x9cf0ed013e67db12ca3af8e7506fe401aa14dad6\",\"price\":0.760791879012424,\"volume_24h\":71267.39447772046,\"market_cap\":7568808.22313975,\"rank\":1583},{\"name\":\"AITECH Cloud Network\",\"symbol\":\"ACN\",\"chain\":\"ethereum\",\"address\":\"0x3e76dd57e649a263a532cc9bcc58b32a065fb2a4\",\"price\":0.00427995163250813,\"volume_24h\":65691.1246200628,\"market_cap\":7636094.67048264,\"rank\":1629},{\"name\":\"Act I : The AI Prophecy\",\"symbol\":\"ACT\",\"chain\":\"solana\",\"address\":\"GJAFwWjJ3vnTsrQVabjBVK2TYB1YtRCQXRDfDgUnpump\",\"price\":0.010011304807258299,\"volume_24h\":77863.60142930421,\"market_cap\":9491978.56727694,\"rank\":1691},{\"name\":\"Sogni AI\",\"symbol\":\"SOGNI\",\"chain\":\"base\",\"address\":\"0xe014d2a4da6e450f21b5050120d291e63c8940fd\",\"price\":0.000513979781175855,\"volume_24h\":68106.00167175679,\"market_cap\":1837933.43354375,\"rank\":1723},{\"name\":\"TokenOS AI\",\"symbol\":\"TOS\",\"chain\":\"solana\",\"address\":\"HmjCoarLh5duURfJ333DwfFiPyTCgFT35pRSAoP8pump\",\"price\":0.009512376373091786,\"volume_24h\":58291.33045976452,\"market_cap\":9510324.22666541,\"rank\":1766},{\"name\":\"Moby AI\",\"symbol\":\"MOBY\",\"chain\":\"solana\",\"address\":\"Cy1GS2FqefgaMbi45UunrUzin1rfEmTUYnomddzBpump\",\"price\":0.0012779562473531267,\"volume_24h\":60392.92434675232,\"market_cap\":1277886.0939948,\"rank\":1772},{\"name\":\"AIW3\",\"symbol\":\"AIW3\",\"chain\":\"bnb\",\"address\":\"0x37e94fc028903e74275478b65160d6d2c0e8880b\",\"price\":0.0407995365189593,\"volume_24h\":60073.95840042207,\"market_cap\":40799536.5189593,\"rank\":1777},{\"name\":\"RICE AI\",\"symbol\":\"RICE\",\"chain\":\"bnb\",\"address\":\"0xb5761f36fdfe2892f1b54bc8ee8babb2a1b698d3\",\"price\":0.00918419286211246,\"volume_24h\":51004.5821412812,\"market_cap\":7061340.04511011,\"rank\":1804},{\"name\":\"PAAL AI\",\"symbol\":\"PAAL\",\"chain\":\"ethereum\",\"address\":\"0x14fee680690900ba0cccfc76ad70fd1b95d10e16\",\"price\":0.00581700519249259,\"volume_24h\":16434.207805808855,\"market_cap\":5840668.79454156,\"rank\":1866},{\"name\":\"Bluwhale AI\",\"symbol\":\"BLUAI\",\"chain\":\"bnb\",\"address\":\"0xed9ae3def8d6f052971bb8b6d1975ff267cf9aad\",\"price\":0.011023980212505,\"volume_24h\":23663.08481518057,\"market_cap\":13585200.33216,\"rank\":2006},{\"name\":\"PaLM AI\",\"symbol\":\"PALM\",\"chain\":\"ethereum\",\"address\":\"0xf1df7305e4bab3885cab5b1e4dfc338452a67891\",\"price\":0.0328549366122116,\"volume_24h\":23136.692333385323,\"market_cap\":2541177.4067867,\"rank\":2037},{\"name\":\"Ai Monkey King\",\"symbol\":\"AMK\",\"chain\":\"bnb\",\"address\":\"0x9773b0ab8d915df36f036dbd7ec1dc6e3dfa9999\",\"price\":0.00199062241610886,\"volume_24h\":22872.84503040433,\"market_cap\":1612404.15704818,\"rank\":2042},{\"name\":\"Holoworld AI\",\"symbol\":\"HOLO\",\"chain\":\"bnb\",\"address\":\"0x1a5d7e4c3a7f940b240b7357a4bfed30d17f9497\",\"price\":0.0583799595770759,\"volume_24h\":14744.279266933012,\"market_cap\":45868521.362221,\"rank\":2178},{\"name\":\"CLANKER Robot AI Slur\",\"symbol\":\"CLANKER\",\"chain\":\"solana\",\"address\":\"3qq54YqAKG3TcrwNHXFSpMCWoL8gmMuPceJ4FG9npump\",\"price\":0.0007187323225662887,\"volume_24h\":14170.453087149503,\"market_cap\":718602.28223294,\"rank\":2222},{\"name\":\"Gensyn\",\"symbol\":\"AI\",\"chain\":\"ethereum\",\"address\":\"0x4d7078ddd6ccfed2f85db5b7d3ff16828d378d48\",\"price\":0.0196289316960031,\"volume_24h\":12228.78788660275,\"market_cap\":25585707.4233598,\"rank\":2238},{\"name\":\"Ethy AI by Virtuals\",\"symbol\":\"ETHY\",\"chain\":\"base\",\"address\":\"0xc44141a684f6aa4e36cd9264ab55550b03c88643\",\"price\":0.000972075767500168,\"volume_24h\":12121.379022424153,\"market_cap\":968493.7977,\"rank\":2268},{\"name\":\"Xeleb AI\",\"symbol\":\"XCX\",\"chain\":\"bnb\",\"address\":\"0xe32f9e8f7f7222fcd83ee0fc68baf12118448eaf\",\"price\":0.00306192664469845,\"volume_24h\":9219.359479876595,\"market_cap\":334187.9968752,\"rank\":2282},{\"name\":\"Reserve AI NeoCloud DTF (BSC)\",\"symbol\":\"NEOCLOUD\",\"chain\":\"bnb\",\"address\":\"0xf571fe3f0d74521bc7310b111faea931c748f27b\",\"price\":69.3230686996481,\"volume_24h\":10176.106786218164,\"market_cap\":2279139.46014098,\"rank\":2299},{\"name\":\"Cortik AI\",\"symbol\":\"CTK\",\"chain\":\"polygon\",\"address\":\"0x933479ba627356f7efaba030504bf1c65cffca5a\",\"price\":6.11630318685239,\"volume_24h\":5588.176547003832,\"market_cap\":256824.021128706,\"rank\":2361},{\"name\":\"Ledger Ai\",\"symbol\":\"LEDGER\",\"chain\":\"ethereum\",\"address\":\"0xd1f2586790a5bd6da1e443441df53af6ec213d83\",\"price\":0.000413573020100359,\"volume_24h\":2812.198633317358,\"market_cap\":1298418.33284485,\"rank\":2601},{\"name\":\"META FINANCIAL AI\",\"symbol\":\"MEFAI\",\"chain\":\"bnb\",\"address\":\"0x45e57907058c707a068100de358ba4535b18e2f3\",\"price\":0.00104922298920662,\"volume_24h\":2256.7213165453904,\"market_cap\":592023.76306412,\"rank\":2639},{\"name\":\"Investor Brand Network Ai\",\"symbol\":\"IBNAI\",\"chain\":\"ethereum\",\"address\":\"0xfdcd8be9dd37cf982472d30eeee4ec50a0296953\",\"price\":0.000551442826671488,\"volume_24h\":1533.561163319347,\"market_cap\":540892.2137,\"rank\":2657},{\"name\":\"Pundi AI\",\"symbol\":\"PUNDIAI\",\"chain\":\"bnb\",\"address\":\"0x7a986ba67227acfab86385ff33436a80e2bb4cc5\",\"price\":0.459242263393657,\"volume_24h\":1731.5893271252064,\"market_cap\":4133530.27779211,\"rank\":2689},{\"name\":\"1claw AI\",\"symbol\":\"1CLAWAI\",\"chain\":\"base\",\"address\":\"0x61d91cff0fc9fbbdb89f505cf8a7422bf95fdba3\",\"price\":2.37086713443182e-6,\"volume_24h\":1650.728308932036,\"market_cap\":236069.7466,\"rank\":2700},{\"name\":\"AIDOGE\",\"symbol\":\"AIDOGE\",\"chain\":\"arbitrum\",\"address\":\"0x09e18590e8f76b6cf471b3cd75fe1a1a9d2b2c2b\",\"price\":9.991797165302733e-12,\"volume_24h\":1469.599402614202,\"market_cap\":1868011.0,\"rank\":2706},{\"name\":\"AI Network\",\"symbol\":\"AIN\",\"chain\":\"ethereum\",\"address\":\"0x3a810ff7211b40c4fa76205a14efe161615d0385\",\"price\":0.0119895664148392,\"volume_24h\":1280.2197963732008,\"market_cap\":3249448.71133389,\"rank\":2728},{\"name\":\"BAD IDEA AI\",\"symbol\":\"BAD\",\"chain\":\"ethereum\",\"address\":\"0x32b86b99441480a7e5bd3a26c124ec2373e3f015\",\"price\":8.60137815244604e-10,\"volume_24h\":794.3889779219982,\"market_cap\":591830.103097033,\"rank\":2807},{\"name\":\"0x0.ai: AI Smart Contract Auditor\",\"symbol\":\"0X0\",\"chain\":\"ethereum\",\"address\":\"0x5a3e6a77ba2f983ec0d371ea3b475f8bc0811ad5\",\"price\":0.00199777982863581,\"volume_24h\":646.5818272321517,\"market_cap\":1780521.27259625,\"rank\":2836},{\"name\":\"Degen Spartan AI\",\"symbol\":\"DEGENAI\",\"chain\":\"solana\",\"address\":\"Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump\",\"price\":0.00012966211241892834,\"volume_24h\":206.22746650391213,\"market_cap\":129643.390000567,\"rank\":2938},{\"name\":\"Hive AI\",\"symbol\":\"BUZZ\",\"chain\":\"solana\",\"address\":\"9DHe3pycTuymFk4H4bbPoAJ4hQrr2kaLDF6J6aAKpump\",\"price\":0.0003826706846519537,\"volume_24h\":130.80858132348604,\"market_cap\":382603.937793262,\"rank\":2977},{\"name\":\"Panther AI\",\"symbol\":\"PAI\",\"chain\":\"bnb\",\"address\":\"0x13a5c811093dd001c328b59a0cc9dec88951f042\",\"price\":0.00544429171661504,\"volume_24h\":101.25000741687788,\"market_cap\":753771.903884274,\"rank\":3002},{\"name\":\"ForU AI\",\"symbol\":\"FORU\",\"chain\":\"bnb\",\"address\":\"0x529edc4cd7d7ff773837ce0ff5492d1fd2d0eafd\",\"price\":0.0105056180253761,\"volume_24h\":89.46820453868706,\"market_cap\":10505617.7221839,\"rank\":3014},{\"name\":\"KOALA AI\",\"symbol\":\"KOKO\",\"chain\":\"solana\",\"address\":\"FsA54yL49WKs7rWoGv9sUcbSGWCWV756jTD349e6H2yW\",\"price\":1.553668036141758e-8,\"volume_24h\":22.00298186952873,\"market_cap\":150795.009723272,\"rank\":3088},{\"name\":\"DOGE AI\",\"symbol\":\"DOGEAI\",\"chain\":\"solana\",\"address\":\"9UYAYvVS2cZ3BndbsoG1ScJbjfwyEPGxjE79hh5ipump\",\"price\":0.00004317755684428663,\"volume_24h\":19.729179738853624,\"market_cap\":43153.0456014232,\"rank\":3094},{\"name\":\"Reserve AI Power DTF (BSC)\",\"symbol\":\"POWER\",\"chain\":\"bnb\",\"address\":\"0x290bcc0fd5096cc3261ae2021841c7bc67cb0f51\",\"price\":87.237713259963,\"volume_24h\":10.278750685478908,\"market_cap\":1721748.34629423,\"rank\":3119},{\"name\":\"Proof of Great AI\",\"symbol\":\"POGAI\",\"chain\":\"solana\",\"address\":\"2miHpQbYLPvXxC2V234jrrrtnJdejd5xW883a5ToNW3g\",\"price\":3.731995001738474e-6,\"volume_24h\":2.117466035799078,\"market_cap\":755220.186357963,\"rank\":3171},{\"name\":\"RIFT AI\",\"symbol\":\"RIFT\",\"chain\":\"solana\",\"address\":\"jUpa2aDCzvdR9EF4fqDXmuyMUkonPTohphABLmRkRFj\",\"price\":0.0025104106228399916,\"volume_24h\":0.0,\"market_cap\":2510398.33326618,\"rank\":3258}],\"entities\":[],\"total_results\":50}"
+    },
+    "30047ccc9fbf0a4dd65586363cf197bd": {
+      "storedAt": "2026-09-18T10:22:32.277Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/flow-intelligence",
+      "body": {
+        "chain": "robinhood",
+        "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+        "timeframe": "1d"
+      },
+      "text": "{\"data\":[{\"public_figure_net_flow_usd\":-1595132.99979195,\"public_figure_avg_flow_usd\":287971.5309453397,\"public_figure_wallet_count\":13,\"top_pnl_net_flow_usd\":115083.76693619652,\"top_pnl_avg_flow_usd\":39062.5735007762,\"top_pnl_wallet_count\":12,\"whale_net_flow_usd\":0.0,\"whale_avg_flow_usd\":28192.537530789934,\"whale_wallet_count\":1,\"smart_trader_net_flow_usd\":-1343341.5093619132,\"smart_trader_avg_flow_usd\":292026.70928004116,\"smart_trader_wallet_count\":34,\"exchange_net_flow_usd\":-1143405.7183238408,\"exchange_avg_flow_usd\":981458.6826110063,\"exchange_wallet_count\":0,\"fresh_wallets_net_flow_usd\":16740058.464105388,\"fresh_wallets_avg_flow_usd\":13591322.44395624,\"fresh_wallets_wallet_count\":0}],\"warnings\":[\"exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.\",\"fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero.\"]}"
+    },
+    "78305cb818cc0c8cdeeaf2c3c14d07b5": {
+      "storedAt": "2026-09-18T10:22:32.299Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/flow-intelligence",
+      "body": {
+        "chain": "robinhood",
+        "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+        "timeframe": "7d"
+      },
+      "text": "{\"data\":[{\"public_figure_net_flow_usd\":87044.53684813654,\"public_figure_avg_flow_usd\":271594.5969016473,\"public_figure_wallet_count\":34,\"top_pnl_net_flow_usd\":13463.080641691695,\"top_pnl_avg_flow_usd\":137874.77210216873,\"top_pnl_wallet_count\":27,\"whale_net_flow_usd\":-10365.09114855792,\"whale_avg_flow_usd\":16499.22281019809,\"whale_wallet_count\":1,\"smart_trader_net_flow_usd\":-731367.5727578048,\"smart_trader_avg_flow_usd\":622838.7343684258,\"smart_trader_wallet_count\":108,\"exchange_net_flow_usd\":-3212076.5944184684,\"exchange_avg_flow_usd\":3061772.95631487,\"exchange_wallet_count\":0,\"fresh_wallets_net_flow_usd\":105569175.1200425,\"fresh_wallets_avg_flow_usd\":121416419.1720793,\"fresh_wallets_wallet_count\":0}],\"warnings\":[\"exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.\",\"fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero.\"]}"
+    },
+    "0a29dc24b524d38589e6bcc1c19ae8df": {
+      "storedAt": "2026-09-18T10:22:32.628Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/who-bought-sold",
+      "body": {
+        "chain": "robinhood",
+        "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+        "buy_or_sell": "SELL",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        },
+        "filters": {
+          "include_smart_money_labels": [
+            "Whale"
+          ]
+        },
+        "order_by": [
+          {
+            "field": "sold_volume_usd",
+            "direction": "DESC"
+          }
+        ]
+      },
+      "text": "{\"data\":[{\"address\":\"0x473d3a2005499301dc353afa9d0c9c5980b5188c\",\"address_label\":\"rawanalsex.eth*\",\"bought_token_volume\":888.0,\"sold_token_volume\":888.0,\"token_trade_volume\":0.0,\"bought_volume_usd\":292.08466668769705,\"sold_volume_usd\":329.637634859823,\"trade_volume_usd\":37.55296817212593}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true}}"
+    },
+    "be4d453436b3d113bc17d1dd4babd1ba": {
+      "storedAt": "2026-09-18T10:22:33.419Z",
+      "ttlMs": 0,
+      "endpoint": "smart-money/netflow",
+      "body": {
+        "chains": [
+          "robinhood"
+        ],
+        "filters": {
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "include_stablecoins": true,
+          "include_native_tokens": true
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 10
+        }
+      },
+      "text": "{\"data\":[{\"token_address\":\"0x2e8c31162b855a2ffa90f6f8634643ad6f111e18\",\"token_symbol\":\"AI\",\"net_flow_1h_usd\":13550.256022124464,\"net_flow_24h_usd\":-1343523.5513981944,\"net_flow_7d_usd\":-731549.614794086,\"net_flow_30d_usd\":-10543298.36241611,\"chain\":\"robinhood\",\"token_sectors\":[\"Memecoins\",\"AI Meme\"],\"trader_count\":222,\"token_age_days\":66,\"market_cap_usd\":350377242.090626}],\"pagination\":{\"page\":1,\"per_page\":10,\"is_last_page\":true}}"
+    },
+    "d54400fd5e3e5a6652ac0d365074ce1b": {
+      "storedAt": "2026-09-18T10:22:33.606Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/holders",
+      "body": {
+        "chain": "robinhood",
+        "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+        "label_type": "whale",
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        }
+      },
+      "text": "{\"data\":[{\"address\":\"0x807a2e2e469df84b299da5f90f15dda4380daca1\",\"address_label\":\"Token Millionaire\",\"token_amount\":76017.85446229218,\"total_outflow\":0.0,\"total_inflow\":76017.85446229218,\"balance_change_24h\":0.0,\"balance_change_7d\":0.0,\"balance_change_30d\":76017.85446229218,\"ownership_percentage\":0.00007668380810282295,\"value_usd\":26470.37613345221}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true},\"warnings\":null}"
+    },
+    "10c7261fd570c05f0cac91236d107108": {
+      "storedAt": "2026-09-18T10:22:34.126Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/token-ohlcv",
+      "body": {
+        "chain": "robinhood",
+        "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+        "timeframe": "1h",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        }
+      },
+      "text": "{\"chain\":\"robinhood\",\"token_address\":\"0x2e8c31162b855a2ffa90f6f8634643ad6f111e18\",\"timeframe\":\"1h\",\"data\":[{\"interval_start\":\"2026-09-17T10:00:00Z\",\"open\":0.287212413508357,\"high\":0.283138908847933,\"low\":0.2824751768533,\"close\":0.282648149167897,\"volume\":1282504.539943516,\"volume_usd\":362853.28898666595,\"market_cap\":{\"open\":284716047.860277,\"high\":284141767.203322,\"low\":280019985.924462,\"close\":284141767.203322}},{\"interval_start\":\"2026-09-17T11:00:00Z\",\"open\":0.282648149167897,\"high\":0.282648149167897,\"low\":0.281389319247745,\"close\":0.28168778457417,\"volume\":483917.38363911264,\"volume_usd\":136312.77734656417,\"market_cap\":{\"open\":284141767.203322,\"high\":284141767.203322,\"low\":278943566.179524,\"close\":279239437.406243}},{\"interval_start\":\"2026-09-17T12:00:00Z\",\"open\":0.28168778457417,\"high\":0.288692039122738,\"low\":0.28168778457417,\"close\":0.288692039122738,\"volume\":1237641.0611551034,\"volume_usd\":352120.64439393434,\"market_cap\":{\"open\":279239437.406243,\"high\":288305663.71943,\"low\":279239437.406243,\"close\":288305663.71943}},{\"interval_start\":\"2026-09-17T13:00:00Z\",\"open\":0.288692039122738,\"high\":0.329774891188151,\"low\":0.2917969585309315,\"close\":0.315702888627244,\"volume\":5830509.81564747,\"volume_usd\":1832247.9356844365,\"market_cap\":{\"open\":288305663.71943,\"high\":325962289.487283,\"low\":285906564.414279,\"close\":312958892.14853}},{\"interval_start\":\"2026-09-17T14:00:00Z\",\"open\":0.315702888627244,\"high\":0.3317893884938205,\"low\":0.315362510543138,\"close\":0.328482151660975,\"volume\":3045839.456953058,\"volume_usd\":991845.1506882963,\"market_cap\":{\"open\":312958892.14853,\"high\":331483506.435442,\"low\":312958892.14853,\"close\":325627081.660466}},{\"interval_start\":\"2026-09-17T15:00:00Z\",\"open\":0.328482151660975,\"high\":0.33464006652251654,\"low\":0.324944285162767,\"close\":0.33464006652251654,\"volume\":2161164.7538658963,\"volume_usd\":708545.2280335278,\"market_cap\":{\"open\":325627081.660466,\"high\":329585369.039673,\"low\":322119965.253267,\"close\":329585369.039673}},{\"interval_start\":\"2026-09-17T16:00:00Z\",\"open\":0.33464006652251654,\"high\":0.3731127846512995,\"low\":0.33626444416508605,\"close\":0.361114754110444,\"volume\":6320839.5361991,\"volume_usd\":2269423.288550842,\"market_cap\":{\"open\":329585369.039673,\"high\":375334405.551255,\"low\":333877578.320577,\"close\":357976051.099156}},{\"interval_start\":\"2026-09-17T17:00:00Z\",\"open\":0.361114754110444,\"high\":0.36631832318942803,\"low\":0.350802512690209,\"close\":0.36631832318942803,\"volume\":3485764.642998972,\"volume_usd\":1246105.0989231484,\"market_cap\":{\"open\":357976051.099156,\"high\":363316791.452312,\"low\":347753001.15966,\"close\":363316791.452312}},{\"interval_start\":\"2026-09-17T18:00:00Z\",\"open\":0.36631832318942803,\"high\":0.375106132395436,\"low\":0.354884065068206,\"close\":0.354884065068206,\"volume\":2510660.7909476617,\"volume_usd\":923753.9197311859,\"market_cap\":{\"open\":363316791.452312,\"high\":374318455.687298,\"low\":351728927.31464,\"close\":351728927.31464}},{\"interval_start\":\"2026-09-17T19:00:00Z\",\"open\":0.354884065068206,\"high\":0.356212621162217,\"low\":0.350611379958408,\"close\":0.350611379958408,\"volume\":798234.3067588268,\"volume_usd\":281622.8569589092,\"market_cap\":{\"open\":351728927.31464,\"high\":354306663.758441,\"low\":347562861.829973,\"close\":347562861.829973}},{\"interval_start\":\"2026-09-17T20:00:00Z\",\"open\":0.350611379958408,\"high\":0.380735911882241,\"low\":0.35047084730114597,\"close\":0.379724783088548,\"volume\":3621439.681010248,\"volume_usd\":1337030.919919943,\"market_cap\":{\"open\":347562861.829973,\"high\":377425465.030281,\"low\":346693674.086479,\"close\":376120024.019807}},{\"interval_start\":\"2026-09-17T21:00:00Z\",\"open\":0.379724783088548,\"high\":0.377038134286838,\"low\":0.33202362298514,\"close\":0.333705673807254,\"volume\":12245142.587204633,\"volume_usd\":4235620.566569243,\"market_cap\":{\"open\":376120024.019807,\"high\":373913583.887495,\"low\":323964481.135475,\"close\":330804148.441581}},{\"interval_start\":\"2026-09-17T22:00:00Z\",\"open\":0.333705673807254,\"high\":0.333705673807254,\"low\":0.322621030717218,\"close\":0.322829999528885,\"volume\":2193637.0342685245,\"volume_usd\":722289.7560573946,\"market_cap\":{\"open\":330804148.441581,\"high\":333514540.348631,\"low\":319815884.802791,\"close\":319815884.802791}},{\"interval_start\":\"2026-09-17T23:00:00Z\",\"open\":0.322829999528885,\"high\":0.328290807074163,\"low\":0.3218107533294175,\"close\":0.328232620727835,\"volume\":1166272.552839158,\"volume_usd\":381001.084952469,\"market_cap\":{\"open\":319815884.802791,\"high\":325378340.929366,\"low\":318946840.600281,\"close\":325378340.929366}},{\"interval_start\":\"2026-09-18T00:00:00Z\",\"open\":0.328232620727835,\"high\":0.327916622084677,\"low\":0.320804740157505,\"close\":0.320804740157505,\"volume\":653867.2878973417,\"volume_usd\":211426.28793037252,\"market_cap\":{\"open\":325378340.929366,\"high\":324966372.19628,\"low\":318014296.368299,\"close\":318014296.368299}},{\"interval_start\":\"2026-09-18T01:00:00Z\",\"open\":0.320804740157505,\"high\":0.327502305118309,\"low\":0.320804740157505,\"close\":0.327502305118309,\"volume\":1076247.4859566719,\"volume_usd\":350350.1756259156,\"market_cap\":{\"open\":318014296.368299,\"high\":324653487.011583,\"low\":318014296.368299,\"close\":324653487.011583}},{\"interval_start\":\"2026-09-18T02:00:00Z\",\"open\":0.327502305118309,\"high\":0.335787091462094,\"low\":0.327502305118309,\"close\":0.3334543643446415,\"volume\":884163.648346937,\"volume_usd\":293601.3578507947,\"market_cap\":{\"open\":324653487.011583,\"high\":333436848.157438,\"low\":324653487.011583,\"close\":333436848.157438}},{\"interval_start\":\"2026-09-18T03:00:00Z\",\"open\":0.3334543643446415,\"high\":0.349326064702901,\"low\":0.3347401418819555,\"close\":0.344151855316288,\"volume\":1973427.5967309773,\"volume_usd\":674214.9242759406,\"market_cap\":{\"open\":333436848.157438,\"high\":346287410.020702,\"low\":336196471.104294,\"close\":341172650.281245}},{\"interval_start\":\"2026-09-18T04:00:00Z\",\"open\":0.344151855316288,\"high\":0.344137287469783,\"low\":0.338272192735766,\"close\":0.338272192735766,\"volume\":892057.8846113512,\"volume_usd\":305448.2293202273,\"market_cap\":{\"open\":341172650.281245,\"high\":341143768.021627,\"low\":335329691.452327,\"close\":335329691.452327}},{\"interval_start\":\"2026-09-18T05:00:00Z\",\"open\":0.338272192735766,\"high\":0.338272192735766,\"low\":0.337320932283097,\"close\":0.338018423883259,\"volume\":406704.86291499453,\"volume_usd\":137483.69922585075,\"market_cap\":{\"open\":335329691.452327,\"high\":335334756.42306,\"low\":334386505.747262,\"close\":335334756.42306}},{\"interval_start\":\"2026-09-18T06:00:00Z\",\"open\":0.338018423883259,\"high\":0.338018423883259,\"low\":0.332878451767988,\"close\":0.3374624333108,\"volume\":1162275.0592892743,\"volume_usd\":390169.8799401449,\"market_cap\":{\"open\":335334756.42306,\"high\":335077929.719447,\"low\":329982671.330238,\"close\":334526775.79996}},{\"interval_start\":\"2026-09-18T07:00:00Z\",\"open\":0.3374624333108,\"high\":0.348948889510541,\"low\":0.332968576271374,\"close\":0.348813640448815,\"volume\":2822797.107643303,\"volume_usd\":968114.0865673701,\"market_cap\":{\"open\":334526775.79996,\"high\":350086323.363378,\"low\":330072011.818039,\"close\":345779236.334507}},{\"interval_start\":\"2026-09-18T08:00:00Z\",\"open\":0.348813640448815,\"high\":0.353938605750495,\"low\":0.348398282287991,\"close\":0.351245051855705,\"volume\":331517.60292154795,\"volume_usd\":116467.64596323323,\"market_cap\":{\"open\":345779236.334507,\"high\":350859618.570192,\"low\":345367491.522984,\"close\":347287974.522355}},{\"interval_start\":\"2026-09-18T09:00:00Z\",\"open\":0.351245051855705,\"high\":0.3555533153011295,\"low\":0.348713978469813,\"close\":0.353196029459944,\"volume\":874606.7284151583,\"volume_usd\":307913.8916375649,\"market_cap\":{\"open\":347287974.522355,\"high\":352333756.097972,\"low\":345680441.414578,\"close\":350123502.099404}},{\"interval_start\":\"2026-09-18T10:00:00Z\",\"open\":0.353196029459944,\"high\":0.353451996153727,\"low\":0.348212618215666,\"close\":0.34902389709126447,\"volume\":464741.2103297541,\"volume_usd\":162766.74602071647,\"market_cap\":{\"open\":350123502.099404,\"high\":350377242.090626,\"low\":345500832.779699,\"close\":345500832.779699}}],\"truncated\":false,\"truncation_note\":null}"
+    },
+    "0b34957987e1806bcc09fb9f1cb82244": {
+      "storedAt": "2026-09-18T10:22:35.259Z",
+      "ttlMs": 0,
+      "endpoint": "tgm/who-bought-sold",
+      "body": {
+        "chain": "robinhood",
+        "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+        "buy_or_sell": "BUY",
+        "date": {
+          "from": "2026-09-17T10:00:00Z",
+          "to": "2026-09-18T10:00:00Z"
+        },
+        "pagination": {
+          "page": 1,
+          "per_page": 100
+        },
+        "filters": {
+          "include_smart_money_labels": [
+            "Whale"
+          ]
+        },
+        "order_by": [
+          {
+            "field": "bought_volume_usd",
+            "direction": "DESC"
+          }
+        ]
+      },
+      "text": "{\"data\":[{\"address\":\"0x473d3a2005499301dc353afa9d0c9c5980b5188c\",\"address_label\":\"rawanalsex.eth*\",\"bought_token_volume\":888.0,\"sold_token_volume\":888.0,\"token_trade_volume\":0.0,\"bought_volume_usd\":292.08466668769705,\"sold_volume_usd\":329.637634859823,\"trade_volume_usd\":-37.55296817212593}],\"pagination\":{\"page\":1,\"per_page\":100,\"is_last_page\":true}}"
+    }
+  },
+  "verdict": {
+    "input": "Artificial Inu (AI) whale sells off holdings at a high price on Robinhood Chain, pushing the token price down over 12%",
+    "claim": {
+      "raw": "Artificial Inu (AI) whale sells off holdings at a high price on Robinhood Chain, pushing the token price down over 12%",
+      "token": "AI",
+      "chain": "robinhood",
+      "type": "selling",
+      "subject": "whales",
+      "extractor": "llm"
+    },
+    "resolved": {
+      "chain": "robinhood",
+      "address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+      "symbol": "AI",
+      "name": "Artificial Inu",
+      "marketCap": 345680441.414578,
+      "sameName": 2,
+      "by": "chain hint (robinhood)",
+      "others": [
+        {
+          "chain": "ethereum",
+          "address": "0x4d7078ddd6ccfed2f85db5b7d3ff16828d378d48",
+          "marketCap": 25585707.4233598
+        }
+      ]
+    },
+    "label": "OVERSTATED",
+    "ruleId": "O-FLAT",
+    "reasons": [
+      "Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $209K)",
+      "flat within the noise threshold — no exit to speak of",
+      "7 d: −$10K"
+    ],
+    "threshold": 209370,
+    "evidence": {
+      "flow1d": {
+        "smart_trader": {
+          "net": -1343341.5093619132,
+          "wallets": 34
+        },
+        "whale": {
+          "net": 0,
+          "wallets": 1
+        },
+        "exchange": {
+          "net": -1143405.7183238408,
+          "wallets": 0
+        },
+        "fresh_wallets": {
+          "net": 16740058.464105388,
+          "wallets": 0
+        },
+        "top_pnl": {
+          "net": 115083.76693619652,
+          "wallets": 12
+        },
+        "public_figure": {
+          "net": -1595132.99979195,
+          "wallets": 13
+        }
+      },
+      "flow7d": {
+        "smart_trader": {
+          "net": -731367.5727578048,
+          "wallets": 108
+        },
+        "whale": {
+          "net": -10365.09114855792,
+          "wallets": 1
+        },
+        "exchange": {
+          "net": -3212076.5944184684,
+          "wallets": 0
+        },
+        "fresh_wallets": {
+          "net": 105569175.1200425,
+          "wallets": 0
+        },
+        "top_pnl": {
+          "net": 13463.080641691695,
+          "wallets": 27
+        },
+        "public_figure": {
+          "net": 87044.53684813654,
+          "wallets": 34
+        }
+      },
+      "named": {
+        "buyUsd": 292.08466668769705,
+        "sellUsd": 329.637634859823,
+        "buyRows": 1,
+        "sellRows": 1,
+        "buyers": [
+          {
+            "address": "0x473d3a2005499301dc353afa9d0c9c5980b5188c",
+            "label": "rawanalsex.eth*",
+            "usd": 292.08466668769705
+          }
+        ],
+        "sellers": [
+          {
+            "address": "0x473d3a2005499301dc353afa9d0c9c5980b5188c",
+            "label": "rawanalsex.eth*",
+            "usd": 329.637634859823
+          }
+        ]
+      },
+      "table": {
+        "inTable": true,
+        "net24": -1343523.5513981944,
+        "net7d": -731549.614794086,
+        "traders": 222
+      },
+      "price": {
+        "open": 0.287212413508357,
+        "close": 0.34902389709126447,
+        "change": 0.21521174112172875,
+        "candles": 25
+      },
+      "holders": {
+        "count": 1,
+        "delta24": 0,
+        "delta7d": 0,
+        "valueUsd": 26470.37613345221,
+        "top": [
+          {
+            "address": "0x807a2e2e469df84b299da5f90f15dda4380daca1",
+            "label": "Token Millionaire",
+            "usd": 26470.37613345221
+          }
+        ]
+      },
+      "checksOk": 7,
+      "checksTotal": 7
+    },
+    "checks": [
+      {
+        "id": "flow1d",
+        "endpoint": "tgm/flow-intelligence",
+        "window": "1d",
+        "credits": 1,
+        "decides": "Whales net flow and wallet count, last 24 h — the primary signal",
+        "ok": true,
+        "ms": 326,
+        "cached": false,
+        "values": {
+          "whale_net_flow_usd": 0,
+          "whale_wallet_count": 1,
+          "fresh_wallets_net_flow_usd": 16740058.464105388,
+          "exchange_net_flow_usd": -1143405.7183238408
+        }
+      },
+      {
+        "id": "flow7d",
+        "endpoint": "tgm/flow-intelligence",
+        "window": "7d",
+        "credits": 1,
+        "decides": "Whales net flow over the week — blip or trend",
+        "ok": true,
+        "ms": 349,
+        "cached": false,
+        "values": {
+          "whale_net_flow_usd": -10365.09114855792,
+          "whale_wallet_count": 1
+        }
+      },
+      {
+        "id": "buyers",
+        "endpoint": "tgm/who-bought-sold",
+        "window": "BUY 24h",
+        "credits": 1,
+        "decides": "who among Whales bought, by USD",
+        "ok": true,
+        "ms": 3308,
+        "cached": false,
+        "values": {
+          "bought_volume_usd": 292,
+          "rows": 1,
+          "top": "rawanalsex.eth* 292"
+        }
+      },
+      {
+        "id": "sellers",
+        "endpoint": "tgm/who-bought-sold",
+        "window": "SELL 24h",
+        "credits": 1,
+        "decides": "who among Whales sold, by USD",
+        "ok": true,
+        "ms": 677,
+        "cached": false,
+        "values": {
+          "sold_volume_usd": 330,
+          "rows": 1,
+          "top": "rawanalsex.eth* 330"
+        }
+      },
+      {
+        "id": "table",
+        "endpoint": "smart-money/netflow",
+        "window": "token filter",
+        "credits": 5,
+        "decides": "is the token on the Smart Money net-flow table at all",
+        "ok": true,
+        "ms": 1472,
+        "cached": false,
+        "values": {
+          "in_table": "yes",
+          "net_flow_24h_usd": -1343523.5513981944,
+          "net_flow_7d_usd": -731549.614794086,
+          "trader_count": 222
+        }
+      },
+      {
+        "id": "price",
+        "endpoint": "tgm/token-ohlcv",
+        "window": "1h × 24",
+        "credits": 1,
+        "decides": "did the price already move — is the claim late",
+        "ok": true,
+        "ms": 2176,
+        "cached": false,
+        "values": {
+          "candles": 25,
+          "open": 0.287212413508357,
+          "close": 0.34902389709126447,
+          "change_24h": 0.2152
+        }
+      },
+      {
+        "id": "holders",
+        "endpoint": "tgm/holders",
+        "window": "whale",
+        "credits": 5,
+        "decides": "Whales holders and whether their balances grew",
+        "ok": true,
+        "ms": 1656,
+        "cached": false,
+        "values": {
+          "holders": 1,
+          "value_usd": 26470,
+          "balance_change_7d": 0,
+          "balance_change_24h": 0
+        }
+      }
+    ],
+    "prose": {
+      "text": "The data show that the single tracked whale sold $0 in the past 24 hours, well within the $209 K noise threshold. Over the last 7 days the net change was only –$10 K, far less than the claimed 12 % price impact.",
+      "source": "llm",
+      "ms": 1037
+    },
+    "provenance": [
+      {
+        "endpoint": "search/general",
+        "body": {
+          "search_query": "AI",
+          "result_type": "token",
+          "limit": 50
+        },
+        "credits": 0,
+        "ms": 458,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "tokens[].symbol",
+          "tokens[].name",
+          "tokens[].chain",
+          "tokens[].address",
+          "tokens[].rank",
+          "tokens[].volume_24h",
+          "tokens[].market_cap"
+        ],
+        "responseHash": "04a34fca60b3489c592f2096ab2ba3fcbb3119489fb24d623f6f7252261e1969",
+        "attempts": 1,
+        "totalMs": 458,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/flow-intelligence",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "timeframe": "1d"
+        },
+        "credits": 1,
+        "ms": 326,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[0].smart_trader_net_flow_usd (1d)",
+          "data[0].smart_trader_wallet_count (1d)",
+          "data[0].whale_net_flow_usd (1d)",
+          "data[0].whale_wallet_count (1d)",
+          "data[0].exchange_net_flow_usd (1d)",
+          "data[0].exchange_wallet_count (1d)",
+          "data[0].fresh_wallets_net_flow_usd (1d)",
+          "data[0].fresh_wallets_wallet_count (1d)",
+          "data[0].top_pnl_net_flow_usd (1d)",
+          "data[0].top_pnl_wallet_count (1d)",
+          "data[0].public_figure_net_flow_usd (1d)",
+          "data[0].public_figure_wallet_count (1d)"
+        ],
+        "responseHash": "97dfdc2a3e65ed3eab7892e11b7983360a9b6995e4175489ef098c1c64aab697",
+        "attempts": 1,
+        "totalMs": 326,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/flow-intelligence",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "timeframe": "7d"
+        },
+        "credits": 1,
+        "ms": 344,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[0].smart_trader_net_flow_usd (7d)",
+          "data[0].smart_trader_wallet_count (7d)",
+          "data[0].whale_net_flow_usd (7d)",
+          "data[0].whale_wallet_count (7d)",
+          "data[0].exchange_net_flow_usd (7d)",
+          "data[0].exchange_wallet_count (7d)",
+          "data[0].fresh_wallets_net_flow_usd (7d)",
+          "data[0].fresh_wallets_wallet_count (7d)",
+          "data[0].top_pnl_net_flow_usd (7d)",
+          "data[0].top_pnl_wallet_count (7d)",
+          "data[0].public_figure_net_flow_usd (7d)",
+          "data[0].public_figure_wallet_count (7d)"
+        ],
+        "responseHash": "63652a940dab7ab75b90c94d487e6349781296f1cfdac15121aca5c53c49a03b",
+        "attempts": 1,
+        "totalMs": 348,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "buy_or_sell": "SELL",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Whale"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "sold_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 1,
+        "ms": 672,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].sold_volume_usd (SELL 24h)",
+          "data[].address (SELL 24h)",
+          "data[].address_label (SELL 24h)",
+          "pagination.is_last_page (SELL 24h)"
+        ],
+        "responseHash": "0fd459834431cc5070021e43c587a26d91abdee3b0965349824f85679660787c",
+        "attempts": 1,
+        "totalMs": 676,
+        "ok": true
+      },
+      {
+        "endpoint": "smart-money/netflow",
+        "body": {
+          "chains": [
+            "robinhood"
+          ],
+          "filters": {
+            "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+            "include_stablecoins": true,
+            "include_native_tokens": true
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 10
+          }
+        },
+        "credits": 5,
+        "ms": 920,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].net_flow_24h_usd",
+          "data[].net_flow_7d_usd",
+          "data[].trader_count",
+          "data[].token_symbol"
+        ],
+        "responseHash": "8f04fa6d2a81be73597e96f245a77d3e737197c655e2b7167103922198cf15b5",
+        "attempts": 1,
+        "totalMs": 1468,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/holders",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "label_type": "whale",
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          }
+        },
+        "credits": 5,
+        "ms": 646,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].address_label (whale)",
+          "data[].balance_change_24h (whale)",
+          "data[].balance_change_7d (whale)",
+          "data[].value_usd (whale)"
+        ],
+        "responseHash": "939e2413bb80b0dc4371d3c56be2bf3a91e4e959346304f2b31d598a6edf161d",
+        "attempts": 1,
+        "totalMs": 1655,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/token-ohlcv",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "timeframe": "1h",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          }
+        },
+        "credits": 1,
+        "ms": 1169,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].open",
+          "data[].close",
+          "data[].interval_start"
+        ],
+        "responseHash": "ebe391e8319c8c423be09378a34dd2f4613b55935b2fb81f2423e85f5428a4d0",
+        "attempts": 1,
+        "totalMs": 2175,
+        "ok": true
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "buy_or_sell": "BUY",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Whale"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "bought_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 1,
+        "ms": 3304,
+        "cached": false,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].bought_volume_usd (BUY 24h)",
+          "data[].address (BUY 24h)",
+          "data[].address_label (BUY 24h)",
+          "pagination.is_last_page (BUY 24h)"
+        ],
+        "responseHash": "c6ba511bc6b2dda397a1e4bc43e6f0cb4b7d726939a4aa70870f107ab7ef6916",
+        "attempts": 1,
+        "totalMs": 3308,
+        "ok": true
+      }
+    ],
+    "credits": 15,
+    "calls": 8,
+    "ms": 5527,
+    "hash": "1f90767d6683fea2d7c061aab4f28e22236669fd4360ddc51fcf68eaee5f6e72",
+    "warnings": [
+      "2 tokens named AI on Nansen — checked the chain hint (robinhood)"
+    ],
+    "llm": {
+      "extract": {
+        "used": true,
+        "ms": 723,
+        "model": "openai/gpt-oss-120b"
+      },
+      "narrate": {
+        "used": true,
+        "ms": 1037,
+        "model": "openai/gpt-oss-120b"
+      }
+    },
+    "rules": {
+      "floorUsd": 5000,
+      "shareOfFlow": 0.01,
+      "freshMult": 3,
+      "staleMove": 0.2,
+      "minWallets": 3,
+      "minWhales": 1,
+      "minHolders": 5,
+      "minChecks": 2
+    },
+    "now": 1789726950769
+  }
+}

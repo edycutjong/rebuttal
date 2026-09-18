@@ -87,7 +87,7 @@ if (v.agent) {
 }
 if (explain) {
   console.log(paint("\nrules", "90"));
-  console.log(`  threshold T = max(${fmtUsd(v.rules.floorUsd)}, ${v.rules.shareOfFlow * 100}% × Σ|class net flow 1d|) = ${fmtUsd(v.threshold)} · fresh ≥ ${v.rules.freshMult}× · stale ≥ ${v.rules.staleMove * 100}% · min wallets ${v.rules.minWallets} · min holders ${v.rules.minHolders}`);
+  console.log(`  threshold T = max(${fmtUsd(v.rules.floorUsd)}, ${v.rules.shareOfFlow * 100}% × Σ|labelled net flow 1d|) = ${fmtUsd(v.threshold)} · stale ≥ ${v.rules.staleMove * 100}% · min wallets ${v.rules.minWallets} (whales ${v.rules.minWhales}) · min holders ${v.rules.minHolders} · min checks ${v.rules.minChecks}`);
   console.log(paint("provenance", "90"));
   for (const c of v.provenance)
     console.log(`  ${c.ok ? "✔" : "✖"} ${c.endpoint.padEnd(22)} ${String(c.credits).padStart(3)} cr ${String(c.ms).padStart(5)} ms ${c.cached ? "cached" : "live  "} ${c.responseHash.slice(0, 12) || "-"}  ${c.fieldsUsed.slice(0, 3).join(", ")}${c.error ? ` · ${c.error}` : ""}`);

@@ -150,7 +150,9 @@ export function mergeClaims(rules: Claim, llm: Partial<Claim> | null): Claim {
     // the model may only name a chain the text actually contains (it guessed "ethereum" for a HYPE claim live)
     chain: llm.chain && SCORABLE_CHAINS.has(llm.chain) && new RegExp(`\\b${llm.chain}\\b`, "i").test(rules.raw) ? llm.chain : rules.chain,
     type: llm.type ?? rules.type,
-    subject: llm.subject ?? rules.subject ?? "smart_money",
+    // the rules' subject is a literal keyword match ("whales", "smart money"); the model only fills a missing one (it read
+    // "Whales have been accumulating $EDEL" as smart_money live)
+    subject: rules.subject ?? llm.subject ?? "smart_money",
     extractor: "llm",
   };
   if (!out.token) out.problem = "no token found — write the ticker as $TICKER";
