@@ -72,8 +72,8 @@
           "limit": 50
         },
         "credits": 0,
-        "ms": 436,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "tokens[].symbol",
@@ -85,28 +85,23 @@
           "tokens[].market_cap"
         ],
         "responseHash": "7b618709926104ef1e68ea865edbf638e1e0ab6511ad44e6943ad98f4a73c1ec",
-        "attempts": 1,
-        "totalMs": 436,
+        "attempts": 0,
+        "totalMs": 0,
         "ok": true
       }
     ],
     "credits": 0,
     "calls": 1,
-    "ms": 1015,
-    "hash": "837f8a54cd2cf5cadd1388a79cbbbd7cbce6daa743f01580dab73c91f09273cd",
+    "ms": 0,
+    "hash": "8c925fff55ab7d0ccf752985122e5a95030200cda532f947ef05d1c5feb8a084",
     "warnings": [],
     "llm": {
-      "extract": {
-        "used": true,
-        "ms": 576,
-        "model": "openai/gpt-oss-120b"
-      },
+      "extract": null,
       "narrate": null
     },
     "rules": {
       "floorUsd": 5000,
       "shareOfFlow": 0.01,
-      "freshMult": 3,
       "staleMove": 0.2,
       "minWallets": 3,
       "minWhales": 1,

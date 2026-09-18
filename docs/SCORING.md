@@ -4,11 +4,11 @@ Every input below is a Nansen response field. The LLM never sees this function's
 
 ## 1 · The claim
 
-`{token, chain?, type ∈ buying | selling | holding, subject ∈ smart_money | whales}`. The rules extractor reads `$TICKER` first, then `(TICKER)`, then a short name map, then bare upper-case words that are not on a stop list; the first verb in reading order decides the type ("sold 602 BTC to purchase ETH" is about selling BTC; a deposit to an exchange reads as selling, a withdrawal as buying); the earliest subject keyword decides the subject. The LLM (Groq, tool call) runs in parallel with a 3 s budget and may fill gaps: it can never override a `$TICKER` in the text, a subject keyword in the text beats its guess, and a chain it names must appear in the text.
+`{token, chain?, type ∈ buying | selling | holding, subject ∈ smart_money | whales}`. The rules extractor reads `$TICKER` first, then `(TICKER)`, then a short name map, then bare upper-case words that are not on a stop list; the first verb in reading order decides the type ("sold 602 BTC to purchase ETH" is about selling BTC; a deposit to an exchange reads as selling, a withdrawal as buying); the earliest subject keyword decides the subject. The LLM (Groq, tool call) runs before token resolution with a 3 s budget and may fill or correct what the rules only guessed: a `$TICKER`/`(TICKER)` and a strong verb (buy/sell/dump/accumulate/deposit/withdraw…) are final; a name-map or bare-word token may be corrected only with a token that literally appears in the text; a weak verb (surged, closed, added…) yields to the model; a subject keyword in the text beats its guess; a chain it names must appear in the text; chain names are stripped before the token pass so "PEPE on Ethereum" is about PEPE. Among bare upper-case words the one nearest the winning verb is the token ("sold 602 BTC to purchase ETH" is about BTC; BTC then refuses as a Bitcoin-chain coin at 0 credits on both extractor paths). A verb with a negator up to three words before it ("is NOT buying", "never bought", "stopped accumulating", "hasn't bought") is the post denying a flow; the first non-negated verb decides, and when every verb is negated the claim is refused as `U-CLAIM` naming the positive form — the rules check what a class did, and answering the positive question under a negated headline gave the inverted verdict (audit 2026-09-19). The LLM cannot un-negate it.
 
 ## 2 · The token
 
-`search/general` (0 credits) → tokens whose symbol or name equals the ticker, on a chain `tgm/flow-intelligence` accepts → the chain named in the text, else **the most-traded (`volume_24h`) among those ranked within `2 × best rank + 50`**. Native coins map to a home chain (ETH → WETH on ethereum, BTC → WBTC, SOL, HYPE → hyperevm `0xeeee…`). Coins whose home chain Nansen does not index (ZEC, XRP, ADA, DOGE, …) are refused at 0 credits unless a chain is named (`U-CHAIN`).
+`search/general` (0 credits) → tokens whose symbol or name equals the ticker, on a chain `tgm/flow-intelligence` accepts → the chain named in the text (the most-traded same-name token on that chain, searched again with a chain filter at 0 credits if the first search never reached it; none there → `U-TOKEN` naming the chain, never another chain's book), else **the most-traded (`volume_24h`) among those ranked within `2 × best rank + 50`**. Native coins map to a home chain (ETH → ethereum `0xeeee…`, SOL, HYPE → hyperevm `0xeeee…`). Coins whose home chain Nansen does not index (BTC, ZEC, XRP, ADA, DOGE, …) are refused at 0 credits unless a chain is named (`U-CHAIN`).
 
 Why not market cap or rank alone (seen live 2026-09-18): bridged PEPE on arbitrum reports $1.553B vs ethereum $1.552B; HYPE on solana ranks 317 vs hyperevm 318. Volume within the rank window picks ethereum PEPE ($1.77M/24 h vs $79K bnb vs $847 arbitrum).
 
@@ -46,7 +46,9 @@ Fresh-wallet and exchange volume are excluded from the scale on purpose: on VVV 
 | 5 | `net ≥ T ∧ px24 ≥ staleMove = 20 %` (selling: `≤ −20 %`) | OVERSTATED `O-STALE` |
 | 6 | `net ≥ T ∧ wallets < minWallets = 3` (whales: `minWhales = 1`) | OVERSTATED `O-FEW` |
 | 7 | `net ≥ T` | CONFIRMED `A-FLOW` |
-| 8 | `−T < net ≤ 0` with the class present | OVERSTATED `O-FLAT` |
+| 8 | `−T < net ≤ 0` with the class present (a sub-dollar net counts as 0) | OVERSTATED `O-FLAT` |
+
+On `O-SMALL` and `O-FLAT`, when who-bought-sold named labelled rows that the flow row's wallet count did not reflect (ONDO: `smart_trader_wallet_count = 0` beside one Fund seller of $8K), a context line names them — the reader must not have to spot the disagreement in the trace.
 
 Holding claims: no holders and no 7 d row → `U-HOLD`; `holders < minHolders = 5` → `O-HOLDERS`; `net7d ≤ −T7 ∧ delta7d < 0` → CONTRADICTED `C-EXIT`; either one alone → `O-TRIM`; else CONFIRMED `A-HOLD`.
 
@@ -54,23 +56,24 @@ Fresh-wallet flow is a **context line, never a verdict**: on a hot token retail 
 
 ## 6 · The hash
 
-`sha256` of the canonical JSON of `{token, type, subject, chain, address, label, ruleId, net1d, wallets1d, net7d, fresh1d, buyUsd, sellUsd, inTable, px24 (3 dp), holders, holdersDelta7d}` with every USD rounded to an integer. A fixture replay reproduces it exactly; a live re-run reproduces the label and usually the hash (flows are priced at current rates).
+`sha256` of the canonical JSON of `{token, type, subject, chain, address, label, ruleId, net1d, wallets1d, net7d, fresh1d, buyUsd, sellUsd, inTable, px24 (3 dp), pxClose (6 s.f.), holders, holdersDelta24, holdersDelta7d}` with every USD rounded to an integer — every number a rule can read, including the whale primary (`holdersDelta24 × pxClose`). A fixture replay reproduces it exactly; a live re-run reproduces the label and usually the hash (flows are priced at current rates).
 
 ## 7 · The 13 recorded rebuttals (2026-09-18, `fixtures/`)
 
 | fixture | claim | chain | verdict | first reason | cr |
 |---|---|---|---|---|---|
-| `pepe-aping` | smart_money · buying | ethereum | **CONTRADICTED** `C-NOBODY` | no Smart Money wallet traded this token in the last 24 h (net $0) | 10 |
+| `pepe-aping` | smart_money · buying | ethereum | **CONTRADICTED** `C-NOBODY` | no Smart Money wallet traded this token in the last 24 h (net $0) | 0 |
 | `vvv-sm-buying` | smart_money · buying | base | **CONFIRMED** `A-FLOW` | Smart Money net bought $100K in 24 h (flow-intelligence 1d, 4 wallets; threshold $17K) | 0 |
-| `uni-whale-sold` | whales · selling | ethereum | **CONFIRMED** `A-FLOW` | Whales net sold $548K in 24 h (whale holders' 24 h balance change × price, 10 wallets; threshold $265K) | 15 |
-| `hype-whale-falconx` | whales · selling | hyperevm | **OVERSTATED** `O-SMALL` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 7 wallets; threshold $684K) | 15 |
-| `uni-sm-holding` | smart_money · holding | ethereum | **OVERSTATED** `O-TRIM` | 59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens | 15 |
-| `ai-robinhood-chain` | whales · selling | robinhood | **OVERSTATED** `O-FLAT` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $209K) | 15 |
-| `meme-whale-position` | whales · buying | robinhood | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 15 |
-| `uni-sm-buying-after-rally` | smart_money · buying | ethereum | **OVERSTATED** `O-SMALL` | Smart Money net bought $17K in 24 h (flow-intelligence 1d, 2 wallets; threshold $265K) | 10 |
+| `uni-whale-sold` | whales · selling | ethereum | **CONFIRMED** `A-FLOW` | Whales net sold $548K in 24 h (whale holders' 24 h balance change × price, 10 wallets; threshold $77K) | 0 |
+| `hype-whale-falconx` | whales · selling | hyperevm | **OVERSTATED** `O-FLAT` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 7 wallets; threshold $5K) | 0 |
+| `uni-sm-holding` | smart_money · holding | ethereum | **OVERSTATED** `O-TRIM` | 59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens | 0 |
+| `ai-robinhood-chain` | whales · selling | robinhood | **OVERSTATED** `O-FLAT` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $31K) | 0 |
+| `meme-whale-position` | whales · buying | robinhood | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 0 |
+| `uni-sm-buying-after-rally` | smart_money · buying | ethereum | **OVERSTATED** `O-SMALL` | Smart Money net bought $17K in 24 h (flow-intelligence 1d, 2 wallets; threshold $77K) | 0 |
 | `hype-sm-bought` | smart_money · buying | hyperevm | **CONFIRMED** `A-FLOW` | Smart Money net bought $291K in 24 h (flow-intelligence 1d, 263 wallets; threshold $5K) | 0 |
-| `edel-tweet-url` | whales · buying | base | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 15 |
+| `edel-tweet-url` | whales · buying | base | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 0 |
 | `xqzplm-unknown` | smart_money · buying | — | **UNVERIFIABLE** `U-TOKEN` | no token named XQZPLM on Nansen | 0 |
 | `pepe-not-a-flow-claim` | smart_money ·  | — | **UNVERIFIABLE** `U-CLAIM` | not a flow claim — nothing about buying, selling or holding | 0 |
 | `zec-not-a-nansen-chain` | whales · buying | — | **UNVERIFIABLE** `U-CHAIN` | Zcash is not a chain Nansen indexes — only bridged copies of ZEC exist here, and they are not what the post is about (na | 0 |
+
 Thresholds were calibrated on the day-one spike (10 real posts, three runs): `shareOfFlow` 2 % → 1 % after a $474K whale sale on UNI read as noise against a $530K threshold dominated by fresh-wallet flow; `minWhales = 1` because "a whale" is singular; `U-NOCLASS` and `U-CHAIN` added after run 1 said CONTRADICTED on three claims whose class or chain Nansen simply does not have.

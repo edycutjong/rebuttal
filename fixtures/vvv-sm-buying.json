@@ -291,11 +291,12 @@
         "id": "flow1d",
         "endpoint": "tgm/flow-intelligence",
         "window": "1d",
-        "credits": 1,
+        "credits": 0,
         "decides": "Smart Money net flow and wallet count, last 24 h — the primary signal",
         "ok": true,
-        "ms": 0,
+        "ms": 1,
         "cached": true,
+        "responseHash": "25235b48b80cfca7c4a53fafa329d3cc027524c28d8e342ec7d7d632c0f7370c",
         "values": {
           "smart_trader_net_flow_usd": 99701.51755118334,
           "smart_trader_wallet_count": 4,
@@ -307,11 +308,12 @@
         "id": "flow7d",
         "endpoint": "tgm/flow-intelligence",
         "window": "7d",
-        "credits": 1,
+        "credits": 0,
         "decides": "Smart Money net flow over the week — blip or trend",
         "ok": true,
-        "ms": 0,
+        "ms": 1,
         "cached": true,
+        "responseHash": "c7421946cbd1d933ff106dabd75f9c011e6cffe2238437140560b04a72d24799",
         "values": {
           "smart_trader_net_flow_usd": 115135.91983096013,
           "smart_trader_wallet_count": 10
@@ -321,11 +323,12 @@
         "id": "buyers",
         "endpoint": "tgm/who-bought-sold",
         "window": "BUY 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Smart Money bought, by USD",
         "ok": true,
-        "ms": 0,
+        "ms": 1,
         "cached": true,
+        "responseHash": "b33a3511d44d86fe784c093bc5f464120a4e522ffd14f2528951c99e443246c5",
         "values": {
           "bought_volume_usd": 99681,
           "rows": 3,
@@ -336,11 +339,12 @@
         "id": "sellers",
         "endpoint": "tgm/who-bought-sold",
         "window": "SELL 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Smart Money sold, by USD",
         "ok": true,
-        "ms": 0,
+        "ms": 1,
         "cached": true,
+        "responseHash": "453e2913d1e53d51106c6812efa5dac151c5d719012d5a80caaadd49a5a3a4ee",
         "values": {
           "sold_volume_usd": 4,
           "rows": 1,
@@ -351,11 +355,12 @@
         "id": "table",
         "endpoint": "smart-money/netflow",
         "window": "token filter",
-        "credits": 5,
+        "credits": 0,
         "decides": "is the token on the Smart Money net-flow table at all",
         "ok": true,
-        "ms": 0,
+        "ms": 1,
         "cached": true,
+        "responseHash": "3615279ede3e9d71b2a8e4bca25a332efc4451d102cc78ab3225f18cbcd7e755",
         "values": {
           "in_table": "yes",
           "net_flow_24h_usd": 99701.51755118334,
@@ -367,11 +372,12 @@
         "id": "price",
         "endpoint": "tgm/token-ohlcv",
         "window": "1h × 24",
-        "credits": 1,
+        "credits": 0,
         "decides": "did the price already move — is the claim late",
         "ok": true,
-        "ms": 0,
+        "ms": 1,
         "cached": true,
+        "responseHash": "6ed6692cc985d9ccf3a20f908031cc0d9c0d10e467aadd02a852fc15424c0100",
         "values": {
           "candles": 25,
           "open": 25.2936883478365,
@@ -439,7 +445,8 @@
         "responseHash": "25235b48b80cfca7c4a53fafa329d3cc027524c28d8e342ec7d7d632c0f7370c",
         "attempts": 0,
         "totalMs": 0,
-        "ok": true
+        "ok": true,
+        "tag": "flow1d"
       },
       {
         "endpoint": "tgm/flow-intelligence",
@@ -469,7 +476,8 @@
         "responseHash": "c7421946cbd1d933ff106dabd75f9c011e6cffe2238437140560b04a72d24799",
         "attempts": 0,
         "totalMs": 0,
-        "ok": true
+        "ok": true,
+        "tag": "flow7d"
       },
       {
         "endpoint": "tgm/who-bought-sold",
@@ -514,7 +522,8 @@
         "responseHash": "b33a3511d44d86fe784c093bc5f464120a4e522ffd14f2528951c99e443246c5",
         "attempts": 0,
         "totalMs": 0,
-        "ok": true
+        "ok": true,
+        "tag": "buyers"
       },
       {
         "endpoint": "tgm/who-bought-sold",
@@ -559,7 +568,8 @@
         "responseHash": "453e2913d1e53d51106c6812efa5dac151c5d719012d5a80caaadd49a5a3a4ee",
         "attempts": 0,
         "totalMs": 0,
-        "ok": true
+        "ok": true,
+        "tag": "sellers"
       },
       {
         "endpoint": "smart-money/netflow",
@@ -590,7 +600,8 @@
         "responseHash": "3615279ede3e9d71b2a8e4bca25a332efc4451d102cc78ab3225f18cbcd7e755",
         "attempts": 0,
         "totalMs": 0,
-        "ok": true
+        "ok": true,
+        "tag": "table"
       },
       {
         "endpoint": "tgm/token-ohlcv",
@@ -615,13 +626,14 @@
         "responseHash": "6ed6692cc985d9ccf3a20f908031cc0d9c0d10e467aadd02a852fc15424c0100",
         "attempts": 0,
         "totalMs": 0,
-        "ok": true
+        "ok": true,
+        "tag": "price"
       }
     ],
     "credits": 0,
     "calls": 7,
-    "ms": 0,
-    "hash": "b552549078478a8450403a6db0d7f9e454880343b10ece664345abbd15f32608",
+    "ms": 1,
+    "hash": "1dfd89ee2c771330f8207b0074f65686c09f7aa7bf4290a198945f8b2a856077",
     "warnings": [],
     "llm": {
       "extract": null,

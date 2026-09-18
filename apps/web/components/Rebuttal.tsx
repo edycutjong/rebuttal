@@ -1,31 +1,32 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Check, Claim, Resolved, Verdict, RebutEvent, Call, AgentRun } from "@rebuttal/core";
+import type { Check, Claim, Resolved, Verdict, RebutEvent, AgentRun } from "@rebuttal/core";
 import { ClaimCard, Trace, VerdictCard, AgentPanel, type PlanRow } from "./Cards";
 import { Example, HowItDecides } from "./Example";
 
 export const EXAMPLES = ["Smart Money is aping $PEPE hard today 🐋", "Smart Money is buying $VVV on Base — net inflows all week", "A whale sold 600,000 UNI tokens, valued at approximately $5.1 million."];
 const AGENT_PRICE = 200;
 
-type Phase = "idle" | "reading" | "checking" | "done" | "error";
-type StreamEvent = RebutEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean };
-type AgentEvent = { type: "tool_call"; name: string } | { type: "delta"; text: string } | { type: "finish" } | { type: "error"; error: string } | { type: "done"; run: AgentRun; replay?: boolean };
-
+/** Same text as core's `rebuttalText` (packages/core/src/rebut.ts) — copied because importing core pulls node:fs into the browser bundle; `guard.test.ts` keeps the two in step. */
 export function rebuttalText(v: Verdict, permalink: string): string {
   const tok = v.resolved ? `$${v.resolved.symbol} (${v.resolved.chain})` : v.claim.token ? `$${v.claim.token}` : "this";
   return [`${v.label} — "${v.claim.raw.slice(0, 120)}${v.claim.raw.length > 120 ? "…" : ""}"`, `${tok}: ${v.reasons.join("; ")}.`, `Checked on Nansen: ${v.checks.filter((c) => c.ok).length}/${v.checks.length} calls, ${v.credits} credits · ${v.hash.slice(0, 12)} · ${permalink}`].join("\n");
 }
 
-export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, proof }: { initialQuery?: string; initialVerdict?: Verdict | null; example: Verdict; exampleAgent?: AgentRun | null; proof: { tests: number; fixtures: number; p50: string; warm: string; credits: string } }) {
-  const [q, setQ] = useState(initialQuery ?? "");
+type Phase = "idle" | "reading" | "checking" | "done" | "error";
+type StreamEvent = RebutEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean };
+type AgentEvent = { type: "tool_call"; name: string } | { type: "delta"; text: string } | { type: "finish" } | { type: "error"; error: string } | { type: "done"; run: AgentRun };
+
+export function Rebuttal({ initialQuery, initialVerdict, prefill, example, exampleAgent, proof }: { initialQuery?: string; initialVerdict?: Verdict | null; prefill?: string; example: Verdict; exampleAgent?: AgentRun | null; proof: { tests: number; fixtures: number; p50: string; warm: string; credits: string } }) {
+  const [q, setQ] = useState(initialQuery ?? prefill ?? "");
   const [phase, setPhase] = useState<Phase>(initialVerdict ? "done" : initialQuery ? "reading" : "idle");
   const [input, setInput] = useState<{ text: string; fromUrl: boolean; author?: string } | null>(null);
   const [claim, setClaim] = useState<Claim | null>(initialVerdict?.claim ?? null);
   const [resolved, setResolved] = useState<Resolved | null | undefined>(initialVerdict ? initialVerdict.resolved : undefined);
   const [plan, setPlan] = useState<PlanRow[]>(initialVerdict?.checks ?? []);
   const [checks, setChecks] = useState<Map<string, Check>>(new Map(initialVerdict?.checks.map((c) => [c.id, c]) ?? []));
-  const [calls, setCalls] = useState<Map<string, Call | undefined>>(new Map());
   const [verdict, setVerdict] = useState<Verdict | null>(initialVerdict ?? null);
+  const [narrating, setNarrating] = useState(false);
   const [asOf, setAsOf] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -36,9 +37,11 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
     abortRef.current?.abort();
     const ctrl = new AbortController();
     abortRef.current = ctrl;
-    if (typeof history !== "undefined") history.replaceState(null, "", `/?q=${encodeURIComponent(term)}`);
+    // ?fresh=1 on the page URL (the recording flag) bypasses cache reads so every row lands live with its real credits
+    const fresh = typeof location !== "undefined" && new URLSearchParams(location.search).get("fresh") === "1";
+    if (typeof history !== "undefined") history.replaceState(null, "", `/?q=${encodeURIComponent(term)}${fresh ? "&fresh=1" : ""}`);
     try {
-      const res = await fetch(`/api/rebut?q=${encodeURIComponent(term)}&stream=1`, { signal: ctrl.signal });
+      const res = await fetch(`/api/rebut?q=${encodeURIComponent(term)}&stream=1${fresh ? "&fresh=1" : ""}`, { signal: ctrl.signal });
       if (!res.ok || !res.body) throw new Error((await res.json().catch(() => ({ error: res.statusText }))).error ?? res.statusText);
       const reader = res.body.getReader();
       const dec = new TextDecoder();
@@ -64,13 +67,16 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
             if (e.plan) setPlan(e.plan);
           } else if (e.type === "check") {
             setChecks((m) => new Map(m).set(e.check.id, e.check));
-            setCalls((m) => new Map(m).set(e.check.id, e.call));
           } else if (e.type === "verdict") {
             sawVerdict = true;
             setVerdict(e.verdict);
             setPlan(e.verdict.checks.length ? e.verdict.checks : []);
+            setNarrating(true);
             setPhase("done");
-          } else if (e.type === "prose") setVerdict((v) => (v ? { ...v, prose: e.prose } : v));
+          } else if (e.type === "prose") {
+            setVerdict((v) => (v ? { ...v, prose: e.prose } : v));
+            setNarrating(false);
+          }
           else if (e.type === "asOf") setAsOf(e.asOf);
           else if (e.type === "error") throw new Error(e.message);
         }
@@ -80,6 +86,8 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
       if ((err as Error).name === "AbortError") return;
       setError((err as Error).message);
       setPhase("error");
+    } finally {
+      setNarrating(false);
     }
   }, []);
 
@@ -94,8 +102,8 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
       setResolved(undefined);
       setPlan([]);
       setChecks(new Map());
-      setCalls(new Map());
       setVerdict(null);
+      setNarrating(false);
       setAsOf(null);
       setAgent(null);
       // the flow renders below the fold on a laptop: bring the claim card into view as the first row lands
@@ -136,12 +144,8 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
     }
   };
 
-  const askAgent = async (replay?: AgentRun | null) => {
+  const askAgent = async () => {
     if (!verdict) return;
-    if (replay) {
-      setAgent({ run: replay, tools: replay.toolCalls, text: replay.text, error: null, busy: false });
-      return;
-    }
     setAgent({ run: null, tools: [], text: "", error: null, busy: true });
     try {
       const res = await fetch("/api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: verdict.claim.raw }) });
@@ -200,7 +204,7 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
             run(q);
           }}
         >
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="paste the claim or the x.com link — “Smart Money is loading $X”" aria-label="claim text or x.com link" maxLength={400} autoFocus={!initialQuery} />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="paste the claim or the x.com link — “Smart Money is loading $X”" aria-label="claim text or x.com link" maxLength={600} autoFocus={!initialQuery} />
           <button type="submit" disabled={phase === "reading" || phase === "checking"}>
             Check
           </button>
@@ -235,11 +239,29 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
           {error}
         </div>
       )}
+      {!idle && !claim && !error && (
+        <div className="flow" aria-busy="true">
+          {/* the reading skeleton: without it the page is empty between Enter and the claim card and the footer jumps up (seen frame by frame in the clip) */}
+          <section className="claimcard" aria-label="reading the claim">
+            <span>
+              <span className="k">claim</span>
+              <span style={{ color: "var(--muted)" }}>{input?.fromUrl ? `tweet by @${input.author} — reading…` : "reading the claim…"}</span>
+            </span>
+          </section>
+          <section className="trace" aria-label="tool trace">
+            <h2>
+              <span>Tool trace</span>
+              <small>planning…</small>
+            </h2>
+          </section>
+          <VerdictCard verdict={null} pending />
+        </div>
+      )}
       {!idle && claim && (
         <div className="flow">
           <ClaimCard claim={claim} resolved={resolved} plan={plan.length ? plan : null} text={input?.text} author={input?.author} fromUrl={input?.fromUrl} />
-          {plan.length > 0 && <Trace plan={plan} checks={checks} calls={calls} credits={verdict?.credits ?? 0} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
-          <VerdictCard verdict={verdict} pending={phase !== "error"} onCopy={copy} onPermalink={copyLink} onAgent={() => askAgent(null)} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
+          {plan.length > 0 && <Trace plan={plan} checks={checks} credits={verdict?.credits ?? 0} calls={verdict?.calls} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
+          <VerdictCard verdict={verdict} pending={phase !== "error"} narrating={narrating} onCopy={copy} onPermalink={copyLink} onAgent={askAgent} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
           {agent && <AgentPanel run={agent.run} tools={agent.tools} text={agent.text} ours={plan} error={agent.error} busy={agent.busy} />}
         </div>
       )}

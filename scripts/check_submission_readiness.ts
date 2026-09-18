@@ -80,6 +80,13 @@ ok(read("JUDGE.md").includes(`**${actual} tests**`), `JUDGE.md states ${actual} 
 ok(read("apps/web/lib/proof.ts").includes(`tests: ${actual},`), `apps/web/lib/proof.ts states ${actual} tests`);
 
 const fixtures = readdirSync("fixtures").filter((f) => f.endsWith(".json")).length;
+// the offline replay must be green — a rule change without `verify --update` is exactly the drift this gate exists for (review finding #2)
+try {
+  const out = execSync("npx tsx scripts/verify.ts", { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+  ok(out.includes(`${fixtures}/${fixtures} verdicts reproduced offline`), `verify: ${fixtures}/${fixtures} reproduced offline`);
+} catch {
+  fails.push("verify: the offline replay is not green — run `npm run verify` (and `-- --update` after an intentional rule change)");
+}
 ok(readme.includes(`${fixtures}%2F${fixtures}`), `README badge says ${fixtures}/${fixtures} fixtures`);
 ok(read("apps/web/lib/proof.ts").includes(`fixtures: ${fixtures},`), `proof.ts says ${fixtures} fixtures`);
 

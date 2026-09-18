@@ -9,13 +9,14 @@ import { tmpdir } from "node:os";
 const dir = process.env.VERCEL ? join(tmpdir(), "rebuttal-cache") : join(process.cwd(), "../../.cache");
 let store: DiskCache | undefined;
 
-export function client(): CachedNansenClient {
+export function client(fresh = false): CachedNansenClient {
   store ??= new DiskCache(dir);
-  return new CachedNansenClient(process.env.NANSEN_API_KEY ?? "", { store });
+  // fresh: bypass cache reads (every call live, still written to the cache) — the recording flag, same spend guard
+  return new CachedNansenClient(process.env.NANSEN_API_KEY ?? "", { store, ttlMs: fresh ? 0 : undefined });
 }
 
-/** A claim is a sentence or an x.com link: up to 400 chars, no control characters. */
-export const MAX_CLAIM = 400;
+/** A claim is a sentence or an x.com link: up to 600 chars (a long-form post's text, as rebut() keeps it), no control characters. */
+export const MAX_CLAIM = 600;
 const CONTROL = /[\u0000-\u001f\u007f]/g;
 export function cleanClaim(q: string): string | null {
   const s = q.replace(CONTROL, "").trim().replace(/\s+/g, " ");
@@ -24,8 +25,8 @@ export function cleanClaim(q: string): string | null {
 }
 export const CHAINS = ["ethereum", "base", "solana", "bnb", "arbitrum", "polygon", "avalanche", "optimism", "hyperevm", "robinhood"] as const;
 
-export async function rebutFor(q: string, chain?: string, opts: Omit<RebutOptions, "chain" | "llm"> = {}): Promise<{ verdict: Verdict; oldestHit?: string }> {
-  const c = client();
+export async function rebutFor(q: string, chain?: string, opts: Omit<RebutOptions, "chain" | "llm"> & { fresh?: boolean } = {}): Promise<{ verdict: Verdict; oldestHit?: string }> {
+  const c = client(opts.fresh);
   const v = await rebut(c, q, { chain, llm: envLlm(), ...opts });
   return { verdict: v, oldestHit: c.oldestHit };
 }

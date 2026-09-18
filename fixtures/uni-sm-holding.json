@@ -235,10 +235,10 @@
     "ruleId": "O-TRIM",
     "reasons": [
       "59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens",
-      "7 d Smart Money net flow −$38K (threshold $593K)",
+      "7 d Smart Money net flow −$38K (threshold $85K)",
       "some Smart Money are trimming — holding, but not all of them"
     ],
-    "threshold": 265008,
+    "threshold": 76812,
     "evidence": {
       "flow1d": {
         "smart_trader": {
@@ -360,11 +360,12 @@
         "id": "flow1d",
         "endpoint": "tgm/flow-intelligence",
         "window": "1d",
-        "credits": 1,
+        "credits": 0,
         "decides": "Smart Money net flow and wallet count, last 24 h — the primary signal",
         "ok": true,
-        "ms": 331,
-        "cached": false,
+        "ms": 1,
+        "cached": true,
+        "responseHash": "0076393ace640ac04f3468e66ca5632805f5d5a0cb017bff6d6eeabced398496",
         "values": {
           "smart_trader_net_flow_usd": 16587.60122198475,
           "smart_trader_wallet_count": 2,
@@ -376,11 +377,12 @@
         "id": "flow7d",
         "endpoint": "tgm/flow-intelligence",
         "window": "7d",
-        "credits": 1,
+        "credits": 0,
         "decides": "Smart Money net flow over the week — blip or trend",
         "ok": true,
-        "ms": 330,
-        "cached": false,
+        "ms": 1,
+        "cached": true,
+        "responseHash": "eda4ef03718f78c7503d3e34488d076a4625477e0353a389de634d94f8b45eaf",
         "values": {
           "smart_trader_net_flow_usd": -38375.280206121744,
           "smart_trader_wallet_count": 3
@@ -390,11 +392,12 @@
         "id": "buyers",
         "endpoint": "tgm/who-bought-sold",
         "window": "BUY 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Smart Money bought, by USD",
         "ok": true,
-        "ms": 887,
-        "cached": false,
+        "ms": 1,
+        "cached": true,
+        "responseHash": "affee52096cd25a0f1619c11796bdb2209d065081ebb9656bcc8cf0709f25aeb",
         "values": {
           "bought_volume_usd": 20122,
           "rows": 2,
@@ -405,11 +408,12 @@
         "id": "sellers",
         "endpoint": "tgm/who-bought-sold",
         "window": "SELL 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Smart Money sold, by USD",
         "ok": true,
-        "ms": 637,
-        "cached": false,
+        "ms": 1,
+        "cached": true,
+        "responseHash": "a5f69eeb21094103877070435c61ab425a5c3487043ab22fb89ece298674d208",
         "values": {
           "sold_volume_usd": 3606,
           "rows": 1,
@@ -420,11 +424,12 @@
         "id": "table",
         "endpoint": "smart-money/netflow",
         "window": "token filter",
-        "credits": 5,
+        "credits": 0,
         "decides": "is the token on the Smart Money net-flow table at all",
         "ok": true,
-        "ms": 1613,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "cfc3331c2b490ea7c5eeec31f25ab6895a691473d7b4496738bcdf0c9d98272a",
         "values": {
           "in_table": "yes",
           "net_flow_24h_usd": 16587.60122198475,
@@ -436,11 +441,12 @@
         "id": "price",
         "endpoint": "tgm/token-ohlcv",
         "window": "1h × 24",
-        "credits": 1,
+        "credits": 0,
         "decides": "did the price already move — is the claim late",
         "ok": true,
-        "ms": 944,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "c704caa229a34b1b3333748825ceb3222f539dca2638d13dc54c1aedcc49e550",
         "values": {
           "candles": 25,
           "open": 6.88611329825717,
@@ -452,11 +458,12 @@
         "id": "holders",
         "endpoint": "tgm/holders",
         "window": "smart_money",
-        "credits": 5,
+        "credits": 0,
         "decides": "Smart Money holders and whether their balances grew",
         "ok": true,
-        "ms": 1971,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "981ce2bf286d7c54b372caaccfb66e89421cbd874e2cdc4a97e08b8953ea9ecb",
         "values": {
           "holders": 59,
           "value_usd": 383917718,
@@ -466,9 +473,9 @@
       }
     ],
     "prose": {
-      "text": "UNI has not risen 2.7‑fold nor delivered 1000% gains for smart money. Only 59 smart‑money wallets hold $383.92 M, with a 7‑day net outflow of $38 K, well under the $593 K threshold, and many are trimming.",
-      "source": "llm",
-      "ms": 1311
+      "text": "Nansen only partly agrees that Smart Money are holding UNI on ethereum. 59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens — 7 d Smart Money net flow −$38K (threshold $85K).",
+      "source": "template",
+      "ms": 0
     },
     "provenance": [
       {
@@ -479,8 +486,8 @@
           "limit": 50
         },
         "credits": 0,
-        "ms": 438,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "tokens[].symbol",
@@ -492,38 +499,8 @@
           "tokens[].market_cap"
         ],
         "responseHash": "c6b6e4b2e6aa5421f6ac41b78f282f9a31e82200de8345cf5ddde7c56a6cc2fa",
-        "attempts": 1,
-        "totalMs": 438,
-        "ok": true
-      },
-      {
-        "endpoint": "tgm/flow-intelligence",
-        "body": {
-          "chain": "ethereum",
-          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-          "timeframe": "7d"
-        },
-        "credits": 1,
-        "ms": 329,
-        "cached": false,
-        "status": 200,
-        "fieldsUsed": [
-          "data[0].smart_trader_net_flow_usd (7d)",
-          "data[0].smart_trader_wallet_count (7d)",
-          "data[0].whale_net_flow_usd (7d)",
-          "data[0].whale_wallet_count (7d)",
-          "data[0].exchange_net_flow_usd (7d)",
-          "data[0].exchange_wallet_count (7d)",
-          "data[0].fresh_wallets_net_flow_usd (7d)",
-          "data[0].fresh_wallets_wallet_count (7d)",
-          "data[0].top_pnl_net_flow_usd (7d)",
-          "data[0].top_pnl_wallet_count (7d)",
-          "data[0].public_figure_net_flow_usd (7d)",
-          "data[0].public_figure_wallet_count (7d)"
-        ],
-        "responseHash": "eda4ef03718f78c7503d3e34488d076a4625477e0353a389de634d94f8b45eaf",
-        "attempts": 1,
-        "totalMs": 330,
+        "attempts": 0,
+        "totalMs": 0,
         "ok": true
       },
       {
@@ -533,9 +510,9 @@
           "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
           "timeframe": "1d"
         },
-        "credits": 1,
-        "ms": 329,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[0].smart_trader_net_flow_usd (1d)",
@@ -552,54 +529,41 @@
           "data[0].public_figure_wallet_count (1d)"
         ],
         "responseHash": "0076393ace640ac04f3468e66ca5632805f5d5a0cb017bff6d6eeabced398496",
-        "attempts": 1,
-        "totalMs": 330,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "flow1d"
       },
       {
-        "endpoint": "tgm/who-bought-sold",
+        "endpoint": "tgm/flow-intelligence",
         "body": {
           "chain": "ethereum",
           "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-          "buy_or_sell": "SELL",
-          "date": {
-            "from": "2026-09-17T10:00:00Z",
-            "to": "2026-09-18T10:00:00Z"
-          },
-          "pagination": {
-            "page": 1,
-            "per_page": 100
-          },
-          "filters": {
-            "include_smart_money_labels": [
-              "Smart Trader",
-              "Fund",
-              "30D Smart Trader",
-              "90D Smart Trader",
-              "180D Smart Trader"
-            ]
-          },
-          "order_by": [
-            {
-              "field": "sold_volume_usd",
-              "direction": "DESC"
-            }
-          ]
+          "timeframe": "7d"
         },
-        "credits": 1,
-        "ms": 634,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
-          "data[].sold_volume_usd (SELL 24h)",
-          "data[].address (SELL 24h)",
-          "data[].address_label (SELL 24h)",
-          "pagination.is_last_page (SELL 24h)"
+          "data[0].smart_trader_net_flow_usd (7d)",
+          "data[0].smart_trader_wallet_count (7d)",
+          "data[0].whale_net_flow_usd (7d)",
+          "data[0].whale_wallet_count (7d)",
+          "data[0].exchange_net_flow_usd (7d)",
+          "data[0].exchange_wallet_count (7d)",
+          "data[0].fresh_wallets_net_flow_usd (7d)",
+          "data[0].fresh_wallets_wallet_count (7d)",
+          "data[0].top_pnl_net_flow_usd (7d)",
+          "data[0].top_pnl_wallet_count (7d)",
+          "data[0].public_figure_net_flow_usd (7d)",
+          "data[0].public_figure_wallet_count (7d)"
         ],
-        "responseHash": "a5f69eeb21094103877070435c61ab425a5c3487043ab22fb89ece298674d208",
-        "attempts": 1,
-        "totalMs": 636,
-        "ok": true
+        "responseHash": "eda4ef03718f78c7503d3e34488d076a4625477e0353a389de634d94f8b45eaf",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "flow7d"
       },
       {
         "endpoint": "tgm/who-bought-sold",
@@ -631,9 +595,9 @@
             }
           ]
         },
-        "credits": 1,
-        "ms": 884,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].bought_volume_usd (BUY 24h)",
@@ -642,34 +606,56 @@
           "pagination.is_last_page (BUY 24h)"
         ],
         "responseHash": "affee52096cd25a0f1619c11796bdb2209d065081ebb9656bcc8cf0709f25aeb",
-        "attempts": 1,
-        "totalMs": 885,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "buyers"
       },
       {
-        "endpoint": "tgm/token-ohlcv",
+        "endpoint": "tgm/who-bought-sold",
         "body": {
           "chain": "ethereum",
           "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-          "timeframe": "1h",
+          "buy_or_sell": "SELL",
           "date": {
             "from": "2026-09-17T10:00:00Z",
             "to": "2026-09-18T10:00:00Z"
-          }
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Smart Trader",
+              "Fund",
+              "30D Smart Trader",
+              "90D Smart Trader",
+              "180D Smart Trader"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "sold_volume_usd",
+              "direction": "DESC"
+            }
+          ]
         },
-        "credits": 1,
-        "ms": 377,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
-          "data[].open",
-          "data[].close",
-          "data[].interval_start"
+          "data[].sold_volume_usd (SELL 24h)",
+          "data[].address (SELL 24h)",
+          "data[].address_label (SELL 24h)",
+          "pagination.is_last_page (SELL 24h)"
         ],
-        "responseHash": "c704caa229a34b1b3333748825ceb3222f539dca2638d13dc54c1aedcc49e550",
-        "attempts": 1,
-        "totalMs": 942,
-        "ok": true
+        "responseHash": "a5f69eeb21094103877070435c61ab425a5c3487043ab22fb89ece298674d208",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "sellers"
       },
       {
         "endpoint": "smart-money/netflow",
@@ -687,9 +673,9 @@
             "per_page": 10
           }
         },
-        "credits": 5,
-        "ms": 606,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].net_flow_24h_usd",
@@ -698,9 +684,36 @@
           "data[].token_symbol"
         ],
         "responseHash": "cfc3331c2b490ea7c5eeec31f25ab6895a691473d7b4496738bcdf0c9d98272a",
-        "attempts": 1,
-        "totalMs": 1613,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "table"
+      },
+      {
+        "endpoint": "tgm/token-ohlcv",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+          "timeframe": "1h",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          }
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].open",
+          "data[].close",
+          "data[].interval_start"
+        ],
+        "responseHash": "c704caa229a34b1b3333748825ceb3222f539dca2638d13dc54c1aedcc49e550",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "price"
       },
       {
         "endpoint": "tgm/holders",
@@ -713,9 +726,9 @@
             "per_page": 100
           }
         },
-        "credits": 5,
-        "ms": 964,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].address_label (smart_money)",
@@ -724,34 +737,26 @@
           "data[].value_usd (smart_money)"
         ],
         "responseHash": "981ce2bf286d7c54b372caaccfb66e89421cbd874e2cdc4a97e08b8953ea9ecb",
-        "attempts": 1,
-        "totalMs": 1969,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "holders"
       }
     ],
-    "credits": 15,
+    "credits": 0,
     "calls": 8,
-    "ms": 4254,
-    "hash": "5ac89638d050b5605db1e3074cc4ce63c6b5fc203b50b04ec1eca4dff791cc5f",
+    "ms": 2,
+    "hash": "62e68c0786ea68c3817ba0e87101bf31f5fbd049c6a34f018600d8870bdc9451",
     "warnings": [
       "9 tokens named UNI on Nansen — checked the most traded of the top-ranked"
     ],
     "llm": {
-      "extract": {
-        "used": true,
-        "ms": 528,
-        "model": "openai/gpt-oss-120b"
-      },
-      "narrate": {
-        "used": true,
-        "ms": 1311,
-        "model": "openai/gpt-oss-120b"
-      }
+      "extract": null,
+      "narrate": null
     },
     "rules": {
       "floorUsd": 5000,
       "shareOfFlow": 0.01,
-      "freshMult": 3,
       "staleMove": 0.2,
       "minWallets": 3,
       "minWhales": 1,

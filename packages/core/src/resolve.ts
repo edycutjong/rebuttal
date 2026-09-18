@@ -20,15 +20,16 @@ export type Resolved = {
  * those would answer a question nobody asked. UNVERIFIABLE unless the claim names a chain.
  */
 export const NOT_A_NANSEN_CHAIN: Record<string, string> = {
-  ZEC: "Zcash", XRP: "XRP Ledger", ADA: "Cardano", LTC: "Litecoin", XMR: "Monero", DOT: "Polkadot", ATOM: "Cosmos", XLM: "Stellar",
+  BTC: "Bitcoin", ZEC: "Zcash", XRP: "XRP Ledger", ADA: "Cardano", LTC: "Litecoin", XMR: "Monero", DOT: "Polkadot", ATOM: "Cosmos", XLM: "Stellar",
   ALGO: "Algorand", HBAR: "Hedera", KAS: "Kaspa", BCH: "Bitcoin Cash", DOGE: "Dogecoin", FIL: "Filecoin", ICP: "Internet Computer",
   ETC: "Ethereum Classic", BSV: "BSV", DASH: "Dash", APT: "Aptos", XTZ: "Tezos",
 };
 
-/** Native coins have no contract; Nansen indexes their wrapped form or a placeholder address. */
+/** Native coins have no contract; Nansen indexes them under a placeholder address (or a wrapped form). BTC is a Bitcoin-chain coin: WBTC/cbBTC are different books, so it is refused unless a chain is named. */
 const NATIVE: Record<string, { symbol: string; chain: string; address: string }> = {
-  ETH: { symbol: "WETH", chain: "ethereum", address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" },
-  BTC: { symbol: "WBTC", chain: "ethereum", address: "0x2260fac5e5542a773aa44fbcfb037771d84ecc68" },
+  // native ETH is Nansen's 0xeeee… placeholder on ethereum (rank 314, $199M/24 h) — WETH is a different, quieter book; the
+  // robinhood-chain copy trades more and would win the volume rule without this map
+  ETH: { symbol: "ETH", chain: "ethereum", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
   SOL: { symbol: "SOL", chain: "solana", address: "So11111111111111111111111111111111111111112" },
   HYPE: { symbol: "HYPE", chain: "hyperevm", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
 };
@@ -69,11 +70,21 @@ export async function resolveToken(client: NansenClient, token: string, chainHin
   let pick = byCap[0];
   let by = matches.length === 1 ? "only match" : "most traded of the top-ranked";
   if (chainHint) {
-    const onChain = byCap.find((t) => t.chain === chainHint);
-    if (onChain) {
-      pick = onChain;
-      by = `chain hint (${chainHint})`;
+    // the chain the text names is not a tiebreak, it is the question: look at every same-name match on that chain (not only
+    // the rank window — base PEPE ranks 2741 against ethereum's 374 and used to lose silently, audit 2026-09-19), then, when
+    // the unfiltered search did not reach that chain at all, ask search for that chain (0 credits); nothing there → null,
+    // and the caller says "no token named X on Nansen (chain)" instead of checking a different chain's book
+    const onChain = [...matches].filter((t) => t.chain === chainHint).sort((a, b) => (b.volume_24h ?? -1) - (a.volume_24h ?? -1) || (a.rank ?? 1e9) - (b.rank ?? 1e9));
+    let hit = onChain[0];
+    if (!hit) {
+      const chainTokens = await searchTokens(client, query, chainHint, opts);
+      const same = chainTokens.filter((t) => sameName(query, t) && t.chain === chainHint).sort((a, b) => (b.volume_24h ?? -1) - (a.volume_24h ?? -1) || (a.rank ?? 1e9) - (b.rank ?? 1e9));
+      hit = same[0];
+      if (hit) matches = [...matches, ...same];
     }
+    if (!hit) return null;
+    pick = hit;
+    by = `chain hint (${chainHint})`;
   }
   return {
     chain: pick.chain,
