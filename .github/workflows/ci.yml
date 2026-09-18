@@ -6,79 +6,199 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel in-progress runs for the same PR/branch
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # ── STAGE 1: Code Quality (parallel with Stage 2) ─────────
   quality:
     name: "Stage 1 · Quality"
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        # Full matrix on main push, single node on PRs
         node-version: ${{ github.event_name == 'push' && fromJSON('[20, 22, 24]') || fromJSON('[20]') }}
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0 # the readiness check scans the whole git history for keys and kitchen files
-      - uses: actions/setup-node@v7
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
       - name: Type check (core, scripts, web)
-        run: npm run typecheck && npx tsc -p apps/web/tsconfig.json --noEmit
+        run: npm run typecheck && npm run typecheck:web
       - name: Unit + property + boundary tests with coverage (no key, no network)
         run: npm run test:coverage
       - name: Offline replay of 13 recorded rebuttals (no key, no network, no LLM)
         run: npm run verify
       - name: Submission readiness (README claims vs tree, kitchen/secret scan, history scan)
         run: npm run check
-      - uses: actions/upload-artifact@v7
+      - name: Upload coverage report
         if: matrix.node-version == 20
+        uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: coverage/
           retention-days: 7
 
-  security:
-    name: "Stage 2 · Security"
+  # ── STAGE 2: Security Gate (parallel with Stage 1) ────────
+  secret-scan:
+    name: "Stage 2 · Secret Scanning"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # full history for scanning git commits
       - name: TruffleHog secret scan (full history, verified only)
         uses: trufflesecurity/trufflehog@main
         with:
           extra_args: --only-verified
-      - uses: actions/setup-node@v7
+
+  dependency-audit:
+    name: "Stage 2 · Dependency Audit"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
       - name: npm audit (production deps, high + critical)
         run: npm audit --omit=dev --audit-level=high
-        continue-on-error: true
+        continue-on-error: true # advisory — transitive upstream advisories must not block a frozen submission
 
+  # ── STAGE 3: Build Verification ───────────────────────────
   build:
-    name: "Stage 3 · Build"
+    name: "Stage 3 · Build Verification"
     needs: [quality]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
       - name: Next.js production build (no API key — nothing is fetched at build time)
         run: npm run build
+      - name: Check bundle size
+        run: |
+          echo "📦 Bundle Size Report"
+          echo "─────────────────────"
+          if [ -d "apps/web/.next/static" ]; then
+            TOTAL_SIZE=$(du -sk apps/web/.next/static | cut -f1)
+            echo "Total static assets: ${TOTAL_SIZE}KB"
+            if [ "$TOTAL_SIZE" -gt 2000 ]; then
+              echo "::error::Bundle size ${TOTAL_SIZE}KB exceeds 2000KB error threshold"
+              exit 1
+            elif [ "$TOTAL_SIZE" -gt 1500 ]; then
+              echo "::warning::Bundle size ${TOTAL_SIZE}KB exceeds 1500KB warning threshold"
+            else
+              echo "✅ Bundle size within budget"
+            fi
+          fi
 
-  deploy-gate:
-    name: "Stage 4 · Deploy gate"
-    needs: [quality, security, build]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  # ── STAGE 4: E2E Smoke ────────────────────────────────────
+  e2e:
+    name: "Stage 4 · E2E Smoke"
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "all gates green — production is deployed from this commit with vercel deploy --prod (see docs)"
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build application
+        run: npm run build
+      - name: Route smoke of the built app (no NANSEN_API_KEY — asserts the honest no-key path)
+        run: npm run e2e
+        env:
+          NODE_ENV: production
+
+  # ── STAGE 5: Deploy Gate (main only) ──────────────────────
+  deploy-gate:
+    name: "Stage 5 · Deploy Gate"
+    needs: [build, e2e, secret-scan, dependency-audit]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: All gates passed
+        run: |
+          echo "🚀 All CI/CD gates passed!"
+          echo ""
+          echo "Pipeline Summary:"
+          echo "  ✅ Stage 1 — Quality (tsc core + web, vitest + coverage, offline replay, readiness)"
+          echo "  ✅ Stage 2 — Secret Scanning (TruffleHog)"
+          echo "  ✅ Stage 2 — Dependency Audit (npm audit)"
+          echo "  ✅ Stage 3 — Build Verification"
+          echo "  ✅ Stage 4 — E2E Smoke (built app, no key)"
+
+  # ── STAGE 6: Production Deploy (main only, after every gate) ──
+  # Prebuilt flow: `vercel build` runs here on the runner, `vercel deploy --prebuilt` uploads the
+  # output — Vercel never builds from git for this project. The only secret is VERCEL_TOKEN; the
+  # org/project ids are plain repository variables. Skipped on PRs and on forks. The last step points
+  # the stable alias at the new deployment; the custom domain follows production automatically.
+  deploy:
+    name: "Stage 6 · Production Deploy"
+    needs: [deploy-gate]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'edycutjong/rebuttal'
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: https://rebuttal.edycu.dev
+    env:
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+      - name: Pull Vercel project settings (production)
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build (vercel build → .vercel/output)
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy prebuilt output to production
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          {
+            echo "## 🚀 Production deploy"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Deployment | $URL |"
+            echo "| Production | https://rebuttal.edycu.dev |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Point the stable alias at the new deployment
+        run: vercel alias set "${{ steps.deploy.outputs.url }}" rebuttal-edycutjong.vercel.app --token=${{ secrets.VERCEL_TOKEN }}

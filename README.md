@@ -192,7 +192,7 @@ Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-1
 
 ## 🧪 Testing & CI
 
-**Pipeline:** Quality (typecheck · 216 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key) → Deploy gate. No API key anywhere in CI.
+**Pipeline (`ci.yml`, CI/CD Pipeline):** Quality (typecheck core + web · 216 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key, bundle budget) → E2E smoke (`npm run e2e` against the built app, no key) → Deploy gate → **Production deploy** on every push to `main`: `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod` → alias, into the `production` environment at [rebuttal.edycu.dev](https://rebuttal.edycu.dev). No API key anywhere in CI — the only secret is the Vercel token. Until GitHub Actions is enabled on the account, the same steps run locally (`npm run ci:full`, then `vercel build && vercel deploy --prebuilt --prod`).
 
 **Security:** CodeQL (`codeql.yml`) · gitleaks on the full history (`gitleaks.yml`) · TruffleHog · Dependabot (npm + actions, grouped) · `npm audit` — 0 open alerts, 0 vulnerabilities.
 
@@ -203,6 +203,7 @@ npm run typecheck      # tsc strict, core + scripts + web
 npm test               # 216 vitest tests incl. 23,000 property cases
 npm run verify         # 13/13 fixtures, 0 network
 npm run check          # README claims vs the tree, kitchen/secret scan, history scan
+npm run e2e            # build first; route smoke of the built app (--url https://… for a deployment, --live adds the hero claim)
 npm run bench          # live: cold/warm p50/p95, credits per rebuttal → docs/BENCH.md (≈ 130 credits per run)
 npm run seed           # live: re-record the 13 fixtures (≈ 125 credits)
 ```
