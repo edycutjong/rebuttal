@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import fc from "fast-check";
-import { decide, type Evidence, type FlowSnapshot, type ClassFlow, type NamedRow } from "../src/decide.js";
-import { extractClaim, validClaim } from "../src/claim.js";
-import { verdictHash } from "../src/rebut.js";
-import { claim } from "./helpers.js";
+import { decide, type Evidence, type FlowSnapshot, type ClassFlow, type NamedRow } from "../src/decide";
+import { extractClaim, validClaim } from "../src/claim";
+import { verdictHash } from "../src/rebut";
+import { claim } from "./helpers";
 
 const LABELS = ["CONFIRMED", "OVERSTATED", "CONTRADICTED", "UNVERIFIABLE"];
 const RUNS = 5_000;

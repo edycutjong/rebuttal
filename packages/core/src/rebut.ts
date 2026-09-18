@@ -1,13 +1,13 @@
-import type { NansenClient, Call } from "./client.js";
-import { sha256 } from "./client.js";
-import { canonicalize } from "./cache.js";
-import { extractClaim, mergeClaims, validClaim, SCORABLE_CHAINS, type Claim } from "./claim.js";
-import { resolveToken, NOT_A_NANSEN_CHAIN, type Resolved } from "./resolve.js";
-import { runChecks, planChecks, type Check, type CheckEvent } from "./checks.js";
-import { decide, RULES, fmtUsd, subjectName, type Decision, type Evidence, type Label, type Rules } from "./decide.js";
-import { extractWithLlm, narrateWithLlm, type LlmOptions, type LlmStatus } from "./llm.js";
-import { isTweetUrl, fetchTweetText } from "./tweet.js";
-import type { AgentRun } from "./agent.js";
+import type { NansenClient, Call } from "./client";
+import { sha256 } from "./client";
+import { canonicalize } from "./cache";
+import { extractClaim, mergeClaims, validClaim, SCORABLE_CHAINS, type Claim } from "./claim";
+import { resolveToken, NOT_A_NANSEN_CHAIN, type Resolved } from "./resolve";
+import { runChecks, planChecks, type Check, type CheckEvent } from "./checks";
+import { decide, RULES, fmtUsd, subjectName, type Decision, type Evidence, type Label, type Rules } from "./decide";
+import { extractWithLlm, narrateWithLlm, type LlmOptions, type LlmStatus } from "./llm";
+import { isTweetUrl, fetchTweetText } from "./tweet";
+import type { AgentRun } from "./agent";
 
 export type Prose = { text: string; source: "llm" | "template"; ms: number };
 

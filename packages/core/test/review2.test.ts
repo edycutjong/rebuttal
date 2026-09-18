@@ -1,17 +1,17 @@
 /** Regression tests named for the second independent review (2026-09-18): findings #1, #2, #3, #4, #8, #9, #11. */
 import { describe, it, expect } from "vitest";
 import { NextRequest } from "next/server";
-import { extractClaim, mergeClaims, findToken } from "../src/claim.js";
-import { rebut, type RebutEvent } from "../src/rebut.js";
-import { fmtValue } from "../src/format.js";
-import { runChecks } from "../src/checks.js";
-import { askNansenAgent } from "../src/agent.js";
-import { decide } from "../src/decide.js";
-import { fakeClient, pepeRoutes, claim, evidence, snap, PEPE_ETH } from "./helpers.js";
+import { extractClaim, mergeClaims, findToken } from "../src/claim";
+import { rebut, type RebutEvent } from "../src/rebut";
+import { fmtValue } from "../src/format";
+import { runChecks } from "../src/checks";
+import { askNansenAgent } from "../src/agent";
+import { decide } from "../src/decide";
+import { fakeClient, pepeRoutes, claim, evidence, snap, PEPE_ETH } from "./helpers";
 import { POST as agentPost } from "@/app/api/agent/route";
 import { fmt } from "@/components/Cards";
 import { resetGuard } from "@/lib/guard";
-import type { Resolved } from "../src/resolve.js";
+import type { Resolved } from "../src/resolve";
 
 describe("#1 a chain name is never the token", () => {
   it("'Smart Money is buying PEPE on Ethereum' is about PEPE on ethereum", () => {

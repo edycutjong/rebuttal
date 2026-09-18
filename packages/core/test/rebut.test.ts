@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { rebut, verdictHash, hashRecord, templateProse, rebuttalText, type RebutEvent } from "../src/rebut.js";
-import { fakeClient, pepeRoutes, searchTokens, claim, evidence, snap } from "./helpers.js";
+import { rebut, verdictHash, hashRecord, templateProse, rebuttalText, type RebutEvent } from "../src/rebut";
+import { fakeClient, pepeRoutes, searchTokens, claim, evidence, snap } from "./helpers";
 
 const NOW = Date.UTC(2026, 8, 18, 12, 30);
 

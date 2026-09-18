@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { askNansenAgent, AGENT_CREDITS } from "../src/agent.js";
+import { askNansenAgent, AGENT_CREDITS } from "../src/agent";
 
 function sse(lines: string[], delayMs = 0): typeof fetch {
   return async () => {

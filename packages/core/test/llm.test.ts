@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { chat, extractWithLlm, narrateWithLlm, keysFromEnv } from "../src/llm.js";
-import { rebut } from "../src/rebut.js";
-import { fakeClient, pepeRoutes } from "./helpers.js";
+import { chat, extractWithLlm, narrateWithLlm, keysFromEnv } from "../src/llm";
+import { rebut } from "../src/rebut";
+import { fakeClient, pepeRoutes } from "./helpers";
 
 const toolReply = (args: Record<string, unknown>) => new Response(JSON.stringify({ choices: [{ message: { content: null, tool_calls: [{ function: { name: "extract_claim", arguments: JSON.stringify(args) } }] } }] }), { status: 200 });
 const textReply = (content: string) => new Response(JSON.stringify({ choices: [{ message: { content } }] }), { status: 200 });
@@ -113,7 +113,7 @@ describe("keysFromEnv", () => {
 
 describe("prose that disputes the verdict is discarded (live finding 2026-09-18: a CONFIRMED whale sale narrated as 'not supported')", () => {
   it("proseConsistent per label", async () => {
-    const { proseConsistent } = await import("../src/llm.js");
+    const { proseConsistent } = await import("../src/llm");
     expect(proseConsistent("CONFIRMED", "Thus the reported sale is not supported.")).toBe(false);
     expect(proseConsistent("CONFIRMED", "Whale holders sold $532K net in 24 h; the direction holds.")).toBe(true);
     expect(proseConsistent("CONTRADICTED", "The data supports the claim.")).toBe(false);

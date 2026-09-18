@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { NansenClient, CallOptions } from "./client.js";
+import type { NansenClient, CallOptions } from "./client";
 
 /** Typed, zod-validated wrappers over the seven Nansen endpoints Rebuttal calls (bodies from openapi.json, 2026-09-15). */
 

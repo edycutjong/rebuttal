@@ -12,8 +12,8 @@ import { GET as rebutRoute } from "@/app/api/rebut/route";
 import { GET as agentGet, POST as agentPost } from "@/app/api/agent/route";
 import { cleanClaim, MAX_CLAIM } from "@/lib/engine";
 import { ipAllowed, creditsLeft, recordSpend, budgetExhausted, resetGuard, replayFixture, fixtureFor, agentAllowed, clientIp, IP_PER_MIN, DAILY_CREDITS, MAX_VERDICT_CREDITS, AGENT_PER_DAY, AGENT_IP_PER_DAY, BUDGET_MESSAGE, NO_FIXTURE_MESSAGE } from "@/lib/guard";
-import { rebut, type RebutEvent } from "../src/index.js";
-import { fakeClient, pepeRoutes } from "./helpers.js";
+import { rebut, type RebutEvent } from "../src/index";
+import { fakeClient, pepeRoutes } from "./helpers";
 
 const KEY = "nsn_test_key_0000000000000000000000";
 const KEY_SHAPE = /nsn_[A-Za-z0-9_]{8,}/;
@@ -196,7 +196,7 @@ describe("the key never leaves the server", () => {
 describe("the web copy text equals core's rebuttalText (the browser bundle cannot import core)", () => {
   it("same paragraph", async () => {
     const { rebuttalText: web } = await import("@/components/Rebuttal");
-    const { rebuttalText: core } = await import("../src/rebut.js");
+    const { rebuttalText: core } = await import("../src/rebut");
     const v = await rebut(fakeClient(pepeRoutes()), HERO, { llm: null, now: 0 });
     expect(web(v, "https://x/c?q=1")).toBe(core(v, "https://x/c?q=1"));
   });

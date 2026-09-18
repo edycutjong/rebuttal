@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractClaim, findChain, findToken, findType, findSubject, mergeClaims, validClaim } from "../src/claim.js";
+import { extractClaim, findChain, findToken, findType, findSubject, mergeClaims, validClaim } from "../src/claim";
 
 /** The ten spike claims (specs/spike-claims.md) plus the hero phrasing: what the rules extractor must read. */
 const SPIKE: Array<[string, string, string, string | undefined]> = [

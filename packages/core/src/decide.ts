@@ -2,7 +2,7 @@
  * The verdict. Pure arithmetic over Nansen fields — the LLM never sees this function's inputs as a question.
  * Every threshold lives in RULES and is printed by `--explain`; `docs/SCORING.md` shows the arithmetic on real fixtures.
  */
-import type { Claim, ClaimType, Subject } from "./claim.js";
+import type { Claim, ClaimType, Subject } from "./claim";
 
 export type Label = "CONFIRMED" | "OVERSTATED" | "CONTRADICTED" | "UNVERIFIABLE";
 

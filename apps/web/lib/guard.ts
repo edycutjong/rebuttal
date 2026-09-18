@@ -90,7 +90,9 @@ export const RATE_MESSAGE = "Too many checks from your address this minute — t
 export const NO_FIXTURE_MESSAGE = "Today's live Nansen budget is used up and this claim has no recorded run. Try one of the example claims, or come back tomorrow.";
 
 function fixturesDir(): string | undefined {
-  for (const c of [join(process.cwd(), "fixtures"), join(process.cwd(), "..", "..", "fixtures")]) if (existsSync(c)) return c;
+  // turbopackIgnore: the fixtures are shipped explicitly by outputFileTracingIncludes (next.config.ts); without the
+  // hint Turbopack's static analysis would trace the whole project into every function that touches this path
+  for (const c of [join(process.cwd(), "fixtures"), join(process.cwd(), "..", "..", "fixtures")]) if (existsSync(/* turbopackIgnore: true */ c)) return c;
   return undefined;
 }
 

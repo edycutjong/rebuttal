@@ -4,7 +4,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { CachedNansenClient, MemoryCache, rebut, envLlm } from "@rebuttal/core";
-import { FIXTURE_SET } from "./fixture-set.js";
+import { FIXTURE_SET } from "./fixture-set";
 
 const key = process.env.NANSEN_API_KEY ?? "";
 if (!key) {

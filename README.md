@@ -17,7 +17,7 @@
 
 <br/>
 
-![Next.js](https://img.shields.io/badge/Next.js_15-black?style=flat&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js_16-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Nansen API](https://img.shields.io/badge/Nansen_API-7_endpoints-7c3aed?style=flat&labelColor=0a0e13)
 ![tests](https://img.shields.io/badge/tests-216%20passing-22c55e?style=flat)
@@ -102,7 +102,7 @@ flowchart LR
 | Engine | `packages/core` — `rebut()`: extract → resolve → checks → `decide()` → prose | one function for the CLI, the web route and the permalink |
 | Nansen client | fetch + `apikey`, 5 rps bucket, 8 s timeout, 1 retry on 429/5xx/timeout, sha256 `responseHash` on every call, credit table, read-through cache (1 h), `NANSEN_OFFLINE` replay | provenance and credits are exact by construction |
 | LLM | Groq `openai/gpt-oss-120b`, OpenAI-compatible tool calling; keys rotated on 429 / restricted; 3 s extraction budget, 4 s prose budget | outside the verified path — `verify`, the tests and CI never need it |
-| Web | Next.js 15 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
+| Web | Next.js 16 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
 | Guard | 10 checks / IP / min · 2,000 live credits / day then labelled fixture replay · agent 2 / IP / day, 4 / day | a public key-holding route cannot be drained |
 | Tests | vitest + fast-check: 216 tests, 23,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
 

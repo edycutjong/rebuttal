@@ -1,9 +1,9 @@
-import type { NansenClient, Call } from "./client.js";
-import type { Claim } from "./claim.js";
-import type { Resolved } from "./resolve.js";
-import { flowIntelligence, whoBoughtSold, smartMoneyNetflow, tokenOhlcv, holders, NETFLOW_CHAINS, type FlowRow, type LabelSubject } from "./nansen.js";
-import { subjectClass, type Evidence, type FlowSnapshot, type NamedRow } from "./decide.js";
-import { CREDITS } from "./client.js";
+import type { NansenClient, Call } from "./client";
+import type { Claim } from "./claim";
+import type { Resolved } from "./resolve";
+import { flowIntelligence, whoBoughtSold, smartMoneyNetflow, tokenOhlcv, holders, NETFLOW_CHAINS, type FlowRow, type LabelSubject } from "./nansen";
+import { subjectClass, type Evidence, type FlowSnapshot, type NamedRow } from "./decide";
+import { CREDITS } from "./client";
 
 /** One planned check: what it asks Nansen, what it costs, what it decides. */
 export type Check = {

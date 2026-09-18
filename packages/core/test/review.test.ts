@@ -1,13 +1,13 @@
 /** Regression tests named for the independent code review of 2026-09-18 (findings #1, #6, #9, #10, #12). */
 import { describe, it, expect } from "vitest";
-import { NansenClient } from "../src/client.js";
-import { CachedNansenClient, MemoryCache } from "../src/cache.js";
-import { runChecks } from "../src/checks.js";
-import { askNansenAgent } from "../src/agent.js";
-import { extractClaim, mergeClaims } from "../src/claim.js";
-import { hashRecord } from "../src/rebut.js";
-import { fakeClient, pepeRoutes, claim, evidence, snap, PEPE_ETH } from "./helpers.js";
-import type { Resolved } from "../src/resolve.js";
+import { NansenClient } from "../src/client";
+import { CachedNansenClient, MemoryCache } from "../src/cache";
+import { runChecks } from "../src/checks";
+import { askNansenAgent } from "../src/agent";
+import { extractClaim, mergeClaims } from "../src/claim";
+import { hashRecord } from "../src/rebut";
+import { fakeClient, pepeRoutes, claim, evidence, snap, PEPE_ETH } from "./helpers";
+import type { Resolved } from "../src/resolve";
 
 const resolved: Resolved = { chain: "ethereum", address: PEPE_ETH, symbol: "PEPE", name: "Pepe", marketCap: 1.5e9, sameName: 3, by: "test", others: [] };
 const NOW = Date.UTC(2026, 8, 18, 12, 30);
