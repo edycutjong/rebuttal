@@ -29,6 +29,7 @@ export async function askNansenAgent(
     });
     if (!res.ok || !res.body) {
       run.error = `HTTP ${res.status}: ${(await res.text().catch(() => "")).slice(0, 160)}`;
+      run.credits = 0; // Nansen charges for a served run, not for a refusal
       return run;
     }
     const reader = res.body.getReader();
@@ -91,6 +92,7 @@ export async function askNansenAgent(
   } finally {
     clearTimeout(timer);
     run.ms = Date.now() - t0;
+    if (run.firstByteMs == null) run.credits = 0; // nothing ever streamed: a timeout before the first byte or a network error
   }
   return run;
 }

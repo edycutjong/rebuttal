@@ -13,6 +13,11 @@ export const maxDuration = 90;
  * prints the price, and lib/guard.ts caps runs per IP and per day. GET is not allowed — a link preview must never spend 200 credits.
  */
 export async function POST(req: NextRequest) {
+  // only our own page may spend 200 credits: a JSON body (never a no-preflight text/plain form) from this origin
+  const site = req.headers.get("sec-fetch-site");
+  const origin = req.headers.get("origin");
+  const sameOrigin = site ? site === "same-origin" || site === "none" : !origin || origin === req.nextUrl.origin;
+  if (!sameOrigin || !(req.headers.get("content-type") ?? "").includes("application/json")) return Response.json({ error: "this route only serves the Rebuttal page" }, { status: 403 });
   const body = (await req.json().catch(() => ({}))) as { q?: string };
   const q = cleanClaim(body.q ?? "");
   if (!q) return Response.json({ error: "no claim" }, { status: 400 });

@@ -29,7 +29,7 @@ sequenceDiagram
   N-->>E: raw JSON · sha256 recorded per call
   E-->>W: {type:"check"} × N as each lands
   E->>E: decide(claim, evidence) → label · ruleId · reasons · verdictHash
-  E-->>W: {type:"verdict"}
+  E-->>W: {type:"verdict"} (template prose — the card never waits for the model)
   E->>G: narrate the decided record (4 s budget; disputing prose discarded)
   E-->>W: {type:"prose"}
   W-->>U: trace rows land, verdict card, copy / permalink / "Ask Nansen's agent (200)"

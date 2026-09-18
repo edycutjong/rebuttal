@@ -53,7 +53,7 @@ export default function Judge() {
             <a href={`${SITE}/?q=${encodeURIComponent("A whale sold 600,000 UNI tokens, valued at approximately $5.1 million.")}`}>
               <code>{SITE}/?q=A whale sold 600,000 UNI…</code>
             </a>
-            — a claim the tool <b>CONFIRMS</b> (whale holders&apos; balances fell $502K in 24 h), so it is seen agreeing, not just contradicting.
+            — a claim the tool <b>CONFIRMS</b> (whale holders&apos; balances fell $548K in 24 h at the recording (fixtures/uni-whale-sold.json; $532K on the DEMO run — flows are priced live)), so it is seen agreeing, not just contradicting.
           </li>
           <li>
             Open{" "}
@@ -70,8 +70,9 @@ export default function Judge() {
             <tr>
               <th>Hero claim, live</th>
               <td>
-                <code>{HERO}</code>: <b>10 credits · 7 calls · 3.7 s cold</b> · 2026-09-18 · CONTRADICTED / C-NOBODY · hash <code>e21a8a19ae59</code> — output
-                verbatim in <a href={`${REPO}/blob/main/DEMO.md`}>DEMO.md</a>, recorded in <code>fixtures/pepe-aping.json</code>
+                <code>{HERO}</code>: <b>10 credits · 7 calls · 3.5 s cold</b> · 2026-09-18 · CONTRADICTED / C-NOBODY · hash <code>e21a8a19ae59</code> (recorded fixture; the DEMO run
+                printed <code>4f3cce391567</code> before the hash record gained the whale fields) — output verbatim in <a href={`${REPO}/blob/main/DEMO.md`}>DEMO.md</a>, recorded in{" "}
+                <code>fixtures/pepe-aping.json</code>
               </td>
             </tr>
             <tr>

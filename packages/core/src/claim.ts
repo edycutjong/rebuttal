@@ -16,6 +16,10 @@ export type Claim = {
   extractor: "llm" | "rules";
   /** why the claim cannot be checked, when it cannot */
   problem?: string;
+  /** how the rules found the token: a `$TICKER` or `(TICKER)` is explicit and final; a name or a bare word is a guess the model may correct */
+  tokenSource?: "dollar" | "paren" | "name" | "bare";
+  /** a strong verb (buy/sell/dump/accumulate/deposit/withdraw…) is final; a weak one (surged, closed, added…) the model may correct */
+  typeStrength?: "strong" | "weak";
 };
 
 /** Chains `tgm/flow-intelligence` accepts (openapi.json enum). `hyperliquid` is a perp venue, not a token chain. */
@@ -38,12 +42,16 @@ const CHAIN_ALIASES: Record<string, string> = {
   sonic: "sonic", sei: "sei", sui: "sui", ton: "ton", tron: "tron", linea: "linea", mantle: "mantle", monad: "monad", near: "near", starknet: "starknet", plasma: "plasma",
 };
 
-/** Token names people write instead of tickers. Small on purpose: `$TICKER` and `(TICKER)` come first. */
+/** Token names people write instead of tickers. Small on purpose: `$TICKER` and `(TICKER)` come first. Chain names are NOT here — "PEPE on Ethereum" is about PEPE (review finding). */
 const NAME_TO_TICKER: Record<string, string> = {
-  ethereum: "ETH", ether: "ETH", bitcoin: "BTC", zcash: "ZEC", uniswap: "UNI", hyperliquid: "HYPE", pepe: "PEPE", dogecoin: "DOGE",
-  shiba: "SHIB", solana: "SOL", chainlink: "LINK", litecoin: "LTC", memecoin: "MEME", bonk: "BONK", fartcoin: "FARTCOIN",
-  "artificial inu": "AI", pudgy: "PENGU", "pudgy penguins": "PENGU", worldcoin: "WLD", aave: "AAVE", ondo: "ONDO", arbitrum: "ARB",
+  ether: "ETH", bitcoin: "BTC", zcash: "ZEC", uniswap: "UNI", pepe: "PEPE", dogecoin: "DOGE",
+  shiba: "SHIB", chainlink: "LINK", litecoin: "LTC", memecoin: "MEME", bonk: "BONK", fartcoin: "FARTCOIN",
+  "artificial inu": "AI", pudgy: "PENGU", "pudgy penguins": "PENGU", worldcoin: "WLD", aave: "AAVE", ondo: "ONDO",
 };
+/** The coin that shares a chain's name — used only when the text names nothing else ("smart money buying ethereum"). */
+const CHAIN_COIN: Record<string, string> = { ethereum: "ETH", solana: "SOL", arbitrum: "ARB", hyperliquid: "HYPE", optimism: "OP", avalanche: "AVAX", polygon: "POL" };
+/** The `on <chain>` / `#chain` / `<chain> chain` phrases findChain reads — removed before the token pass so a chain never becomes the token. */
+const CHAIN_PHRASE = /\bon (?:the )?(?:ethereum|eth|mainnet|solana|sol|base|bnb|bsc|binance smart chain|arbitrum|arb|polygon|matic|avalanche|avax|optimism|op|hyperevm|hyperliquid|robinhood|sonic|sei|sui|ton|tron|linea|mantle|monad|near|starknet|plasma)(?: chain| network| mainnet)?\b|\b(?:robinhood|hyperevm|arbitrum|avalanche|polygon|optimism|solana|base|bnb|bsc) chain\b|#(?:sol|solana|base|bnb|bsc|eth|ethereum|arbitrum|polygon|avax|avalanche)\b/gi;
 
 /** Upper-case words that look like tickers but never are. */
 const NOT_TICKERS = new Set([
@@ -56,6 +64,8 @@ const NOT_TICKERS = new Set([
 
 const BUY_RE = /\b(buy|buys|buying|bought|purchas\w*|ape|aping|aped|apes|load(?:ing|ed|s)?(?: up)?|accumulat\w*|scoop\w*|bid(?:ding)?|stack(?:ing|ed)?|added?|adding|built a|building a|open(?:ed|ing)? (?:a )?(?:\w+ )?long|went long|long(?:ed|ing)?|surged|increas\w*|withdr[ae]w\w*|pull(?:ed|s)?\b|withdrawn|net inflow\w*|inflows?)\b/i;
 const SELL_RE = /\b(sell|sells|selling|sold|dump\w*|exit\w*|offload\w*|distribut\w*|deposit\w*|took profit|take profit|taking profit|closed|closing|unload\w*|liquidat\w*|net outflow\w*|outflows?|rotat\w* (?:out|from)|cut (?:their |his |her )?(?:losses|loss)|short(?:ed|ing)?|went short)\b/i;
+/** verbs that can only mean one thing; the rest ("surged", "added", "closed", "pulled") are hints the model may correct */
+const STRONG_RE = /\b(buy|buys|buying|bought|purchas\w*|ape|aping|aped|apes|accumulat\w*|scoop\w*|withdr[ae]w\w*|withdrawn|sell|sells|selling|sold|dump\w*|offload\w*|deposit\w*|took profit|take profit|taking profit|unload\w*|liquidat\w*|hold(?:s|ing)?|hasn'?t sold|haven'?t sold|has not sold|have not sold|hodl\w*|logging gains)\b/i;
 const HOLD_RE = /\b(hold(?:s|ing)?|holds? (?:strong|steady)|hasn'?t sold|haven'?t sold|has not sold|have not sold|diamond|hodl\w*|still (?:in|holding|hold)|logging gains|gains of|sitting on|unrealized|top holders? list|holders? (?:hit|at|reach\w*))\b/i;
 
 const SM_RE = /\b(smart money|smart-money|smart traders?|smart wallets?|\bSM\b|funds?|nansen|top traders?|top pnl|profitable wallets?|insiders?|institutions?)\b/i;
@@ -80,19 +90,24 @@ export function findChain(text: string): string | undefined {
   return undefined;
 }
 
-export function findToken(text: string): string | undefined {
+export function findTokenSource(text: string): { token: string; source: NonNullable<Claim["tokenSource"]> } | undefined {
   const dollar = text.match(/\$([A-Za-z][A-Za-z0-9]{1,11})\b/);
-  if (dollar) return dollar[1].toUpperCase();
+  if (dollar) return { token: dollar[1].toUpperCase(), source: "dollar" };
   const paren = text.match(/\(([A-Z][A-Z0-9]{1,9})\)/);
-  if (paren) return paren[1];
-  const lower = text.toLowerCase();
+  if (paren) return { token: paren[1], source: "paren" };
+  const stripped = text.replace(CHAIN_PHRASE, " ");
+  const lower = stripped.toLowerCase();
   // longest names first so "pudgy penguins" beats "pudgy"
   for (const name of Object.keys(NAME_TO_TICKER).sort((a, b) => b.length - a.length)) {
-    if (new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(lower)) return NAME_TO_TICKER[name];
+    if (new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(lower)) return { token: NAME_TO_TICKER[name], source: "name" };
   }
-  const bare = text.match(/\b([A-Z][A-Z0-9]{1,9})\b/g) ?? [];
-  for (const w of bare) if (!NOT_TICKERS.has(w) && !/^\d+[KMBT]?$/.test(w)) return w;
+  const bare = stripped.match(/\b([A-Z][A-Z0-9]{1,9})\b/g) ?? [];
+  for (const w of bare) if (!NOT_TICKERS.has(w) && !/^\d+[KMBT]?$/.test(w)) return { token: w, source: "bare" };
+  for (const [name, t] of Object.entries(CHAIN_COIN)) if (new RegExp(`\\b${name}\\b`).test(lower)) return { token: t, source: "name" };
   return undefined;
+}
+export function findToken(text: string): string | undefined {
+  return findTokenSource(text)?.token;
 }
 
 export function findType(text: string): ClaimType | undefined {
@@ -125,9 +140,12 @@ export function extractClaim(raw: string): Claim {
   const claim: Claim = { raw: text, extractor: "rules" };
   if (!text) return { ...claim, problem: "empty claim" };
   if (EVM_ADDR.test(text) || SOL_ADDR.test(text)) return { ...claim, problem: "that is an address — paste the claim (the sentence), not a wallet or contract" };
-  claim.token = findToken(text);
+  const found = findTokenSource(text);
+  claim.token = found?.token;
+  claim.tokenSource = found?.source;
   claim.chain = findChain(text);
   claim.type = findType(text);
+  if (claim.type) claim.typeStrength = STRONG_RE.test(text) ? "strong" : "weak";
   claim.subject = findSubject(text);
   if (!claim.token) claim.problem = "no token found — write the ticker as $TICKER";
   else if (!claim.type) claim.problem = "not a flow claim — nothing about buying, selling or holding";
@@ -142,15 +160,22 @@ export function validClaim(c: Claim): c is Claim & { token: string; type: ClaimT
 /** Merge an LLM extraction with the rules extraction: the LLM fills what the rules found nothing for, never overrides a `$TICKER`. */
 export function mergeClaims(rules: Claim, llm: Partial<Claim> | null): Claim {
   if (!llm) return rules;
-  // the rules are literal matches on the text; the model only fills what they could not find — so a post that says
-  // "…the token is BTC…" in prose cannot talk the model into swapping the token or the verb (review finding #9)
-  const token = rules.token ?? llm.token?.toUpperCase().replace(/^\$/, "");
+  // The rules are literal matches on the text. A `$TICKER` / `(TICKER)` and a strong verb are final. A name-map or
+  // bare-word token and a weak verb are guesses the model may correct — but only with a token that literally appears in
+  // the text, so prose ("…the token is BTC…") cannot talk it into a swap (review findings #9 and pass-2 #1/#3).
+  const llmToken = llm.token?.toUpperCase().replace(/^\$/, "");
+  const inText = (t: string | undefined) => !!t && new RegExp(`\\b${t}\\b`, "i").test(rules.raw);
+  const explicit = rules.tokenSource === "dollar" || rules.tokenSource === "paren";
+  const token = explicit ? rules.token : llmToken && inText(llmToken) ? llmToken : (rules.token ?? llmToken);
+  const type = rules.type && rules.typeStrength === "strong" ? rules.type : (llm.type ?? rules.type);
   const out: Claim = {
     raw: rules.raw,
     token,
+    tokenSource: rules.tokenSource,
+    typeStrength: rules.typeStrength,
     // the model may only name a chain the text actually contains (it guessed "ethereum" for a HYPE claim live)
     chain: llm.chain && SCORABLE_CHAINS.has(llm.chain) && new RegExp(`\\b${llm.chain}\\b`, "i").test(rules.raw) ? llm.chain : rules.chain,
-    type: rules.type ?? llm.type,
+    type,
     // the rules' subject is a literal keyword match ("whales", "smart money"); the model only fills a missing one (it read
     // "Whales have been accumulating $EDEL" as smart_money live)
     subject: rules.subject ?? llm.subject ?? "smart_money",

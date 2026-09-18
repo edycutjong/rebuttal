@@ -143,7 +143,7 @@ export async function runChecks(
         check = { ...p, ok: true, ms: Date.now() - t0, cached: call?.cached ?? false, credits: call?.credits ?? p.credits, responseHash: call?.responseHash, values };
         evidence.checksOk++;
       } catch (e) {
-        check = { ...p, ok: false, ms: Date.now() - t0, cached: false, credits: 0, error: (e as Error).message.slice(0, 160), values: {} };
+        check = { ...p, ok: false, ms: Date.now() - t0, cached: false, credits: 0, error: (e instanceof Error ? e.message : String(e)).slice(0, 160), values: {} };
       }
       checks.push(check);
       onCheck?.({ type: "check", check, call: own() });

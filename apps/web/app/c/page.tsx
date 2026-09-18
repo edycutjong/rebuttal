@@ -19,9 +19,9 @@ const EXAMPLE = pepe as unknown as Fixture;
 const verdictFor = cache(async (q: string): Promise<Verdict | null> => {
   try {
     // same per-IP gate and daily ceiling as /api/rebut: a link-preview crawler or a loop over /c?q= cannot spend freely
-    const live = ipAllowed(clientIp(await headers())).ok && !budgetExhausted();
-    const degraded = !live;
-    const r = degraded ? await replayFixture(q) : await rebutFor(q);
+    const gated = !ipAllowed(clientIp(await headers())).ok;
+    const degraded = gated || budgetExhausted();
+    const r = degraded ? await replayFixture(q, { reason: gated ? "rate" : "budget" }) : await rebutFor(q);
     if (!r) return null;
     if (!degraded) recordSpend(r.verdict.credits);
     return r.verdict;

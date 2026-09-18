@@ -43,7 +43,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="foot-row">
         <span>
-          <Mark size={14} /> rebuttal <a href={`${REPO}/releases/latest`}>{VERSION}</a>
+          <Mark size={14} /> rebuttal <a href={`${REPO}/commits/main`}>{VERSION}</a>
         </span>
         <span className="foot-links">
           <a href={`${REPO}/blob/main/docs/SCORING.md`}>how it decides</a>

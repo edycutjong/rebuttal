@@ -20,7 +20,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js_15-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Nansen API](https://img.shields.io/badge/Nansen_API-7_endpoints-7c3aed?style=flat&labelColor=0a0e13)
-![tests](https://img.shields.io/badge/tests-180%20passing-22c55e?style=flat)
+![tests](https://img.shields.io/badge/tests-192%20passing-22c55e?style=flat)
 ![property cases](https://img.shields.io/badge/property_cases-23%2C000-22c55e?style=flat)
 ![fixtures](https://img.shields.io/badge/fixtures-13%2F13%20replay%20offline-22c55e?style=flat)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
@@ -102,7 +102,7 @@ flowchart LR
 | LLM | Groq `openai/gpt-oss-120b`, OpenAI-compatible tool calling; keys rotated on 429 / restricted; 3 s extraction budget, 4 s prose budget | outside the verified path — `verify`, the tests and CI never need it |
 | Web | Next.js 15 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
 | Guard | 10 checks / IP / min · 2,000 live credits / day then labelled fixture replay · agent 2 / IP / day, 4 / day | a public key-holding route cannot be drained |
-| Tests | vitest + fast-check: 180 tests, 23,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
+| Tests | vitest + fast-check: 192 tests, 23,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the as-shipped detail.
 
@@ -132,7 +132,7 @@ The engine, not decoration — every rule input is a Nansen response field.
 
 | Metric | Value | Source |
 |---|---|---|
-| Tests | **180 tests** (`npm test`) | `packages/core/test/` |
+| Tests | **192 tests** (`npm test`) | `packages/core/test/` |
 | Property-based verification | **23,000 generated cases** (fast-check): `decide()` is pure, always one of four labels, selling is the exact mirror of buying; `extractClaim()` never throws on any string | `packages/core/test/property.test.ts` |
 | Route boundary | **10,000 generated bad inputs** → 400 with zero fetches; the key never appears in a verdict, an event, the trace or an error; the agent never runs on a GET | `packages/core/test/guard.test.ts` |
 | Spike on real posts | 10 claims from Lookonchain / OKX feeds (2026-09-14 → 18): **7/10 decisive**, 3 honest refusals; extraction LLM 10/10, rules 10/10 | recorded in the kitchen; the claims are `packages/core/test/claim.test.ts` |
@@ -144,8 +144,8 @@ The engine, not decoration — every rule input is a Nansen response field.
 
 ### Honesty
 
-- **Fixtures are replays, the default path is live.** `fixtures/*.json` hold 13 real rebuttals recorded on 2026-09-18 with every raw Nansen response byte-for-byte and the claim as extracted (so a replay needs no LLM key). `npm run verify` replays them with `NANSEN_OFFLINE=1` and requires the same label, rule and hash and zero network calls. The CLI never reads them; the web app reads one only after the day's live credit ceiling is spent, and says so on the card.
-- **The LLM cannot change the verdict.** It extracts the claim (a `$TICKER` in the text can never be overridden; a subject keyword in the text beats its guess; a chain it names must appear in the text) and paraphrases the decided record. Prose that disputes the label is discarded and the template ships — `packages/core/src/llm.ts`.
+- **Fixtures are replays, the default path is live.** `fixtures/*.json` hold 13 real rebuttals recorded on 2026-09-18 with every raw Nansen response byte-for-byte and the claim as extracted (so a replay needs no LLM key). `npm run verify` replays them with `NANSEN_OFFLINE=1` and requires the same label, rule and hash and zero network calls. The CLI never reads them; the web app reads one for the idle example (labelled), and otherwise only when the day's live credit ceiling is spent or an address exceeds the per-minute gate — the card says which.
+- **The LLM cannot change the verdict.** It extracts the claim (a `$TICKER` and a strong verb in the text are final; it may correct a guessed token only with one that appears in the text; a subject keyword beats its guess; a chain it names must appear in the text) and paraphrases the decided record. Prose that disputes the label is discarded and the template ships — `packages/core/src/llm.ts`.
 - **Numbers come from scripts.** [docs/BENCH.md](docs/BENCH.md) is the output of `npm run bench`. Net flows are priced at current rates and drift by the minute; the hash covers integers of the numbers that decided the label, so a fixture replay always matches and a live re-run usually does.
 
 ### Honest limits (6)
@@ -189,11 +189,11 @@ Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-1
 
 ## 🧪 Testing & CI
 
-**Pipeline:** Quality (typecheck · 180 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key) → Deploy gate. No API key anywhere in CI.
+**Pipeline:** Quality (typecheck · 192 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key) → Deploy gate. No API key anywhere in CI.
 
 ```bash
 npm run typecheck      # tsc strict, core + scripts + web
-npm test               # 180 vitest tests incl. 23,000 property cases
+npm test               # 192 vitest tests incl. 23,000 property cases
 npm run verify         # 13/13 fixtures, 0 network
 npm run check          # README claims vs the tree, kitchen/secret scan, history scan
 npm run bench          # live: cold/warm p50/p95, credits per rebuttal → docs/BENCH.md (≈ 130 credits per run)

@@ -151,7 +151,7 @@ function decideHolding(claim: Claim, e: Evidence, rules: Rules, T7: number, R: (
   if (h) lines.push(`${h.count} ${who} holders on page 1, ${fmtUsd(h.valueUsd)} held, 7 d balance change ${h.delta7d >= 0 ? "+" : ""}${h.delta7d.toFixed(0)} tokens`);
   if (net7 != null) lines.push(`7 d ${who} net flow ${fmtUsd(net7)} (threshold ${fmtUsd(T7)})`);
   if (h && h.count < rules.minHolders) return R("OVERSTATED", "O-HOLDERS", [...lines, `fewer than ${rules.minHolders} labelled holders — nothing to hold with`]);
-  if (net7 != null && net7 <= -T7 && (!h || h.delta7d < 0)) return R("CONTRADICTED", "C-EXIT", [...lines, `${who} are net sellers over the week and their balances shrank`]);
+  if (h && net7 != null && net7 <= -T7 && h.delta7d < 0) return R("CONTRADICTED", "C-EXIT", [...lines, `${who} are net sellers over the week and their balances shrank`]);
   if ((h && h.delta7d < 0) || (net7 != null && net7 <= -T7)) return R("OVERSTATED", "O-TRIM", [...lines, `some ${who} are trimming — holding, but not all of them`]);
   return R("CONFIRMED", "A-HOLD", [...lines, `${who} balances are not shrinking`]);
 }

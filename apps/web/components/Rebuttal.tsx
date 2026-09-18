@@ -15,7 +15,7 @@ export function rebuttalText(v: Verdict, permalink: string): string {
 
 type Phase = "idle" | "reading" | "checking" | "done" | "error";
 type StreamEvent = RebutEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean };
-type AgentEvent = { type: "tool_call"; name: string } | { type: "delta"; text: string } | { type: "finish" } | { type: "error"; error: string } | { type: "done"; run: AgentRun; replay?: boolean };
+type AgentEvent = { type: "tool_call"; name: string } | { type: "delta"; text: string } | { type: "finish" } | { type: "error"; error: string } | { type: "done"; run: AgentRun };
 
 export function Rebuttal({ initialQuery, initialVerdict, prefill, example, exampleAgent, proof }: { initialQuery?: string; initialVerdict?: Verdict | null; prefill?: string; example: Verdict; exampleAgent?: AgentRun | null; proof: { tests: number; fixtures: number; p50: string; warm: string; credits: string } }) {
   const [q, setQ] = useState(initialQuery ?? prefill ?? "");
@@ -134,12 +134,8 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
     }
   };
 
-  const askAgent = async (replay?: AgentRun | null) => {
+  const askAgent = async () => {
     if (!verdict) return;
-    if (replay) {
-      setAgent({ run: replay, tools: replay.toolCalls, text: replay.text, error: null, busy: false });
-      return;
-    }
     setAgent({ run: null, tools: [], text: "", error: null, busy: true });
     try {
       const res = await fetch("/api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: verdict.claim.raw }) });
@@ -254,8 +250,8 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
       {!idle && claim && (
         <div className="flow">
           <ClaimCard claim={claim} resolved={resolved} plan={plan.length ? plan : null} text={input?.text} author={input?.author} fromUrl={input?.fromUrl} />
-          {plan.length > 0 && <Trace plan={plan} checks={checks} credits={verdict?.credits ?? 0} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
-          <VerdictCard verdict={verdict} pending={phase !== "error"} onCopy={copy} onPermalink={copyLink} onAgent={() => askAgent(null)} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
+          {plan.length > 0 && <Trace plan={plan} checks={checks} credits={verdict?.credits ?? 0} calls={verdict?.calls} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
+          <VerdictCard verdict={verdict} pending={phase !== "error"} onCopy={copy} onPermalink={copyLink} onAgent={askAgent} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
           {agent && <AgentPanel run={agent.run} tools={agent.tools} text={agent.text} ours={plan} error={agent.error} busy={agent.busy} />}
         </div>
       )}

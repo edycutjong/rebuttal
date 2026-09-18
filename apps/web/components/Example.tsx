@@ -23,7 +23,7 @@ export function Example({ verdict, agent, onRun }: { verdict: Verdict; agent: Ag
       </div>
       <div className="flow">
         <ClaimCard claim={v.claim} resolved={v.resolved} plan={v.checks} />
-        <Trace plan={v.checks} checks={new Map(v.checks.map((c) => [c.id, c]))} credits={v.credits} ms={v.ms} done asOf={v.provenance[0] ? new Date(v.now).toISOString() : null} />
+        <Trace plan={v.checks} checks={new Map(v.checks.map((c) => [c.id, c]))} credits={v.credits} calls={v.calls} ms={v.ms} done asOf={v.provenance[0] ? new Date(v.now).toISOString() : null} />
         <VerdictCard verdict={v} compact />
         {agent && <AgentPanel run={agent} tools={agent.toolCalls} text={agent.text} ours={v.checks} busy={false} />}
       </div>

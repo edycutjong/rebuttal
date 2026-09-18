@@ -168,14 +168,14 @@ describe("/api/agent boundary", () => {
     const fetchSpy = vi.fn<typeof fetch>();
     vi.stubGlobal("fetch", fetchSpy);
     for (let i = 0; i < AGENT_PER_DAY; i++) agentAllowed(`ip${i}`);
-    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: JSON.stringify({ q: HERO }), headers: { "x-forwarded-for": "9.9.9.9" } }));
+    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: JSON.stringify({ q: HERO }), headers: { "x-forwarded-for": "9.9.9.9", "content-type": "application/json", "sec-fetch-site": "same-origin" } }));
     expect(res.status).toBe(429);
     expect((await res.json()) as { credits: number }).toMatchObject({ credits: 200 });
     expect(fetchSpy).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
   it("POST with no claim is a 400", async () => {
-    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: "{}" }));
+    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: "{}", headers: { "content-type": "application/json", "sec-fetch-site": "same-origin" } }));
     expect(res.status).toBe(400);
   });
 });
