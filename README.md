@@ -20,7 +20,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js_15-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Nansen API](https://img.shields.io/badge/Nansen_API-7_endpoints-7c3aed?style=flat&labelColor=0a0e13)
-![tests](https://img.shields.io/badge/tests-195%20passing-22c55e?style=flat)
+![tests](https://img.shields.io/badge/tests-215%20passing-22c55e?style=flat)
 ![property cases](https://img.shields.io/badge/property_cases-23%2C000-22c55e?style=flat)
 ![fixtures](https://img.shields.io/badge/fixtures-13%2F13%20replay%20offline-22c55e?style=flat)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
@@ -36,7 +36,7 @@
 
 | Claim in | What the six calls found (live, 2026-09-18) | Verdict |
 |---|---|---|
-| `Smart Money is aping $PEPE hard today 🐋` | PEPE resolves to ethereum (most traded of 14 same-name); Smart Trader net flow 24 h **$0, 0 wallets**; 7 d +$5K over 53 wallets; on the Smart Money table with 89 traders; fresh wallets bought $1.14M | **CONTRADICTED** · `C-NOBODY` |
+| `Smart Money is aping $PEPE hard today 🐋` | PEPE resolves to ethereum (most traded of 14 same-name at the recording; 13 on 2026-09-19 — the search index moves); Smart Trader net flow 24 h **$0, 0 wallets**; 7 d +$5K over 53 wallets; on the Smart Money table with 89 traders; fresh wallets bought $1.14M | **CONTRADICTED** · `C-NOBODY` |
 | `A whale sold 600,000 UNI tokens, valued at approximately $5.1 million.` | Whale-labelled holders' balances fell **$532K** in 24 h (10 wallets, threshold $77K); 7 d −$460K; price +31.7 % | **CONFIRMED** · `A-FLOW` |
 | `Smart Money is buying $VVV on Base — net inflows all week` | Smart Trader net +$100K / 24 h (4 wallets), +$115K / 7 d, #2 on the Smart Money table; fresh wallets +$73.9M (context, not a downgrade) | **CONFIRMED** · `A-FLOW` |
 | `Zcash whales accumulate … $ZEC` | Zcash is not a chain Nansen indexes — refused before any call | **UNVERIFIABLE** · `U-CHAIN` · 0 credits |
@@ -102,7 +102,7 @@ flowchart LR
 | LLM | Groq `openai/gpt-oss-120b`, OpenAI-compatible tool calling; keys rotated on 429 / restricted; 3 s extraction budget, 4 s prose budget | outside the verified path — `verify`, the tests and CI never need it |
 | Web | Next.js 15 App Router on Vercel: NDJSON stream `/api/rebut`, permalink `/c?q=`, `/api/og` card, `/judge`, POST-only `/api/agent` relay | the trace streams as the calls land |
 | Guard | 10 checks / IP / min · 2,000 live credits / day then labelled fixture replay · agent 2 / IP / day, 4 / day | a public key-holding route cannot be drained |
-| Tests | vitest + fast-check: 195 tests, 23,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
+| Tests | vitest + fast-check: 215 tests, 23,000 property cases, 10,000 generated bad inputs at the route boundary | the label is a pure function of the evidence |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the as-shipped detail.
 
@@ -132,7 +132,7 @@ The engine, not decoration — every rule input is a Nansen response field.
 
 | Metric | Value | Source |
 |---|---|---|
-| Tests | **195 tests** (`npm test`) | `packages/core/test/` |
+| Tests | **215 tests** (`npm test`) | `packages/core/test/` |
 | Property-based verification | **23,000 generated cases** (fast-check): `decide()` is pure, always one of four labels, selling is the exact mirror of buying; `extractClaim()` never throws on any string | `packages/core/test/property.test.ts` |
 | Route boundary | **10,000 generated bad inputs** → 400 with zero fetches; the key never appears in a verdict, an event, the trace or an error; the agent never runs on a GET | `packages/core/test/guard.test.ts` |
 | Spike on real posts | 10 claims from Lookonchain / OKX feeds (2026-09-14 → 18): **7/10 decisive**, 3 honest refusals; extraction LLM 10/10, rules 10/10 | recorded in the kitchen; the claims are `packages/core/test/claim.test.ts` |
@@ -145,15 +145,16 @@ The engine, not decoration — every rule input is a Nansen response field.
 ### Honesty
 
 - **Fixtures are replays, the default path is live.** `fixtures/*.json` hold 13 real rebuttals recorded on 2026-09-18 with every raw Nansen response byte-for-byte and the claim as extracted (so a replay needs no LLM key). `npm run verify` replays them with `NANSEN_OFFLINE=1` and requires the same label, rule and hash and zero network calls. The CLI never reads them; the web app reads one for the idle example (labelled), and otherwise only when the day's live credit ceiling is spent (the `/` stream then replays with a warning; past the per-minute gate `/` answers 429 while the permalink and the share card replay with a rate message).
-- **The LLM cannot change the verdict.** It extracts the claim (a `$TICKER` and a strong verb in the text are final; it may correct a guessed token only with one that appears in the text; a subject keyword beats its guess; a chain it names must appear in the text) and paraphrases the decided record. Prose that disputes the label is discarded and the template ships — `packages/core/src/llm.ts`.
+- **The LLM cannot change the verdict.** It extracts the claim (a `$TICKER` and a strong verb in the text are final; it may correct a guessed token only with one that appears in the text; a subject keyword beats its guess; a chain it names must appear in the text; a negated claim — "Smart Money is NOT buying $X" — stays a refusal whatever the model reads) and paraphrases the decided record. Prose that disputes the label is discarded and the template ships — `packages/core/src/llm.ts`.
 - **Numbers come from scripts.** [docs/BENCH.md](docs/BENCH.md) is the output of `npm run bench`. Net flows are priced at current rates and drift by the minute; the hash covers integers of the numbers that decided the label, so a fixture replay always matches and a live re-run usually does.
 
-### Honest limits (6)
+### Honest limits (7)
 
 1. **"Smart Money" here means the Smart Trader flow columns plus the Fund / Smart Trader rows named in the trace.** Funds have no separate flow-intelligence column; the who-bought-sold label filter covers them.
 2. **Nansen's Whale label is sparse.** A post's "whale" is usually a big wallet Nansen does not tag; when no Whale-labelled wallet exists in the token the tool says UNVERIFIABLE (`U-NOCLASS`) rather than pretending a CONTRADICTED. In the spike that was 2 of 7 whale claims.
 3. **Ambiguous tickers resolve to the most-traded token among the top-ranked** — `MEME` picks Robinhood-chain "A Meme Coin" over ethereum Memecoin. Name the chain in the claim, or pass `--chain`.
-4. **Coins whose home chain Nansen does not index** (BTC, ZEC, XRP, ADA, DOGE, …) are refused unless a chain is named — only bridged copies exist on Nansen and they are not what the post is about.
+4. **Coins whose home chain Nansen does not index** (BTC, ZEC, XRP, ADA, DOGE, …) are refused unless a chain is named — only bridged copies exist on Nansen and they are not what the post is about. A chain named in the claim is the question, not a tiebreak: "$PEPE on base" checks base's PEPE, and if Nansen has none there the answer is UNVERIFIABLE (`U-TOKEN`), never another chain's book.
+7. **A negated claim is refused, not inverted.** "Smart Money is NOT buying $X" is a denial; the rules check what a class did, so the tool names the positive form and refuses at 0 credits (`U-CLAIM`) rather than answering the opposite question.
 5. **Two Nansen endpoints can disagree about the same 24 h**: for HYPE, `tgm/flow-intelligence` 1d said Smart Trader +$291K over 263 wallets while `smart-money/netflow` said +$207 over 109 traders. Flow-intelligence is the primary; the table line is context and both numbers are shown.
 6. **The 24 h window can miss a slow accumulation**; the 7 d window and the holders check exist for that, and OVERSTATED is the honest answer when they disagree.
 
@@ -185,15 +186,15 @@ npm run dev                                                              # http:
 
 Optional: `export GROQ_API_KEY=…` (or `GROQ_API_KEYS=a,b,c`) turns on the LLM extractor and the two-sentence prose. Without it the rules extractor and the template run, and the output says so — the verdict is identical.
 
-Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-18 12:35 UTC, HEAD): clone 2 s · install 3 s · first live rebuttal 2 s (10 credits) · `verify` 1 s · tests 3 s · `next build` 8 s — **19 s of machine time** plus pasting the API key.
+Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-18 12:35 UTC, HEAD): clone 2 s · install 3 s · first live rebuttal 2 s (10 credits) · `verify` 1 s · tests 3 s · `next build` 8 s — **19 s of machine time** plus pasting the API key. Re-timed by an independent audit on 2026-09-19 following [JUDGE.md](JUDGE.md) literally (no build step): clone 2 · install 3 · live rebuttal 3 · verify <1 · tests 3 — **11 s**.
 
 ## 🧪 Testing & CI
 
-**Pipeline:** Quality (typecheck · 195 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key) → Deploy gate. No API key anywhere in CI.
+**Pipeline:** Quality (typecheck · 215 tests with coverage · offline replay · readiness) ∥ Security (TruffleHog on the full history · npm audit) → Build (Next.js, no key) → Deploy gate. No API key anywhere in CI.
 
 ```bash
 npm run typecheck      # tsc strict, core + scripts + web
-npm test               # 195 vitest tests incl. 23,000 property cases
+npm test               # 215 vitest tests incl. 23,000 property cases
 npm run verify         # 13/13 fixtures, 0 network
 npm run check          # README claims vs the tree, kitchen/secret scan, history scan
 npm run bench          # live: cold/warm p50/p95, credits per rebuttal → docs/BENCH.md (≈ 130 credits per run)

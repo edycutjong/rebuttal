@@ -40,7 +40,7 @@ export default function Judge() {
             <a href={heroUrl}>
               <code>{SITE}/?q=Smart Money is aping $PEPE…</code>
             </a>
-            . The claim card reads <b>Smart Money · buying · PEPE (ethereum, most traded of 14 same-name)</b>, six trace rows land as each call returns, and
+            . The claim card reads <b>Smart Money · buying · PEPE (ethereum, most traded of the same-name tokens — 14 at the recording, 13 on 2026-09-19)</b>, six trace rows land as each call returns, and
             the verdict card turns red: <b>CONTRADICTED · C-NOBODY</b> — no Smart Money wallet traded PEPE in 24 h while 89 Smart Money traders sit on its
             table. Cold ≈ 4 s, cached ≈ 0 s.
           </li>

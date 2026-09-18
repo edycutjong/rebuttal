@@ -70,11 +70,21 @@ export async function resolveToken(client: NansenClient, token: string, chainHin
   let pick = byCap[0];
   let by = matches.length === 1 ? "only match" : "most traded of the top-ranked";
   if (chainHint) {
-    const onChain = byCap.find((t) => t.chain === chainHint);
-    if (onChain) {
-      pick = onChain;
-      by = `chain hint (${chainHint})`;
+    // the chain the text names is not a tiebreak, it is the question: look at every same-name match on that chain (not only
+    // the rank window — base PEPE ranks 2741 against ethereum's 374 and used to lose silently, audit 2026-09-19), then, when
+    // the unfiltered search did not reach that chain at all, ask search for that chain (0 credits); nothing there → null,
+    // and the caller says "no token named X on Nansen (chain)" instead of checking a different chain's book
+    const onChain = [...matches].filter((t) => t.chain === chainHint).sort((a, b) => (b.volume_24h ?? -1) - (a.volume_24h ?? -1) || (a.rank ?? 1e9) - (b.rank ?? 1e9));
+    let hit = onChain[0];
+    if (!hit) {
+      const chainTokens = await searchTokens(client, query, chainHint, opts);
+      const same = chainTokens.filter((t) => sameName(query, t) && t.chain === chainHint).sort((a, b) => (b.volume_24h ?? -1) - (a.volume_24h ?? -1) || (a.rank ?? 1e9) - (b.rank ?? 1e9));
+      hit = same[0];
+      if (hit) matches = [...matches, ...same];
     }
+    if (!hit) return null;
+    pick = hit;
+    by = `chain hint (${chainHint})`;
   }
   return {
     chain: pick.chain,

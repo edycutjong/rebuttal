@@ -39,9 +39,12 @@ describe("resolveToken", () => {
     const r = await resolveToken(fakeClient(pepeRoutes()), "PEPE", "bnb");
     expect(r).toMatchObject({ chain: "bnb", by: "chain hint (bnb)" });
   });
-  it("a chain hint with no match on that chain falls back to the default pick", async () => {
-    const r = await resolveToken(fakeClient(pepeRoutes()), "PEPE", "solana");
-    expect(r).toMatchObject({ chain: "ethereum" });
+  it("a chain hint with no match on that chain is null (U-TOKEN with the chain), never a silent pick of another chain's book", async () => {
+    // the unfiltered search has no solana PEPE; the chain-filtered follow-up (0 credits) finds none either
+    const c = fakeClient((endpoint, body) => (endpoint === "search/general" && body.chain === "solana" ? searchTokens([]) : pepeRoutes()(endpoint, body)));
+    expect(await resolveToken(c, "PEPE", "solana")).toBeNull();
+    expect(c.calls.map((x) => x.body.chain)).toEqual([undefined, "solana"]);
+    expect(c.creditsSpent).toBe(0);
   });
   it("null when Nansen knows no token by that name", async () => {
     expect(await resolveToken(fakeClient(() => searchTokens([])), "XQZPLM")).toBeNull();

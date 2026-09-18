@@ -117,6 +117,12 @@ export function decide(claim: Claim, e: Evidence, rules: Rules = RULES): Decisio
   const priceLine = e.price ? `price ${pct(e.price.change)} over the last 24 h` : null;
   const tableLine = e.table ? (e.table.inTable ? `on the Smart Money net-flow table (24 h ${fmtUsd(e.table.net24 ?? 0)}, ${e.table.traders ?? "?"} traders)` : "not on the Smart Money net-flow table") : null;
   const wallets = p.wallets;
+  // the named rows are context on a flat/small verdict: flow-intelligence can say "0 wallets" while who-bought-sold names a
+  // labelled seller in the same 24 h (ONDO, audit 2026-09-19) — the reader must not have to spot that in the trace
+  const namedLine =
+    e.named && e.named.buyRows + e.named.sellRows > 0 && p.source === "flow-intelligence 1d"
+      ? `who-bought-sold names ${e.named.buyRows} ${who} buyer${e.named.buyRows === 1 ? "" : "s"} (${fmtUsd(e.named.buyUsd)}) and ${e.named.sellRows} seller${e.named.sellRows === 1 ? "" : "s"} (${fmtUsd(e.named.sellUsd)}) in 24 h`
+      : null;
   const base = `${who} net ${net >= 0 ? verb : anti} ${fmtUsd(Math.abs(p.net))} in 24 h (${p.source}${wallets != null ? `, ${wallets} wallet${wallets === 1 ? "" : "s"}` : ""}; threshold ${fmtUsd(T)})`;
 
   if (net <= -T) return R("CONTRADICTED", "C-SIGN", [base, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(freshLine ? [freshLine] : []), ...(tableLine ? [tableLine] : [])]);
@@ -124,7 +130,7 @@ export function decide(claim: Claim, e: Evidence, rules: Rules = RULES): Decisio
     if (!presence(e, cls)) return R("UNVERIFIABLE", "U-NOCLASS", [`Nansen tags no wallet as ${who} in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels`]);
     return R("CONTRADICTED", "C-NOBODY", [`no ${who} wallet traded this token in the last 24 h (net ${fmtUsd(p.net)})`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(tableLine ? [tableLine] : [])]);
   }
-  if (net > 0 && net < T) return R("OVERSTATED", "O-SMALL", [base, `real but small: under ${fmtUsd(T)}, the noise level for a token with ${fmtUsd(totalFlow(e.flow1d))} of labelled flow a day`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(freshLine ? [freshLine] : [])]);
+  if (net > 0 && net < T) return R("OVERSTATED", "O-SMALL", [base, `real but small: under ${fmtUsd(T)}, the noise level for a token with ${fmtUsd(totalFlow(e.flow1d))} of labelled flow a day`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(namedLine ? [namedLine] : []), ...(freshLine ? [freshLine] : [])]);
   if (net >= T) {
     if (net7 != null && net7 * sign <= -T7) return R("OVERSTATED", "O-7D", [base, `but over 7 d ${who} net ${anti} ${fmtUsd(Math.abs(net7))} — a one-day blip against the week`]);
     if (e.price && e.price.change * sign >= rules.staleMove) return R("OVERSTATED", "O-STALE", [base, `${priceLine} — the move already happened; the claim is late`]);
@@ -138,7 +144,7 @@ export function decide(claim: Claim, e: Evidence, rules: Rules = RULES): Decisio
     return R("CONFIRMED", "A-FLOW", reasons);
   }
   // −T < net ≤ 0 with someone in the class present: flat
-  return R("OVERSTATED", "O-FLAT", [base, `flat within the noise threshold — no ${type === "selling" ? "exit" : "accumulation"} to speak of`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : [])]);
+  return R("OVERSTATED", "O-FLAT", [base, `flat within the noise threshold — no ${type === "selling" ? "exit" : "accumulation"} to speak of`, ...(net7 != null ? [`7 d: ${fmtUsd(net7)}`] : []), ...(namedLine ? [namedLine] : [])]);
 }
 
 function decideHolding(claim: Claim, e: Evidence, rules: Rules, T7: number, R: (l: Label, id: string, r: string[]) => Decision): Decision {
