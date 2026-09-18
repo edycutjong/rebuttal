@@ -36,9 +36,11 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
     abortRef.current?.abort();
     const ctrl = new AbortController();
     abortRef.current = ctrl;
-    if (typeof history !== "undefined") history.replaceState(null, "", `/?q=${encodeURIComponent(term)}`);
+    // ?fresh=1 on the page URL (the recording flag) bypasses cache reads so every row lands live with its real credits
+    const fresh = typeof location !== "undefined" && new URLSearchParams(location.search).get("fresh") === "1";
+    if (typeof history !== "undefined") history.replaceState(null, "", `/?q=${encodeURIComponent(term)}${fresh ? "&fresh=1" : ""}`);
     try {
-      const res = await fetch(`/api/rebut?q=${encodeURIComponent(term)}&stream=1`, { signal: ctrl.signal });
+      const res = await fetch(`/api/rebut?q=${encodeURIComponent(term)}&stream=1${fresh ? "&fresh=1" : ""}`, { signal: ctrl.signal });
       if (!res.ok || !res.body) throw new Error((await res.json().catch(() => ({ error: res.statusText }))).error ?? res.statusText);
       const reader = res.body.getReader();
       const dec = new TextDecoder();
