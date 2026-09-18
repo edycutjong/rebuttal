@@ -1,0 +1,30 @@
+{
+  "name": "rebuttal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Paste \"Smart Money is buying $X\". Rebuttal checks it against Nansen — six calls, one verdict, the trace that decided it.",
+  "license": "MIT",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "spike": "tsx scripts/spike.ts",
+    "rebuttal": "tsx packages/cli/src/cli.ts",
+    "seed": "tsx scripts/seed.ts",
+    "verify": "tsx scripts/verify.ts",
+    "bench": "tsx scripts/bench.ts",
+    "check": "tsx scripts/check_submission_readiness.ts",
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "start": "npm run start -w apps/web"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "fast-check": "^4.10.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^5.0.1"
+  },
+  "engines": { "node": ">=20" },
+  "type": "module"
+}

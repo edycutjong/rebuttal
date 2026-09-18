@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "types": ["node"],
+    "paths": {
+      "@rebuttal/core": ["./packages/core/src/index.ts"],
+      "@/*": ["./apps/web/*"]
+    }
+  },
+  "include": ["packages/**/*.ts", "scripts/**/*.ts"]
+}

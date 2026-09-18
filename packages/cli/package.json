@@ -1,0 +1,9 @@
+{
+  "name": "rebuttal-cli",
+  "version": "0.1.0",
+  "description": "npm run rebuttal -- \"<claim>\" — the judge's reproduce path.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "rebuttal": "./src/cli.ts" },
+  "dependencies": { "@rebuttal/core": "0.1.0" }
+}

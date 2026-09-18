@@ -1,0 +1,10 @@
+{
+  "name": "@rebuttal/core",
+  "version": "0.1.0",
+  "description": "Fact-checks 'Smart Money is buying X' claims against Nansen label-class flows. Deterministic verdict, full tool trace.",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": { "zod": "^3.24.0" }
+}
