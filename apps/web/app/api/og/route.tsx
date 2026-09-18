@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     // or the daily ceiling the card comes from a recorded fixture, or falls through to the data-free layout below
     const gated = !ipAllowed(clientIp(req.headers)).ok;
     const live = !gated && !budgetExhausted();
-    const r = live ? await rebutFor(q, chain) : await replayFixture(q, { reason: gated ? "rate" : "budget" });
+    const r = live ? await rebutFor(q, chain, { narrate: false }) : await replayFixture(q, { reason: gated ? "rate" : "budget" });
     if (!r) throw new Error("no live budget and no recorded run");
     if (live) recordSpend(r.verdict.credits);
     const v = r.verdict;

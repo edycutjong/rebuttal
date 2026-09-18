@@ -24,7 +24,7 @@ export function Example({ verdict, agent, onRun }: { verdict: Verdict; agent: Ag
       <div className="flow">
         <ClaimCard claim={v.claim} resolved={v.resolved} plan={v.checks} />
         <Trace plan={v.checks} checks={new Map(v.checks.map((c) => [c.id, c]))} credits={v.credits} calls={v.calls} ms={v.ms} done asOf={v.provenance[0] ? new Date(v.now).toISOString() : null} />
-        <VerdictCard verdict={v} compact />
+        <VerdictCard verdict={v} compact replay />
         {agent && <AgentPanel run={agent} tools={agent.toolCalls} text={agent.text} ours={v.checks} busy={false} />}
       </div>
       <p className="example-more">{agent ? "the violet panel is Nansen's own agent on the same claim, recorded once (200 credits) — live it is a button with the price on it" : "live, the “Ask Nansen's agent” button runs the same claim through agent/fast (200 credits) and shows its tool list beside this trace"}</p>

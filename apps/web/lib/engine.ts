@@ -15,8 +15,8 @@ export function client(fresh = false): CachedNansenClient {
   return new CachedNansenClient(process.env.NANSEN_API_KEY ?? "", { store, ttlMs: fresh ? 0 : undefined });
 }
 
-/** A claim is a sentence or an x.com link: up to 400 chars, no control characters. */
-export const MAX_CLAIM = 400;
+/** A claim is a sentence or an x.com link: up to 600 chars (a long-form post's text, as rebut() keeps it), no control characters. */
+export const MAX_CLAIM = 600;
 const CONTROL = /[\u0000-\u001f\u007f]/g;
 export function cleanClaim(q: string): string | null {
   const s = q.replace(CONTROL, "").trim().replace(/\s+/g, " ");

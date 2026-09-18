@@ -1,6 +1,6 @@
 # DEMO — Rebuttal
 
-Real output, real credits. Everything below was produced by the commands shown, against the live Nansen API, on 2026-09-18.
+Real output, real credits. Everything below was produced by the commands shown, against the live Nansen API, on 2026-09-18 10:46 UTC. (The trace-row value formatting changed later that day after code review — token amounts now print as `−58.7K tokens`, prices with three significant digits, changes as `+7.9%` — the numbers themselves are the run's.)
 
 ## 1 · The hero rebuttal (live, `--no-cache`, 10 credits, 3.5 s)
 
@@ -111,7 +111,7 @@ git clone https://github.com/edycutjong/rebuttal.git && cd rebuttal && npm insta
 export NANSEN_API_KEY=nsn_…                                   # https://app.nansen.ai/api
 npm run rebuttal -- "Smart Money is aping \$PEPE hard today" --explain   # 10 credits, live
 npm run verify                                                # 13/13, 0 credits
-npm test                                                      # 192 tests
+npm test                                                      # 195 tests
 npm run bench -- --runs 1                                     # ≈ 130 credits, rewrites docs/BENCH.md
 ```
 

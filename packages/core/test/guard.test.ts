@@ -146,7 +146,7 @@ describe("/api/rebut boundary", () => {
   it("10,000 generated bad inputs: never a fetch, always a clean 400", async () => {
     recordSpend(DAILY_CREDITS); // no live path
     await fc.assert(
-      fc.asyncProperty(fc.oneof(fc.constant(""), fc.string({ maxLength: 3 }).map((s) => s.replace(/\S/g, " ")), fc.stringMatching(/^[a-z$0-9]{401,440}$/)), async (q) => {
+      fc.asyncProperty(fc.oneof(fc.constant(""), fc.string({ maxLength: 3 }).map((s) => s.replace(/\S/g, " ")), fc.stringMatching(/^[a-z$0-9]{601,640}$/)), async (q) => {
         const res = await rebutRoute(req(q, "", "198.51.100.1"));
         expect(res.status).toBe(400);
       }),

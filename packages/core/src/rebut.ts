@@ -51,6 +51,8 @@ export type RebutOptions = {
   /** a pre-extracted claim (fixture replay): skips both extractors */
   claim?: Claim;
   rules?: Rules;
+  /** false → skip the two-sentence narration (the OG card never shows prose); extraction still runs so the label matches the page */
+  narrate?: boolean;
   fetchImpl?: typeof fetch;
   onProgress?: (e: RebutEvent) => void;
 };
@@ -224,7 +226,7 @@ export async function rebut(client: NansenClient, input: string, opts: RebutOpti
   const v = finish(resolved, d, evidence, checks);
   emit({ type: "verdict", verdict: v });
   // 6 · prose: the LLM paraphrases the decided record within its budget, else the template already on the verdict
-  if (llmOpts) {
+  if (llmOpts && opts.narrate !== false) {
     const r = await narrateWithLlm(summaryForLlm(claim, resolved, d), { ...llmOpts, label: d.label });
     llm.narrate = r.status;
     if (r.text) v.prose = { text: r.text, source: "llm", ms: r.status.ms };

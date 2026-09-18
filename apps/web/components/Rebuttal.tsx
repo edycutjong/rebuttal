@@ -26,6 +26,7 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
   const [plan, setPlan] = useState<PlanRow[]>(initialVerdict?.checks ?? []);
   const [checks, setChecks] = useState<Map<string, Check>>(new Map(initialVerdict?.checks.map((c) => [c.id, c]) ?? []));
   const [verdict, setVerdict] = useState<Verdict | null>(initialVerdict ?? null);
+  const [narrating, setNarrating] = useState(false);
   const [asOf, setAsOf] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -70,8 +71,12 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
             sawVerdict = true;
             setVerdict(e.verdict);
             setPlan(e.verdict.checks.length ? e.verdict.checks : []);
+            setNarrating(true);
             setPhase("done");
-          } else if (e.type === "prose") setVerdict((v) => (v ? { ...v, prose: e.prose } : v));
+          } else if (e.type === "prose") {
+            setVerdict((v) => (v ? { ...v, prose: e.prose } : v));
+            setNarrating(false);
+          }
           else if (e.type === "asOf") setAsOf(e.asOf);
           else if (e.type === "error") throw new Error(e.message);
         }
@@ -81,6 +86,8 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
       if ((err as Error).name === "AbortError") return;
       setError((err as Error).message);
       setPhase("error");
+    } finally {
+      setNarrating(false);
     }
   }, []);
 
@@ -96,6 +103,7 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
       setPlan([]);
       setChecks(new Map());
       setVerdict(null);
+      setNarrating(false);
       setAsOf(null);
       setAgent(null);
       // the flow renders below the fold on a laptop: bring the claim card into view as the first row lands
@@ -196,7 +204,7 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
             run(q);
           }}
         >
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="paste the claim or the x.com link — “Smart Money is loading $X”" aria-label="claim text or x.com link" maxLength={400} autoFocus={!initialQuery} />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="paste the claim or the x.com link — “Smart Money is loading $X”" aria-label="claim text or x.com link" maxLength={600} autoFocus={!initialQuery} />
           <button type="submit" disabled={phase === "reading" || phase === "checking"}>
             Check
           </button>
@@ -253,7 +261,7 @@ export function Rebuttal({ initialQuery, initialVerdict, prefill, example, examp
         <div className="flow">
           <ClaimCard claim={claim} resolved={resolved} plan={plan.length ? plan : null} text={input?.text} author={input?.author} fromUrl={input?.fromUrl} />
           {plan.length > 0 && <Trace plan={plan} checks={checks} credits={verdict?.credits ?? 0} calls={verdict?.calls} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
-          <VerdictCard verdict={verdict} pending={phase !== "error"} onCopy={copy} onPermalink={copyLink} onAgent={askAgent} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
+          <VerdictCard verdict={verdict} pending={phase !== "error"} narrating={narrating} onCopy={copy} onPermalink={copyLink} onAgent={askAgent} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
           {agent && <AgentPanel run={agent.run} tools={agent.tools} text={agent.text} ours={plan} error={agent.error} busy={agent.busy} />}
         </div>
       )}

@@ -41,7 +41,7 @@ describe("#1 a chain name is never the token", () => {
 describe("#3 a weak verb is a hint, a strong verb is final", () => {
   it("'surged … dumped' lets the model say selling; 'closing in … keeps buying' lets it say buying", () => {
     const a = extractClaim("$PEPE surged 40% today while smart money dumped into the rally");
-    expect(a.typeStrength).toBe("strong"); // "dumped" is strong even though "surged" came first
+    expect(a.typeStrength).toBe("weak"); // "surged" won in reading order and it is a weak verb — the model may correct it
     const b = extractClaim("$PEPE is closing in on a new ATH as retail piles in");
     expect(b.type).toBe("selling");
     expect(b.typeStrength).toBe("weak");
@@ -121,5 +121,31 @@ describe("holding: C-EXIT needs the holders row, flow alone is O-TRIM (SCORING �
   it("net7d ≤ −T7 with no holders → O-TRIM", () => {
     const d = decide(claim({ type: "holding" }), evidence({ holders: null, flow7d: snap({ smart_trader: { net: -90_000, wallets: 20 } }) }));
     expect(d.ruleId).toBe("O-TRIM");
+  });
+});
+
+describe("pass 3: the verb that won decides the strength; 'on ETH' keeps its token", () => {
+  it("'surged … dumped' is a weak buying the model may flip to selling", () => {
+    const a = extractClaim("$PEPE surged 40% today while smart money dumped into the rally");
+    expect(a.type).toBe("buying");
+    expect(a.typeStrength).toBe("weak");
+    expect(mergeClaims(a, { token: "PEPE", type: "selling" }).type).toBe("selling");
+  });
+  it("'loading up on ETH' / 'bidding on SOL' / 'buying the dip on ETH' keep the coin without the model", () => {
+    expect(extractClaim("Smart Money is loading up on ETH").token).toBe("ETH");
+    expect(extractClaim("Whales are bidding on SOL").token).toBe("SOL");
+    expect(extractClaim("smart money buying the dip on ETH").token).toBe("ETH");
+    expect(extractClaim("Smart Money is buying PEPE on Ethereum").token).toBe("PEPE");
+  });
+  it("narrate: false skips the LLM prose but keeps the extraction", async () => {
+    let calls = 0;
+    const fetchImpl: typeof fetch = async () => {
+      calls++;
+      return new Response(JSON.stringify({ choices: [{ message: { tool_calls: [{ function: { name: "extract_claim", arguments: JSON.stringify({ token: "PEPE", type: "buying", subject: "smart_money" }) } }] } }] }), { status: 200 });
+    };
+    const v = await rebut(fakeClient(pepeRoutes()), "Smart Money is aping $PEPE", { llm: { keys: ["a"], fetchImpl }, now: 0, narrate: false });
+    expect(calls).toBe(1);
+    expect(v.claim.extractor).toBe("llm");
+    expect(v.prose.source).toBe("template");
   });
 });

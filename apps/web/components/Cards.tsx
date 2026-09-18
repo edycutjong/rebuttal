@@ -140,7 +140,7 @@ export function Trace({ plan, checks, credits, calls, ms, done, asOf }: { plan: 
 const LABEL_CLASS: Record<string, string> = { CONFIRMED: "confirmed", OVERSTATED: "overstated", CONTRADICTED: "contradicted", UNVERIFIABLE: "unverifiable" };
 
 /** The verdict word, the rule, the numbers, the two sentences, the hash. */
-export function VerdictCard({ verdict, pending, onCopy, onPermalink, onAgent, agentBusy, agentPrice, compact }: { verdict: Verdict | null; pending?: boolean; onCopy?: () => void; onPermalink?: () => void; onAgent?: () => void; agentBusy?: boolean; agentPrice?: number; compact?: boolean }) {
+export function VerdictCard({ verdict, pending, narrating, replay, onCopy, onPermalink, onAgent, agentBusy, agentPrice, compact }: { verdict: Verdict | null; pending?: boolean; narrating?: boolean; replay?: boolean; onCopy?: () => void; onPermalink?: () => void; onAgent?: () => void; agentBusy?: boolean; agentPrice?: number; compact?: boolean }) {
   if (!verdict)
     return (
       <section className="verdict pending" aria-label="verdict">
@@ -165,7 +165,15 @@ export function VerdictCard({ verdict, pending, onCopy, onPermalink, onAgent, ag
       </ul>
       <p className="prose">
         {v.prose.text}
-        <small>{v.prose.source === "llm" ? "narrated by the LLM from the numbers above — it cannot change the verdict" : "template prose — the LLM was skipped or slow; the verdict is unchanged"}</small>
+        <small>
+          {v.prose.source === "llm"
+            ? "narrated by the LLM from the numbers above — it cannot change the verdict"
+            : narrating
+              ? "writing the two sentences… (the verdict above is already final)"
+              : replay
+                ? "replayed offline without the LLM — template prose; the verdict is unchanged"
+                : "template prose — the LLM was skipped or slow; the verdict is unchanged"}
+        </small>
       </p>
       {v.warnings.length > 0 && (
         <p className="warns">

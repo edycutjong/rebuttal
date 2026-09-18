@@ -103,6 +103,9 @@ export function findTokenSource(text: string): { token: string; source: NonNulla
   }
   const bare = stripped.match(/\b([A-Z][A-Z0-9]{1,9})\b/g) ?? [];
   for (const w of bare) if (!NOT_TICKERS.has(w) && !/^\d+[KMBT]?$/.test(w)) return { token: w, source: "bare" };
+  // "loading up on ETH" / "bidding on SOL": the phrase was the object, not the venue — recover a chain's own coin from the unstripped text
+  const coins = new Set(Object.values(CHAIN_COIN));
+  for (const w of text.match(/\b([A-Z][A-Z0-9]{1,9})\b/g) ?? []) if (coins.has(w)) return { token: w, source: "bare" };
   for (const [name, t] of Object.entries(CHAIN_COIN)) if (new RegExp(`\\b${name}\\b`).test(lower)) return { token: t, source: "name" };
   return undefined;
 }
@@ -110,19 +113,22 @@ export function findToken(text: string): string | undefined {
   return findTokenSource(text)?.token;
 }
 
-export function findType(text: string): ClaimType | undefined {
+export function findTypeVerb(text: string): { type: ClaimType; verb: string } | undefined {
   // the first verb in reading order wins: "sold 602 BTC ... to purchase ETH" is about selling the first token
-  const hits: Array<[number, ClaimType]> = [];
+  const hits: Array<[number, ClaimType, string]> = [];
   for (const [re, t] of [
     [HOLD_RE, "holding"],
     [SELL_RE, "selling"],
     [BUY_RE, "buying"],
   ] as const) {
     const m = text.match(re);
-    if (m && m.index !== undefined) hits.push([m.index, t]);
+    if (m && m.index !== undefined) hits.push([m.index, t, m[0]]);
   }
   hits.sort((a, b) => a[0] - b[0]);
-  return hits[0]?.[1];
+  return hits[0] ? { type: hits[0][1], verb: hits[0][2] } : undefined;
+}
+export function findType(text: string): ClaimType | undefined {
+  return findTypeVerb(text)?.type;
 }
 
 export function findSubject(text: string): Subject | undefined {
@@ -144,8 +150,10 @@ export function extractClaim(raw: string): Claim {
   claim.token = found?.token;
   claim.tokenSource = found?.source;
   claim.chain = findChain(text);
-  claim.type = findType(text);
-  if (claim.type) claim.typeStrength = STRONG_RE.test(text) ? "strong" : "weak";
+  const tv = findTypeVerb(text);
+  claim.type = tv?.type;
+  // strength is a property of the verb that WON, not of any verb in the text ("surged … dumped" is a weak "buying")
+  if (tv) claim.typeStrength = STRONG_RE.test(tv.verb) ? "strong" : "weak";
   claim.subject = findSubject(text);
   if (!claim.token) claim.problem = "no token found — write the ticker as $TICKER";
   else if (!claim.type) claim.problem = "not a flow claim — nothing about buying, selling or holding";
