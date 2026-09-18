@@ -8,7 +8,7 @@ const config: NextConfig = {
   eslint: { ignoreDuringBuilds: true },
   outputFileTracingRoot: new URL("../../", import.meta.url).pathname,
   // lib/guard.ts replays a recorded fixture once the day's live credit budget is spent — ship them with the function
-  outputFileTracingIncludes: { "/api/rebut": ["../../fixtures/*.json"], "/c": ["../../fixtures/*.json"] },
+  outputFileTracingIncludes: { "/api/rebut": ["../../fixtures/*.json"], "/api/og": ["../../fixtures/*.json"], "/c": ["../../fixtures/*.json"] },
   webpack: (cfg) => {
     cfg.resolve.extensionAlias = { ".js": [".ts", ".tsx", ".js"] };
     return cfg;

@@ -29,7 +29,7 @@ sequenceDiagram
   N-->>E: raw JSON · sha256 recorded per call
   E-->>W: {type:"check"} × N as each lands
   E->>E: decide(claim, evidence) → label · ruleId · reasons · verdictHash
-  E-->>W: {type:"verdict"}
+  E-->>W: {type:"verdict"} (template prose — the card never waits for the model)
   E->>G: narrate the decided record (4 s budget; disputing prose discarded)
   E-->>W: {type:"prose"}
   W-->>U: trace rows land, verdict card, copy / permalink / "Ask Nansen's agent (200)"
@@ -39,7 +39,7 @@ sequenceDiagram
 
 | File | Role | Key exports |
 |---|---|---|
-| `client.ts` | `NansenClient`: fetch + `apikey`, 5 rps token bucket, 8 s timeout, 1 retry on 429/5xx/timeout, every call recorded (`Call`: endpoint, body, credits, ms, status, fieldsUsed, sha256 responseHash, attempts, ok/error); `CREDITS` table | `NansenClient`, `CREDITS`, `sha256` |
+| `client.ts` | `NansenClient`: fetch + `apikey`, 5 rps token bucket, 8 s timeout, 1 retry on 429/5xx/timeout, every call recorded (`Call`: endpoint, body, credits — from `X-Nansen-Credits-Used` when Nansen sends it, else the table —, ms, status, fieldsUsed, sha256 responseHash, attempts, ok/error, tag); a check finds its own call by `tag`, never by position | `NansenClient`, `CREDITS`, `sha256` |
 | `cache.ts` | `CachedNansenClient`: read-through cache keyed by `sha256(endpoint + canonical body)`, TTL 1 h, hits recorded at 0 credits, `NANSEN_OFFLINE=1` refuses the network; `DiskCache` / `MemoryCache` | `CachedNansenClient`, `cacheKey` |
 | `nansen.ts` | zod-validated wrappers: `searchTokens`, `flowIntelligence`, `whoBoughtSold` (24 h floored to the hour, `include_smart_money_labels` per subject), `smartMoneyNetflow`, `tokenOhlcv`, `holders` | + `SUBJECT_LABELS`, `NETFLOW_CHAINS` |
 | `claim.ts` | the deterministic extractor and the merge rule with the LLM | `extractClaim`, `mergeClaims`, `validClaim`, `SCORABLE_CHAINS` |
@@ -57,7 +57,7 @@ sequenceDiagram
 | Route | What | Guard |
 |---|---|---|
 | `/` | the ONE flow; idle state shows the recorded hero fixture (0 credits, labelled) | — |
-| `/api/rebut?q=[&chain=][&stream=1]` | JSON verdict, or NDJSON `input · claim · resolved · check×N · verdict · prose · asOf` | 400 on bad input before any fetch; 6 / IP / min → 429; 2,000 live credits / day then a labelled fixture replay or 503 |
+| `/api/rebut?q=[&chain=][&stream=1]` | JSON verdict, or NDJSON `input · claim · resolved · check×N · verdict · prose · asOf` | 400 on bad input before any fetch; 10 / IP / min → 429; 2,000 live credits / day then a labelled fixture replay or 503 |
 | `/c?q=` | the permalink: server-rendered verdict (cache → live → replay) with Open Graph tags; `React.cache` so metadata and page share one run | same daily ceiling |
 | `/api/og?q=` | 1200×630 card: claim, verdict word in its colour, two reasons, hash; edge-cached 30 min | never 4xx — falls back to a replay or a data-free card |
 | `/api/agent` (POST) | NDJSON relay of `agent/fast`: tool_call · delta · finish · done | 2 / IP / day, 4 / day; GET → 405 |

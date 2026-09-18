@@ -54,21 +54,16 @@
     "provenance": [],
     "credits": 0,
     "calls": 0,
-    "ms": 902,
-    "hash": "7b35fd8556f2dc570945514415cfdf4df84f6d4f6d52bf176c5fb87bdaae296d",
+    "ms": 0,
+    "hash": "d5c87bc9b8659a715556745f04c4f53c2c0186a255471d34afc6dac7ec988d31",
     "warnings": [],
     "llm": {
-      "extract": {
-        "used": true,
-        "ms": 899,
-        "model": "openai/gpt-oss-120b"
-      },
+      "extract": null,
       "narrate": null
     },
     "rules": {
       "floorUsd": 5000,
       "shareOfFlow": 0.01,
-      "freshMult": 3,
       "staleMove": 0.2,
       "minWallets": 3,
       "minWhales": 1,

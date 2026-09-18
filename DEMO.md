@@ -1,6 +1,6 @@
 # DEMO — Rebuttal
 
-Real output, real credits. Everything below was produced by the commands shown, against the live Nansen API, on 2026-09-18.
+Real output, real credits. Everything below was produced by the commands shown, against the live Nansen API, on 2026-09-18 10:46 UTC. (The trace-row value formatting changed later that day after code review — token amounts now print as `−58.7K tokens`, prices with three significant digits, changes as `+7.9%` — the numbers themselves are the run's.)
 
 ## 1 · The hero rebuttal (live, `--no-cache`, 10 credits, 3.5 s)
 
@@ -40,7 +40,7 @@ $PEPE (ethereum): no Smart Money wallet traded this token in the last 24 h (net 
 Checked on Nansen: 6/6 calls, 10 credits · 4f3cce391567
 ```
 
-Same engine on the web: <https://rebuttal-edycutjong.vercel.app/?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B> — the six rows land one by one, then the verdict card turns red. JSON: `/api/rebut?q=…`. The permalink `/c?q=…` renders the same verdict server-side with an Open Graph card (`/api/og?q=…`).
+Same engine on the web: <https://rebuttal.edycu.dev/?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B> — the six rows land one by one, then the verdict card turns red. JSON: `/api/rebut?q=…`. The permalink `/c?q=…` renders the same verdict server-side with an Open Graph card (`/api/og?q=…`).
 
 ## 2 · A claim the tool CONFIRMS (live, 15 credits, 3.8 s)
 
@@ -67,7 +67,7 @@ token  UNI · ethereum 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 · most traded
   15 credits · 8 calls · 3.8 s · hash 0815c33aed48
 ```
 
-(The two-sentence prose above was the first live run; the narration guard that discards prose disputing the verdict was added after this run — see `docs/DX-REPORT.md` #9. The label, the rules and the hash do not involve the LLM.)
+(The two-sentence prose above was the first live run; the narration guard that discards prose disputing the verdict was added after this run — see `docs/DX-REPORT.md`. The label, the rules and the hash do not involve the LLM. Hashes in this section are from the live runs of 10:46 UTC; the hash record later gained the whale-primary fields, so the recorded fixtures carry the hashes shown in the verify block below.)
 
 ## 3 · Nansen's own agent on the same claim (`--ask-nansen`, 200 credits)
 
@@ -77,19 +77,19 @@ Run once in the spike (2026-09-18, claim: the PEPE post from OKX Insight): **fir
 
 ```
 $ npm run verify
-✔ ai-robinhood-chain           OVERSTATED    O-FLAT     1f90767d6683 8 cached calls · 0 credits
-✔ edel-tweet-url               UNVERIFIABLE  U-NOCLASS  03a838b89bd5 8 cached calls · 0 credits
-✔ hype-sm-bought               CONFIRMED     A-FLOW     b19684e8e507 7 cached calls · 0 credits
-✔ hype-whale-falconx           OVERSTATED    O-SMALL    6ee32a5baadf 8 cached calls · 0 credits
-✔ meme-whale-position          UNVERIFIABLE  U-NOCLASS  0c6fc8d118b4 8 cached calls · 0 credits
-✔ pepe-aping                   CONTRADICTED  C-NOBODY   0f5da7e87546 7 cached calls · 0 credits
-✔ pepe-not-a-flow-claim        UNVERIFIABLE  U-CLAIM    7b35fd8556f2 0 cached calls · 0 credits
-✔ uni-sm-buying-after-rally    OVERSTATED    O-SMALL    3b66291dac87 7 cached calls · 0 credits
-✔ uni-sm-holding               OVERSTATED    O-TRIM     5ac89638d050 8 cached calls · 0 credits
-✔ uni-whale-sold               CONFIRMED     A-FLOW     4a32b5e71fce 8 cached calls · 0 credits
-✔ vvv-sm-buying                CONFIRMED     A-FLOW     b55254907847 7 cached calls · 0 credits
-✔ xqzplm-unknown               UNVERIFIABLE  U-TOKEN    837f8a54cd2c 1 cached calls · 0 credits
-✔ zec-not-a-nansen-chain       UNVERIFIABLE  U-CHAIN    0bbb67c2cbc0 0 cached calls · 0 credits
+✔ ai-robinhood-chain           OVERSTATED    O-FLAT     49f0e6ee2b59 8 cached calls · 0 credits
+✔ edel-tweet-url               UNVERIFIABLE  U-NOCLASS  a914a08a79c6 8 cached calls · 0 credits
+✔ hype-sm-bought               CONFIRMED     A-FLOW     2274034ebea8 7 cached calls · 0 credits
+✔ hype-whale-falconx           OVERSTATED    O-FLAT     c27dfe3faa49 8 cached calls · 0 credits
+✔ meme-whale-position          UNVERIFIABLE  U-NOCLASS  cb7dc25419d0 8 cached calls · 0 credits
+✔ pepe-aping                   CONTRADICTED  C-NOBODY   e21a8a19ae59 7 cached calls · 0 credits
+✔ pepe-not-a-flow-claim        UNVERIFIABLE  U-CLAIM    d5c87bc9b865 0 cached calls · 0 credits
+✔ uni-sm-buying-after-rally    OVERSTATED    O-SMALL    af11018db8bb 7 cached calls · 0 credits
+✔ uni-sm-holding               OVERSTATED    O-TRIM     62e68c0786ea 8 cached calls · 0 credits
+✔ uni-whale-sold               CONFIRMED     A-FLOW     6007ef858809 8 cached calls · 0 credits
+✔ vvv-sm-buying                CONFIRMED     A-FLOW     1dfd89ee2c77 7 cached calls · 0 credits
+✔ xqzplm-unknown               UNVERIFIABLE  U-TOKEN    8c925fff55ab 1 cached calls · 0 credits
+✔ zec-not-a-nansen-chain       UNVERIFIABLE  U-CHAIN    11d641446a9d 0 cached calls · 0 credits
 
 13/13 verdicts reproduced offline · network calls attempted: 0
 ```
@@ -111,7 +111,7 @@ git clone https://github.com/edycutjong/rebuttal.git && cd rebuttal && npm insta
 export NANSEN_API_KEY=nsn_…                                   # https://app.nansen.ai/api
 npm run rebuttal -- "Smart Money is aping \$PEPE hard today" --explain   # 10 credits, live
 npm run verify                                                # 13/13, 0 credits
-npm test                                                      # 168 tests
+npm test                                                      # 216 tests
 npm run bench -- --runs 1                                     # ≈ 130 credits, rewrites docs/BENCH.md
 ```
 

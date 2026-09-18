@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { cachedClientFromEnv, rebut, rebuttalText, askNansenAgent, AGENT_CREDITS, fmtUsd, envLlm, type RebutEvent, type Verdict } from "@rebuttal/core";
+import { cachedClientFromEnv, rebut, rebuttalText, askNansenAgent, AGENT_CREDITS, fmtUsd, fmtValue, envLlm, type RebutEvent, type Verdict } from "@rebuttal/core";
 
 const USAGE = `rebuttal — fact-check "Smart Money is buying $X" against Nansen
 
@@ -33,7 +33,13 @@ if (!process.env.NANSEN_API_KEY) {
 
 const json = flag("--json");
 const explain = flag("--explain");
-const client = cachedClientFromEnv({ ttlMs: flag("--no-cache") ? 0 : undefined });
+let client: ReturnType<typeof cachedClientFromEnv>;
+try {
+  client = cachedClientFromEnv({ ttlMs: flag("--no-cache") ? 0 : undefined });
+} catch (e) {
+  console.error((e as Error).message);
+  process.exit(2);
+}
 const llm = flag("--no-llm") ? null : envLlm();
 const color = process.stdout.isTTY && !json;
 const paint = (s: string, code: string) => (color ? `\x1b[${code}m${s}\x1b[0m` : s);
@@ -53,15 +59,22 @@ const onProgress = (e: RebutEvent) => {
   if (e.type === "check") {
     const c = e.check;
     const vals = Object.entries(c.values)
-      .map(([k, v]) => `${k}=${typeof v === "number" && Math.abs(v) >= 1000 ? fmtUsd(v) : String(v)}`)
+      .map(([k, v]) => `${k}=${fmtValue(k, v)}`)
       .join(" ");
     console.log(`  ${c.ok ? paint("✔", "32") : paint("✖", "31")} ${c.endpoint.padEnd(22)} ${c.window.padEnd(12)} ${String(c.credits).padStart(3)} cr ${String(c.ms).padStart(5)} ms${c.cached ? " cached" : ""}  ${c.ok ? vals : paint(c.error ?? "failed", "31")}`);
   }
 };
 
-const v: Verdict = await rebut(client, input, { chain: val("--chain"), llm, onProgress });
+let v: Verdict;
+try {
+  v = await rebut(client, input, { chain: val("--chain"), llm, onProgress });
+} catch (e) {
+  // rebut() throws only when search/general itself fails — say so in one line instead of a stack trace
+  console.error(paint(`Nansen search failed: ${(e as Error).message.slice(0, 160)} — try again in a minute`, "31"));
+  process.exit(3);
+}
 if (flag("--ask-nansen") && v.resolved) {
-  console.log(paint(`\nasking Nansen's agent (agent/fast, ${AGENT_CREDITS} credits)…`, "90"));
+  if (!json) console.log(paint(`\nasking Nansen's agent (agent/fast, ${AGENT_CREDITS} credits)…`, "90"));
   v.agent = await askNansenAgent(process.env.NANSEN_API_KEY as string, v.claim.raw, {
     onEvent: (e) => {
       if (!json && e.type === "tool_call") console.log(paint(`  agent tool_call: ${e.name}`, "35"));

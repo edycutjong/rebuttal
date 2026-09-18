@@ -146,7 +146,7 @@ describe("/api/rebut boundary", () => {
   it("10,000 generated bad inputs: never a fetch, always a clean 400", async () => {
     recordSpend(DAILY_CREDITS); // no live path
     await fc.assert(
-      fc.asyncProperty(fc.oneof(fc.constant(""), fc.string({ maxLength: 3 }).map((s) => s.replace(/\S/g, " ")), fc.stringMatching(/^[a-z$0-9]{401,440}$/)), async (q) => {
+      fc.asyncProperty(fc.oneof(fc.constant(""), fc.string({ maxLength: 3 }).map((s) => s.replace(/\S/g, " ")), fc.stringMatching(/^[a-z$0-9]{601,640}$/)), async (q) => {
         const res = await rebutRoute(req(q, "", "198.51.100.1"));
         expect(res.status).toBe(400);
       }),
@@ -168,14 +168,14 @@ describe("/api/agent boundary", () => {
     const fetchSpy = vi.fn<typeof fetch>();
     vi.stubGlobal("fetch", fetchSpy);
     for (let i = 0; i < AGENT_PER_DAY; i++) agentAllowed(`ip${i}`);
-    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: JSON.stringify({ q: HERO }), headers: { "x-forwarded-for": "9.9.9.9" } }));
+    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: JSON.stringify({ q: HERO }), headers: { "x-forwarded-for": "9.9.9.9", "content-type": "application/json", "sec-fetch-site": "same-origin" } }));
     expect(res.status).toBe(429);
     expect((await res.json()) as { credits: number }).toMatchObject({ credits: 200 });
     expect(fetchSpy).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
   it("POST with no claim is a 400", async () => {
-    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: "{}" }));
+    const res = await agentPost(new NextRequest("http://localhost:3400/api/agent", { method: "POST", body: "{}", headers: { "content-type": "application/json", "sec-fetch-site": "same-origin" } }));
     expect(res.status).toBe(400);
   });
 });
@@ -190,5 +190,14 @@ describe("the key never leaves the server", () => {
       expect(text).not.toContain(KEY);
       expect(text).not.toMatch(KEY_SHAPE);
     }
+  });
+});
+
+describe("the web copy text equals core's rebuttalText (the browser bundle cannot import core)", () => {
+  it("same paragraph", async () => {
+    const { rebuttalText: web } = await import("@/components/Rebuttal");
+    const { rebuttalText: core } = await import("../src/rebut.js");
+    const v = await rebut(fakeClient(pepeRoutes()), HERO, { llm: null, now: 0 });
+    expect(web(v, "https://x/c?q=1")).toBe(core(v, "https://x/c?q=1"));
   });
 });

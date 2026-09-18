@@ -19,11 +19,13 @@ export async function GET(req: NextRequest) {
   let hash = "";
   let meta = "";
   let claim = q;
+  let failed = false;
   try {
     // same spend guard as /api/rebut — but an image never 4xxs (a scraper would drop the card): past the per-IP rate
     // or the daily ceiling the card comes from a recorded fixture, or falls through to the data-free layout below
-    const live = ipAllowed(clientIp(req.headers)).ok && !budgetExhausted();
-    const r = live ? await rebutFor(q, chain) : await replayFixture(q);
+    const gated = !ipAllowed(clientIp(req.headers)).ok;
+    const live = !gated && !budgetExhausted();
+    const r = live ? await rebutFor(q, chain, { narrate: false }) : await replayFixture(q, { reason: gated ? "rate" : "budget" });
     if (!r) throw new Error("no live budget and no recorded run");
     if (live) recordSpend(r.verdict.credits);
     const v = r.verdict;
@@ -33,6 +35,7 @@ export async function GET(req: NextRequest) {
     claim = v.claim.raw;
     meta = `${v.resolved ? `$${v.resolved.symbol} · ${v.resolved.chain} · ` : ""}${v.checks.filter((c) => c.ok).length}/${v.checks.length} Nansen calls · ${v.credits} credits`;
   } catch (e) {
+    failed = true;
     reasons = [`Nansen lookup failed: ${(e as Error).message.slice(0, 80)}`];
   }
   const color = COLOR[label];
@@ -62,6 +65,7 @@ export async function GET(req: NextRequest) {
         <div style={{ display: "flex", fontFamily: "monospace" }}>{hash}</div>
       </div>
     </div>,
-    { width: 1200, height: 630, headers: { "cache-control": "public, s-maxage=1800, stale-while-revalidate=86400" } },
+    // a failure card is never cached at the edge — the next crawler gets a fresh try
+    { width: 1200, height: 630, headers: { "cache-control": failed ? "no-store" : "public, s-maxage=1800, stale-while-revalidate=86400" } },
   );
 }
