@@ -142,14 +142,15 @@ export function validClaim(c: Claim): c is Claim & { token: string; type: ClaimT
 /** Merge an LLM extraction with the rules extraction: the LLM fills what the rules found nothing for, never overrides a `$TICKER`. */
 export function mergeClaims(rules: Claim, llm: Partial<Claim> | null): Claim {
   if (!llm) return rules;
-  const dollar = /\$[A-Za-z][A-Za-z0-9]{1,11}\b/.test(rules.raw);
-  const token = dollar && rules.token ? rules.token : (llm.token?.toUpperCase().replace(/^\$/, "") ?? rules.token);
+  // the rules are literal matches on the text; the model only fills what they could not find — so a post that says
+  // "…the token is BTC…" in prose cannot talk the model into swapping the token or the verb (review finding #9)
+  const token = rules.token ?? llm.token?.toUpperCase().replace(/^\$/, "");
   const out: Claim = {
     raw: rules.raw,
     token,
     // the model may only name a chain the text actually contains (it guessed "ethereum" for a HYPE claim live)
     chain: llm.chain && SCORABLE_CHAINS.has(llm.chain) && new RegExp(`\\b${llm.chain}\\b`, "i").test(rules.raw) ? llm.chain : rules.chain,
-    type: llm.type ?? rules.type,
+    type: rules.type ?? llm.type,
     // the rules' subject is a literal keyword match ("whales", "smart money"); the model only fills a missing one (it read
     // "Whales have been accumulating $EDEL" as smart_money live)
     subject: rules.subject ?? llm.subject ?? "smart_money",

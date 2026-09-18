@@ -192,3 +192,12 @@ describe("the key never leaves the server", () => {
     }
   });
 });
+
+describe("the web copy text equals core's rebuttalText (the browser bundle cannot import core)", () => {
+  it("same paragraph", async () => {
+    const { rebuttalText: web } = await import("@/components/Rebuttal");
+    const { rebuttalText: core } = await import("../src/rebut.js");
+    const v = await rebut(fakeClient(pepeRoutes()), HERO, { llm: null, now: 0 });
+    expect(web(v, "https://x/c?q=1")).toBe(core(v, "https://x/c?q=1"));
+  });
+});

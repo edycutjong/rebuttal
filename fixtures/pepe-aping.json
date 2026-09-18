@@ -1,10 +1,10 @@
 {
   "slug": "pepe-aping",
-  "edge": "hero \u00b7 Smart Money buying \u00b7 14 same-name tokens \u00b7 SM idle for 24 h while on the table",
-  "input": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
+  "edge": "hero · Smart Money buying · 14 same-name tokens · SM idle for 24 h while on the table",
+  "input": "Smart Money is aping $PEPE hard today 🐋",
   "source": "idea card phrasing of OKX Insight 2026-09-14 (PEPE smart money +307%)",
   "claim": {
-    "raw": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
+    "raw": "Smart Money is aping $PEPE hard today 🐋",
     "token": "PEPE",
     "type": "buying",
     "subject": "smart_money",
@@ -157,9 +157,9 @@
     }
   },
   "verdict": {
-    "input": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
+    "input": "Smart Money is aping $PEPE hard today 🐋",
     "claim": {
-      "raw": "Smart Money is aping $PEPE hard today \ud83d\udc0b",
+      "raw": "Smart Money is aping $PEPE hard today 🐋",
       "token": "PEPE",
       "type": "buying",
       "subject": "smart_money",
@@ -223,7 +223,7 @@
       "7 d: $5K",
       "on the Smart Money net-flow table (24 h $0, 89 traders)"
     ],
-    "threshold": 24307,
+    "threshold": 5000,
     "evidence": {
       "flow1d": {
         "smart_trader": {
@@ -292,8 +292,8 @@
         "traders": 89
       },
       "price": {
-        "open": 3.46515471648103e-06,
-        "close": 3.75161589813731e-06,
+        "open": 0.00000346515471648103,
+        "close": 0.00000375161589813731,
         "change": 0.08266908842303877,
         "candles": 25
       },
@@ -306,11 +306,12 @@
         "id": "flow1d",
         "endpoint": "tgm/flow-intelligence",
         "window": "1d",
-        "credits": 1,
-        "decides": "Smart Money net flow and wallet count, last 24 h \u2014 the primary signal",
+        "credits": 0,
+        "decides": "Smart Money net flow and wallet count, last 24 h — the primary signal",
         "ok": true,
-        "ms": 313,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "f92722770414ef16d50fd6f43158dcec5cf494b99135c757c6ecc9dbdd20a418",
         "values": {
           "smart_trader_net_flow_usd": 0,
           "smart_trader_wallet_count": 0,
@@ -322,11 +323,12 @@
         "id": "flow7d",
         "endpoint": "tgm/flow-intelligence",
         "window": "7d",
-        "credits": 1,
-        "decides": "Smart Money net flow over the week \u2014 blip or trend",
+        "credits": 0,
+        "decides": "Smart Money net flow over the week — blip or trend",
         "ok": true,
-        "ms": 322,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "19e028697b95cdc2ab23c618904a88e501b5567b3aa191d1c73d391e5164271f",
         "values": {
           "smart_trader_net_flow_usd": 4610.999831296786,
           "smart_trader_wallet_count": 53
@@ -336,11 +338,12 @@
         "id": "buyers",
         "endpoint": "tgm/who-bought-sold",
         "window": "BUY 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Smart Money bought, by USD",
         "ok": true,
-        "ms": 633,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "d751e140bcfb7a7aedfa43575f658c02290326d722ea97f3582af1029513c15b",
         "values": {
           "bought_volume_usd": 0,
           "rows": 0,
@@ -351,11 +354,12 @@
         "id": "sellers",
         "endpoint": "tgm/who-bought-sold",
         "window": "SELL 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Smart Money sold, by USD",
         "ok": true,
-        "ms": 566,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "d751e140bcfb7a7aedfa43575f658c02290326d722ea97f3582af1029513c15b",
         "values": {
           "sold_volume_usd": 0,
           "rows": 0,
@@ -366,11 +370,12 @@
         "id": "table",
         "endpoint": "smart-money/netflow",
         "window": "token filter",
-        "credits": 5,
+        "credits": 0,
         "decides": "is the token on the Smart Money net-flow table at all",
         "ok": true,
-        "ms": 782,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "0176f965c111dd8360cacb712efb390a3fd83b192e4608f32d3d68b119cf6ca0",
         "values": {
           "in_table": "yes",
           "net_flow_24h_usd": 0,
@@ -381,24 +386,25 @@
       {
         "id": "price",
         "endpoint": "tgm/token-ohlcv",
-        "window": "1h \u00d7 24",
-        "credits": 1,
-        "decides": "did the price already move \u2014 is the claim late",
+        "window": "1h × 24",
+        "credits": 0,
+        "decides": "did the price already move — is the claim late",
         "ok": true,
-        "ms": 1582,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
+        "responseHash": "723bc070b0f4f0b5eac5a0db4918eedf9ba39b555802ffc7f7a4a2b48d2a7567",
         "values": {
           "candles": 25,
-          "open": 3.46515471648103e-06,
-          "close": 3.75161589813731e-06,
+          "open": 0.00000346515471648103,
+          "close": 0.00000375161589813731,
           "change_24h": 0.0827
         }
       }
     ],
     "prose": {
-      "text": "No Smart Money wallet bought PEPE in the past 24 hours, showing a net flow of $0 despite 89 traders listed. Over the last seven days the total Smart Money net flow was only $5 K, far below \u201chard aping.\u201d",
-      "source": "llm",
-      "ms": 697
+      "text": "Nansen disagrees that Smart Money are buying PEPE on ethereum. No Smart Money wallet traded this token in the last 24 h (net $0) — 7 d: $5K.",
+      "source": "template",
+      "ms": 0
     },
     "provenance": [
       {
@@ -409,8 +415,8 @@
           "limit": 50
         },
         "credits": 0,
-        "ms": 598,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "tokens[].symbol",
@@ -422,8 +428,8 @@
           "tokens[].market_cap"
         ],
         "responseHash": "5e5caa06b3dee3a53979a4e532d673adc99e7c7a5e519ce2176d1f5b5707f0d4",
-        "attempts": 1,
-        "totalMs": 598,
+        "attempts": 0,
+        "totalMs": 0,
         "ok": true
       },
       {
@@ -433,9 +439,9 @@
           "token_address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
           "timeframe": "1d"
         },
-        "credits": 1,
-        "ms": 310,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[0].smart_trader_net_flow_usd (1d)",
@@ -452,9 +458,10 @@
           "data[0].public_figure_wallet_count (1d)"
         ],
         "responseHash": "f92722770414ef16d50fd6f43158dcec5cf494b99135c757c6ecc9dbdd20a418",
-        "attempts": 1,
-        "totalMs": 311,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "flow1d"
       },
       {
         "endpoint": "tgm/flow-intelligence",
@@ -463,9 +470,9 @@
           "token_address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
           "timeframe": "7d"
         },
-        "credits": 1,
-        "ms": 319,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[0].smart_trader_net_flow_usd (7d)",
@@ -482,54 +489,10 @@
           "data[0].public_figure_wallet_count (7d)"
         ],
         "responseHash": "19e028697b95cdc2ab23c618904a88e501b5567b3aa191d1c73d391e5164271f",
-        "attempts": 1,
-        "totalMs": 322,
-        "ok": true
-      },
-      {
-        "endpoint": "tgm/who-bought-sold",
-        "body": {
-          "chain": "ethereum",
-          "token_address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
-          "buy_or_sell": "SELL",
-          "date": {
-            "from": "2026-09-17T10:00:00Z",
-            "to": "2026-09-18T10:00:00Z"
-          },
-          "pagination": {
-            "page": 1,
-            "per_page": 100
-          },
-          "filters": {
-            "include_smart_money_labels": [
-              "Smart Trader",
-              "Fund",
-              "30D Smart Trader",
-              "90D Smart Trader",
-              "180D Smart Trader"
-            ]
-          },
-          "order_by": [
-            {
-              "field": "sold_volume_usd",
-              "direction": "DESC"
-            }
-          ]
-        },
-        "credits": 1,
-        "ms": 561,
-        "cached": false,
-        "status": 200,
-        "fieldsUsed": [
-          "data[].sold_volume_usd (SELL 24h)",
-          "data[].address (SELL 24h)",
-          "data[].address_label (SELL 24h)",
-          "pagination.is_last_page (SELL 24h)"
-        ],
-        "responseHash": "d751e140bcfb7a7aedfa43575f658c02290326d722ea97f3582af1029513c15b",
-        "attempts": 1,
-        "totalMs": 565,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "flow7d"
       },
       {
         "endpoint": "tgm/who-bought-sold",
@@ -561,9 +524,9 @@
             }
           ]
         },
-        "credits": 1,
-        "ms": 629,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].bought_volume_usd (BUY 24h)",
@@ -572,9 +535,56 @@
           "pagination.is_last_page (BUY 24h)"
         ],
         "responseHash": "d751e140bcfb7a7aedfa43575f658c02290326d722ea97f3582af1029513c15b",
-        "attempts": 1,
-        "totalMs": 632,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "buyers"
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "ethereum",
+          "token_address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+          "buy_or_sell": "SELL",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Smart Trader",
+              "Fund",
+              "30D Smart Trader",
+              "90D Smart Trader",
+              "180D Smart Trader"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "sold_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].sold_volume_usd (SELL 24h)",
+          "data[].address (SELL 24h)",
+          "data[].address_label (SELL 24h)",
+          "pagination.is_last_page (SELL 24h)"
+        ],
+        "responseHash": "d751e140bcfb7a7aedfa43575f658c02290326d722ea97f3582af1029513c15b",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "sellers"
       },
       {
         "endpoint": "smart-money/netflow",
@@ -592,9 +602,9 @@
             "per_page": 10
           }
         },
-        "credits": 5,
-        "ms": 385,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].net_flow_24h_usd",
@@ -603,9 +613,10 @@
           "data[].token_symbol"
         ],
         "responseHash": "0176f965c111dd8360cacb712efb390a3fd83b192e4608f32d3d68b119cf6ca0",
-        "attempts": 1,
-        "totalMs": 782,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "table"
       },
       {
         "endpoint": "tgm/token-ohlcv",
@@ -618,9 +629,9 @@
             "to": "2026-09-18T10:00:00Z"
           }
         },
-        "credits": 1,
-        "ms": 552,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].open",
@@ -628,34 +639,26 @@
           "data[].interval_start"
         ],
         "responseHash": "723bc070b0f4f0b5eac5a0db4918eedf9ba39b555802ffc7f7a4a2b48d2a7567",
-        "attempts": 1,
-        "totalMs": 1557,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "price"
       }
     ],
-    "credits": 10,
+    "credits": 0,
     "calls": 7,
-    "ms": 3655,
-    "hash": "0f5da7e87546e0ff27962355a8791f85c0e4673aad9fb6d66c6ddfea09b50b46",
+    "ms": 0,
+    "hash": "e21a8a19ae59cf92458c1bc2c12a91229a5ff2fcdbce0e9ec140fdfec2a55b1d",
     "warnings": [
-      "14 tokens named PEPE on Nansen \u2014 checked the most traded of the top-ranked"
+      "14 tokens named PEPE on Nansen — checked the most traded of the top-ranked"
     ],
     "llm": {
-      "extract": {
-        "used": true,
-        "ms": 764,
-        "model": "openai/gpt-oss-120b"
-      },
-      "narrate": {
-        "used": true,
-        "ms": 697,
-        "model": "openai/gpt-oss-120b"
-      }
+      "extract": null,
+      "narrate": null
     },
     "rules": {
       "floorUsd": 5000,
       "shareOfFlow": 0.01,
-      "freshMult": 3,
       "staleMove": 0.2,
       "minWallets": 3,
       "minWhales": 1,
@@ -664,7 +667,7 @@
     },
     "now": 1789726929083,
     "agent": {
-      "text": "The relevant token is Ethereum [PEPE](https://app.nansen.ai/token-god-mode?tokenAddress=0x6982508145454ce325ddbe47a25d4ec3d2311933&chain=ethereum), not the Hyperliquid perp or similarly named tokens.\n\nSmart Money is **not aping PEPE hard today**: smart-trader/fund netflow was **$0 over 24h** and only **+$4.6K over 7 days**. The stronger signal is distribution risk\u2014exchange wallets received **$1.5M over 1 day** (2.2\u00d7 average), while fresh wallets received **$1.4M**. Price rose **12.44% over 7 days**, with RSI at **55.9**, but the onchain data does not confirm aggressive smart-money accumulation.",
+      "text": "The relevant token is Ethereum [PEPE](https://app.nansen.ai/token-god-mode?tokenAddress=0x6982508145454ce325ddbe47a25d4ec3d2311933&chain=ethereum), not the Hyperliquid perp or similarly named tokens.\n\nSmart Money is **not aping PEPE hard today**: smart-trader/fund netflow was **$0 over 24h** and only **+$4.6K over 7 days**. The stronger signal is distribution risk—exchange wallets received **$1.5M over 1 day** (2.2× average), while fresh wallets received **$1.4M**. Price rose **12.44% over 7 days**, with RSI at **55.9**, but the onchain data does not confirm aggressive smart-money accumulation.",
       "toolCalls": [
         "smart_traders_and_funds_netflow",
         "token_recent_flows_summary",

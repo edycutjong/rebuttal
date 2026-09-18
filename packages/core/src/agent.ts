@@ -36,6 +36,40 @@ export async function askNansenAgent(
     let buf = "";
     // the timer must also cut a stream that is still trickling deltas past the budget, not only the initial fetch
     const aborted = new Promise<never>((_, rej) => ctrl.signal.addEventListener("abort", () => rej(Object.assign(new Error("aborted"), { name: "AbortError" }))));
+    const handle = (raw: string) => {
+      const line = raw.trim();
+      if (!line.startsWith("data:")) return;
+      const data = line.slice(5).trim();
+      if (data === "[DONE]") return;
+      let ev: Record<string, unknown>;
+      try {
+        ev = JSON.parse(data) as Record<string, unknown>;
+      } catch {
+        return;
+      }
+      if (ev.type === "delta" && typeof ev.text === "string") {
+        run.text += ev.text;
+        opts.onEvent?.({ type: "delta", text: ev.text });
+      } else if (ev.type === "tool_call" && typeof ev.name === "string") {
+        if (!seen.has(ev.name)) {
+          seen.add(ev.name);
+          run.toolCalls.push(ev.name);
+        }
+        opts.onEvent?.({ type: "tool_call", name: ev.name });
+      } else if (ev.type === "finish") {
+        const tc = Array.isArray(ev.tool_calls) ? (ev.tool_calls as unknown[]).map((t) => (typeof t === "string" ? t : ((t as { name?: string }).name ?? JSON.stringify(t)))) : [];
+        for (const n of tc)
+          if (!seen.has(n)) {
+            seen.add(n);
+            run.toolCalls.push(n);
+          }
+        if (typeof ev.conversation_id === "string") run.conversationId = ev.conversation_id;
+        opts.onEvent?.({ type: "finish", conversationId: run.conversationId, toolCalls: run.toolCalls });
+      } else if (ev.type === "error") {
+        run.error = String(ev.error ?? "agent error");
+        opts.onEvent?.({ type: "error", error: run.error });
+      }
+    };
     for (;;) {
       const { value, done } = await Promise.race([reader.read(), aborted]);
       if (done) break;
@@ -43,40 +77,11 @@ export async function askNansenAgent(
       buf += dec.decode(value, { stream: true });
       let idx: number;
       while ((idx = buf.indexOf("\n")) >= 0) {
-        const line = buf.slice(0, idx).trim();
+        handle(buf.slice(0, idx));
         buf = buf.slice(idx + 1);
-        if (!line.startsWith("data:")) continue;
-        const data = line.slice(5).trim();
-        if (data === "[DONE]") continue;
-        let ev: Record<string, unknown>;
-        try {
-          ev = JSON.parse(data) as Record<string, unknown>;
-        } catch {
-          continue;
-        }
-        if (ev.type === "delta" && typeof ev.text === "string") {
-          run.text += ev.text;
-          opts.onEvent?.({ type: "delta", text: ev.text });
-        } else if (ev.type === "tool_call" && typeof ev.name === "string") {
-          if (!seen.has(ev.name)) {
-            seen.add(ev.name);
-            run.toolCalls.push(ev.name);
-          }
-          opts.onEvent?.({ type: "tool_call", name: ev.name });
-        } else if (ev.type === "finish") {
-          const tc = Array.isArray(ev.tool_calls) ? (ev.tool_calls as unknown[]).map((t) => (typeof t === "string" ? t : ((t as { name?: string }).name ?? JSON.stringify(t)))) : [];
-          for (const n of tc) if (!seen.has(n)) {
-            seen.add(n);
-            run.toolCalls.push(n);
-          }
-          if (typeof ev.conversation_id === "string") run.conversationId = ev.conversation_id;
-          opts.onEvent?.({ type: "finish", conversationId: run.conversationId, toolCalls: run.toolCalls });
-        } else if (ev.type === "error") {
-          run.error = String(ev.error ?? "agent error");
-          opts.onEvent?.({ type: "error", error: run.error });
-        }
       }
     }
+    if (buf.trim()) handle(buf); // a final event without a trailing newline (finish carries tool_calls)
   } catch (e) {
     ctrl.abort();
     if ((e as Error).name === "AbortError") {

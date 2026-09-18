@@ -92,7 +92,7 @@ export async function whoBoughtSold(
   subject: LabelSubject,
   now: number,
   opts?: CallOptions,
-): Promise<{ rows: WbsRow[]; lastPage: boolean }> {
+): Promise<{ rows: WbsRow[] }> {
   const to = floorHour(now);
   const from = to - DAY;
   const usd = side === "BUY" ? "bought_volume_usd" : "sold_volume_usd";
@@ -110,8 +110,7 @@ export async function whoBoughtSold(
     [`data[].${usd}`, "data[].address", "data[].address_label", "pagination.is_last_page"].map((f) => `${f} (${side} 24h)`),
     opts,
   );
-  const parsed = WbsResponse.parse(raw);
-  return { rows: parsed.data, lastPage: parsed.pagination?.is_last_page !== false };
+  return { rows: WbsResponse.parse(raw).data };
 }
 
 export const NetflowRow = z.object({

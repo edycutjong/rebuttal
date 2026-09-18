@@ -46,7 +46,7 @@ Fresh-wallet and exchange volume are excluded from the scale on purpose: on VVV 
 | 5 | `net ≥ T ∧ px24 ≥ staleMove = 20 %` (selling: `≤ −20 %`) | OVERSTATED `O-STALE` |
 | 6 | `net ≥ T ∧ wallets < minWallets = 3` (whales: `minWhales = 1`) | OVERSTATED `O-FEW` |
 | 7 | `net ≥ T` | CONFIRMED `A-FLOW` |
-| 8 | `−T < net ≤ 0` with the class present | OVERSTATED `O-FLAT` |
+| 8 | `−T < net ≤ 0` with the class present (a sub-dollar net counts as 0) | OVERSTATED `O-FLAT` |
 
 Holding claims: no holders and no 7 d row → `U-HOLD`; `holders < minHolders = 5` → `O-HOLDERS`; `net7d ≤ −T7 ∧ delta7d < 0` → CONTRADICTED `C-EXIT`; either one alone → `O-TRIM`; else CONFIRMED `A-HOLD`.
 
@@ -54,23 +54,24 @@ Fresh-wallet flow is a **context line, never a verdict**: on a hot token retail 
 
 ## 6 · The hash
 
-`sha256` of the canonical JSON of `{token, type, subject, chain, address, label, ruleId, net1d, wallets1d, net7d, fresh1d, buyUsd, sellUsd, inTable, px24 (3 dp), holders, holdersDelta7d}` with every USD rounded to an integer. A fixture replay reproduces it exactly; a live re-run reproduces the label and usually the hash (flows are priced at current rates).
+`sha256` of the canonical JSON of `{token, type, subject, chain, address, label, ruleId, net1d, wallets1d, net7d, fresh1d, buyUsd, sellUsd, inTable, px24 (3 dp), pxClose (6 s.f.), holders, holdersDelta24, holdersDelta7d}` with every USD rounded to an integer — every number a rule can read, including the whale primary (`holdersDelta24 × pxClose`). A fixture replay reproduces it exactly; a live re-run reproduces the label and usually the hash (flows are priced at current rates).
 
 ## 7 · The 13 recorded rebuttals (2026-09-18, `fixtures/`)
 
 | fixture | claim | chain | verdict | first reason | cr |
 |---|---|---|---|---|---|
-| `pepe-aping` | smart_money · buying | ethereum | **CONTRADICTED** `C-NOBODY` | no Smart Money wallet traded this token in the last 24 h (net $0) | 10 |
+| `pepe-aping` | smart_money · buying | ethereum | **CONTRADICTED** `C-NOBODY` | no Smart Money wallet traded this token in the last 24 h (net $0) | 0 |
 | `vvv-sm-buying` | smart_money · buying | base | **CONFIRMED** `A-FLOW` | Smart Money net bought $100K in 24 h (flow-intelligence 1d, 4 wallets; threshold $17K) | 0 |
-| `uni-whale-sold` | whales · selling | ethereum | **CONFIRMED** `A-FLOW` | Whales net sold $548K in 24 h (whale holders' 24 h balance change × price, 10 wallets; threshold $265K) | 15 |
-| `hype-whale-falconx` | whales · selling | hyperevm | **OVERSTATED** `O-SMALL` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 7 wallets; threshold $684K) | 15 |
-| `uni-sm-holding` | smart_money · holding | ethereum | **OVERSTATED** `O-TRIM` | 59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens | 15 |
-| `ai-robinhood-chain` | whales · selling | robinhood | **OVERSTATED** `O-FLAT` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $209K) | 15 |
-| `meme-whale-position` | whales · buying | robinhood | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 15 |
-| `uni-sm-buying-after-rally` | smart_money · buying | ethereum | **OVERSTATED** `O-SMALL` | Smart Money net bought $17K in 24 h (flow-intelligence 1d, 2 wallets; threshold $265K) | 10 |
+| `uni-whale-sold` | whales · selling | ethereum | **CONFIRMED** `A-FLOW` | Whales net sold $548K in 24 h (whale holders' 24 h balance change × price, 10 wallets; threshold $77K) | 0 |
+| `hype-whale-falconx` | whales · selling | hyperevm | **OVERSTATED** `O-FLAT` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 7 wallets; threshold $5K) | 0 |
+| `uni-sm-holding` | smart_money · holding | ethereum | **OVERSTATED** `O-TRIM` | 59 Smart Money holders on page 1, $383.92M held, 7 d balance change -5691 tokens | 0 |
+| `ai-robinhood-chain` | whales · selling | robinhood | **OVERSTATED** `O-FLAT` | Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $31K) | 0 |
+| `meme-whale-position` | whales · buying | robinhood | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 0 |
+| `uni-sm-buying-after-rally` | smart_money · buying | ethereum | **OVERSTATED** `O-SMALL` | Smart Money net bought $17K in 24 h (flow-intelligence 1d, 2 wallets; threshold $77K) | 0 |
 | `hype-sm-bought` | smart_money · buying | hyperevm | **CONFIRMED** `A-FLOW` | Smart Money net bought $291K in 24 h (flow-intelligence 1d, 263 wallets; threshold $5K) | 0 |
-| `edel-tweet-url` | whales · buying | base | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 15 |
+| `edel-tweet-url` | whales · buying | base | **UNVERIFIABLE** `U-NOCLASS` | Nansen tags no wallet as Whales in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels | 0 |
 | `xqzplm-unknown` | smart_money · buying | — | **UNVERIFIABLE** `U-TOKEN` | no token named XQZPLM on Nansen | 0 |
 | `pepe-not-a-flow-claim` | smart_money ·  | — | **UNVERIFIABLE** `U-CLAIM` | not a flow claim — nothing about buying, selling or holding | 0 |
 | `zec-not-a-nansen-chain` | whales · buying | — | **UNVERIFIABLE** `U-CHAIN` | Zcash is not a chain Nansen indexes — only bridged copies of ZEC exist here, and they are not what the post is about (na | 0 |
+
 Thresholds were calibrated on the day-one spike (10 real posts, three runs): `shareOfFlow` 2 % → 1 % after a $474K whale sale on UNI read as noise against a $530K threshold dominated by fresh-wallet flow; `minWhales = 1` because "a whale" is singular; `U-NOCLASS` and `U-CHAIN` added after run 1 said CONTRADICTED on three claims whose class or chain Nansen simply does not have.

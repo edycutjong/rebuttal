@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { askNansenAgent, AGENT_CREDITS, type AgentEvent } from "@rebuttal/core";
 import { cleanClaim } from "@/lib/engine";
-import { clientIp, agentAllowed, fixtureFor } from "@/lib/guard";
+import { clientIp, agentAllowed } from "@/lib/guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,10 +20,6 @@ export async function POST(req: NextRequest) {
   const ip = clientIp(req.headers);
   const refusal = agentAllowed(ip);
   if (refusal) return Response.json({ error: refusal, credits: AGENT_CREDITS }, { status: 429, headers: { "cache-control": "no-store" } });
-  // a claim recorded in fixtures may carry a recorded agent run — the example replays it at 0 credits
-  const recorded = fixtureFor(q)?.verdict.agent;
-  if (recorded && body.q && req.nextUrl.searchParams.get("replay") === "1") return Response.json({ type: "done", run: recorded, replay: true }, { headers: { "cache-control": "no-store" } });
-
   const enc = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {

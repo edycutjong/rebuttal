@@ -18,10 +18,12 @@ export type Call = {
   /** false when every attempt failed; `error` says why. Failed calls are recorded at 0 credits. */
   ok: boolean;
   error?: string;
+  /** caller's label for this call (the check id) so a parallel runner can find its own call in the log */
+  tag?: string;
 };
 
 /** Per-call overrides: a secondary lookup can be given a shorter timeout and no retry so it cannot stall a verdict. */
-export type CallOptions = { timeoutMs?: number; retries?: number };
+export type CallOptions = { timeoutMs?: number; retries?: number; tag?: string };
 
 export type ClientOptions = {
   baseUrl?: string;
@@ -109,11 +111,12 @@ export class NansenClient {
   async post<T = unknown>(endpoint: string, body: Record<string, unknown>, fieldsUsed: string[] = [], opts: CallOptions = {}): Promise<T> {
     const t0 = Date.now();
     try {
-      const { text, ms, status, attempts, totalMs } = await this.postRaw(endpoint, body, opts);
+      const { text, ms, status, attempts, totalMs, credits } = await this.postRaw(endpoint, body, opts);
+      const parsed = JSON.parse(text) as T; // parse first: a non-JSON 200 is a failure, not an ok record plus a throw
       this.calls.push({
         endpoint,
         body,
-        credits: CREDITS[endpoint] ?? 1,
+        credits: credits ?? CREDITS[endpoint] ?? 1,
         ms,
         cached: false,
         status,
@@ -122,20 +125,21 @@ export class NansenClient {
         attempts,
         totalMs,
         ok: true,
+        tag: opts.tag,
       });
-      return JSON.parse(text) as T;
+      return parsed;
     } catch (e) {
-      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0);
+      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag);
       throw e;
     }
   }
 
   /** A call that failed every attempt still appears in provenance — a hidden 12 s timeout is a recording risk, not a detail. */
-  protected recordFailure(endpoint: string, body: Record<string, unknown>, fieldsUsed: string[], e: unknown, totalMs: number) {
+  protected recordFailure(endpoint: string, body: Record<string, unknown>, fieldsUsed: string[], e: unknown, totalMs: number, tag?: string) {
     const status = e instanceof NansenError ? e.status : 0;
     const error = e instanceof Error ? (e.name === "AbortError" ? "timeout" : e.message.slice(0, 120)) : String(e);
     const attempts = (e as { attempts?: number })?.attempts ?? 1;
-    this.calls.push({ endpoint, body, credits: 0, ms: 0, cached: false, status, fieldsUsed, responseHash: "", attempts, totalMs, ok: false, error });
+    this.calls.push({ endpoint, body, credits: 0, ms: 0, cached: false, status, fieldsUsed, responseHash: "", attempts, totalMs, ok: false, error, tag });
   }
 
   /** The network call itself, returning the raw body so callers (and the cache) hash exactly what Nansen sent. */
@@ -143,7 +147,7 @@ export class NansenClient {
     endpoint: string,
     body: Record<string, unknown>,
     opts: CallOptions = {},
-  ): Promise<{ text: string; ms: number; status: number; attempts: number; totalMs: number }> {
+  ): Promise<{ text: string; ms: number; status: number; attempts: number; totalMs: number; credits?: number }> {
     const url = `${this.baseUrl}/${endpoint}`;
     const t0 = Date.now();
     const maxAttempts = 1 + (opts.retries ?? 1);
@@ -168,13 +172,17 @@ export class NansenClient {
         if (res.status === 429 || res.status >= 500) {
           lastErr = new NansenError(endpoint, res.status, text);
           if (attempt < maxAttempts - 1) {
-            await new Promise((r) => setTimeout(r, 750));
+            // honour Retry-After on a 429 (seconds), capped so one slow minute cannot stall a verdict
+            const ra = Number(res.headers.get("retry-after"));
+            await new Promise((r) => setTimeout(r, res.status === 429 && ra > 0 ? Math.min(ra * 1000, 5000) : 750));
             continue;
           }
           throw lastErr;
         }
         if (!res.ok) throw new NansenError(endpoint, res.status, text);
-        return { text, ms, status: res.status, attempts: attempt + 1, totalMs: Date.now() - t0 };
+        // Nansen reports the credits it actually charged; the static table is the fallback
+        const used = Number(res.headers.get("x-nansen-credits-used"));
+        return { text, ms, status: res.status, attempts: attempt + 1, totalMs: Date.now() - t0, credits: Number.isFinite(used) && res.headers.has("x-nansen-credits-used") ? used : undefined };
       } catch (e) {
         lastErr = e;
         if (attempt === maxAttempts - 1 || !(e instanceof Error && e.name === "AbortError")) throw withAttempts(e, attemptsMade);

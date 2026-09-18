@@ -76,7 +76,10 @@ export function hashRecord(claim: Claim, resolved: Resolved | null, d: Decision,
     inTable: e.table?.inTable ?? null,
     px24: e.price ? Number(e.price.change.toFixed(3)) : null,
     holders: e.holders?.count ?? null,
+    holdersDelta24: r(e.holders?.delta24),
     holdersDelta7d: r(e.holders?.delta7d),
+    /** the whale primary is delta24 × close; the close enters at 6 significant digits so a cent tick cannot move the hash */
+    pxClose: e.price ? Number(e.price.close.toPrecision(6)) : null,
   };
 }
 

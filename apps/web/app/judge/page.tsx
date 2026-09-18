@@ -70,7 +70,7 @@ export default function Judge() {
             <tr>
               <th>Hero claim, live</th>
               <td>
-                <code>{HERO}</code>: <b>10 credits · 7 calls · 3.7 s cold</b> · 2026-09-18 · CONTRADICTED / C-NOBODY · hash <code>0f5da7e87546</code> — output
+                <code>{HERO}</code>: <b>10 credits · 7 calls · 3.7 s cold</b> · 2026-09-18 · CONTRADICTED / C-NOBODY · hash <code>e21a8a19ae59</code> — output
                 verbatim in <a href={`${REPO}/blob/main/DEMO.md`}>DEMO.md</a>, recorded in <code>fixtures/pepe-aping.json</code>
               </td>
             </tr>
@@ -100,7 +100,7 @@ export default function Judge() {
               <th>Tests</th>
               <td>
                 <b>{PROOF.tests} tests</b> (vitest): the extractor on every spike claim, every rule with live-shaped evidence, the client&apos;s retry and cache,
-                the SSE parser, the oEmbed path, a route boundary suite · <b>20,000 generated cases</b> on <code>decide()</code> and <code>extractClaim()</code>{" "}
+                the SSE parser, the oEmbed path, a route boundary suite · <b>23,000 generated cases</b> on <code>decide()</code> and <code>extractClaim()</code>{" "}
                 (fast-check: purity, the buying/selling mirror, never-throws)
               </td>
             </tr>

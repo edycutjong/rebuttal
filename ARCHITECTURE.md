@@ -39,7 +39,7 @@ sequenceDiagram
 
 | File | Role | Key exports |
 |---|---|---|
-| `client.ts` | `NansenClient`: fetch + `apikey`, 5 rps token bucket, 8 s timeout, 1 retry on 429/5xx/timeout, every call recorded (`Call`: endpoint, body, credits, ms, status, fieldsUsed, sha256 responseHash, attempts, ok/error); `CREDITS` table | `NansenClient`, `CREDITS`, `sha256` |
+| `client.ts` | `NansenClient`: fetch + `apikey`, 5 rps token bucket, 8 s timeout, 1 retry on 429/5xx/timeout, every call recorded (`Call`: endpoint, body, credits — from `X-Nansen-Credits-Used` when Nansen sends it, else the table —, ms, status, fieldsUsed, sha256 responseHash, attempts, ok/error, tag); a check finds its own call by `tag`, never by position | `NansenClient`, `CREDITS`, `sha256` |
 | `cache.ts` | `CachedNansenClient`: read-through cache keyed by `sha256(endpoint + canonical body)`, TTL 1 h, hits recorded at 0 credits, `NANSEN_OFFLINE=1` refuses the network; `DiskCache` / `MemoryCache` | `CachedNansenClient`, `cacheKey` |
 | `nansen.ts` | zod-validated wrappers: `searchTokens`, `flowIntelligence`, `whoBoughtSold` (24 h floored to the hour, `include_smart_money_labels` per subject), `smartMoneyNetflow`, `tokenOhlcv`, `holders` | + `SUBJECT_LABELS`, `NETFLOW_CHAINS` |
 | `claim.ts` | the deterministic extractor and the merge rule with the LLM | `extractClaim`, `mergeClaims`, `validClaim`, `SCORABLE_CHAINS` |

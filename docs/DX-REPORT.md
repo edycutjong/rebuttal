@@ -15,7 +15,8 @@ What we hit, in the order we hit it. Every item is from a live call; the raw res
 9. **Fresh-wallet and exchange flows dwarf every labelled class.** VVV: fresh wallets +$73.9M vs Smart Trader +$100K in 24 h. Any threshold that scales with total flow reads real Smart Money activity as noise; ours scales with the labelled classes only. Worth a sentence in the flow-intelligence docs: the six columns are not comparable in magnitude.
 10. **`account` is GET-only** (`405` on POST) while everything else is POST; the OpenAPI file says so, the credits page's "all endpoints are POST" phrasing does not.
 11. **`agent/fast` emits `tool_call` per unique tool and repeats the list in `finish.tool_calls`** — as documented; first byte took 3.5 s and the run 8.0 s on the PEPE claim. It would be a stronger comparison artifact if the events carried the tool *arguments* (which token, which window), not only the names.
-12. **The hourly cache on our side needs the request window floored to the hour** (who-bought-sold `date`, ohlcv `date`), otherwise every call has a unique body and never hits. Documenting the server-side cache windows (who-bought-sold: 5 min for ranges including today) helped choose ours.
+12. **Two different "24 h" in one trace.** `flow-intelligence 1d` is Nansen's rolling window; our who-bought-sold and ohlcv windows end at the floor of the hour (so the cache key is stable within the hour) and can lag it by up to 59 minutes. Stated here because it is one more reason the numbers on the same card need not agree to the dollar.
+13. **The hourly cache on our side needs the request window floored to the hour** (who-bought-sold `date`, ohlcv `date`), otherwise every call has a unique body and never hits. Documenting the server-side cache windows (who-bought-sold: 5 min for ranges including today) helped choose ours.
 
 ## Not Nansen, but found on the way
 

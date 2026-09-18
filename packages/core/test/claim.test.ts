@@ -131,7 +131,7 @@ describe("mergeClaims (LLM never overrides a $TICKER, chain must be in the text)
   it("LLM token is ignored when the text carries a $TICKER", () => {
     const m = mergeClaims(rules, { token: "ETH", type: "buying", subject: "whales" });
     expect(m.token).toBe("HYPE");
-    expect(m.type).toBe("buying"); // type/subject the model may set
+    expect(m.type).toBe("selling"); // the rules read "deposits into FalconX" — the model's verb only fills a gap
     expect(m.extractor).toBe("llm");
   });
   it("LLM chain is dropped unless the chain word appears in the text", () => {

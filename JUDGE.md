@@ -17,11 +17,11 @@ One sentence in → one of four words out (CONFIRMED · OVERSTATED · CONTRADICT
 
 | | |
 |---|---|
-| Hero claim, live | `Smart Money is aping $PEPE hard today 🐋`: **10 credits · 7 calls · 3.5 s cold** · 2026-09-18 · CONTRADICTED / C-NOBODY · hash `4f3cce391567` (live run) / `0f5da7e87546` (recorded fixture) — output verbatim in [DEMO.md](DEMO.md), recorded in `fixtures/pepe-aping.json` |
+| Hero claim, live | `Smart Money is aping $PEPE hard today 🐋`: **10 credits · 7 calls · 3.5 s cold** · 2026-09-18 · CONTRADICTED / C-NOBODY · hash `4f3cce391567` (live run) / `e21a8a19ae59` (recorded fixture) — output verbatim in [DEMO.md](DEMO.md), recorded in `fixtures/pepe-aping.json` |
 | Spike, 10 real claims | Posts from Lookonchain / OKX feeds, 2026-09-14 → 18: **7/10 decisive**; the three UNVERIFIABLE are refusals with a reason (Zcash is not a Nansen chain; EDEL and MEME have no Whale-labelled wallet at all). Extraction: LLM 10/10, rules 10/10, agreeing on token and type 10/10 |
 | Benchmark, live | 13 claims × 2 cold runs: **cold p50 4.0 s · p95 5.0 s · warm p50 2 ms · mean 10.0 credits, max 15** per rebuttal; 0 of 154 live calls failed — [docs/BENCH.md](docs/BENCH.md) is the script's output |
 | Nansen endpoints | `search/general` · `tgm/flow-intelligence` (1d + 7d) · `tgm/who-bought-sold` (BUY + SELL, Smart Money label filter) · `smart-money/netflow` · `tgm/token-ohlcv` · `tgm/holders` · `agent/fast` (button only) — every rule input is one of their response fields |
-| Tests | **169 tests** (vitest): the extractor on every spike claim, every rule with live-shaped evidence, the client's retry and cache, the SSE parser, the oEmbed path, a route boundary suite · **20,000 generated cases** on `decide()` and `extractClaim()` (fast-check: purity, the buying/selling mirror, never-throws) |
+| Tests | **180 tests** (vitest): the extractor on every spike claim, every rule with live-shaped evidence, the client's retry and cache, the SSE parser, the oEmbed path, a route boundary suite · **23,000 generated cases** on `decide()` and `extractClaim()` (fast-check: purity, the buying/selling mirror, never-throws) |
 | Determinism | 13 recorded rebuttals replay offline with the same label, rule and hash, zero network, zero credits, zero LLM (`npm run verify`) |
 | Spend guard | 10 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (`apps/web/lib/guard.ts`) |
 
@@ -33,7 +33,7 @@ npm install
 export NANSEN_API_KEY=nsn_…            # https://app.nansen.ai/api — the only required key
 npm run rebuttal -- "Smart Money is aping \$PEPE hard today 🐋" --explain   # ≤ 15 credits, ~4 s
 npm run verify                          # 13/13 recorded rebuttals replayed offline, 0 credits, 0 network
-npm test                                # 169 tests
+npm test                                # 180 tests
 ```
 
 Optional: `export GROQ_API_KEY=…` turns on the LLM extractor and the two-sentence prose (Groq, `openai/gpt-oss-120b`); without it the rules extractor and the template run and the output says so. `--ask-nansen` adds the agent/fast comparison (200 credits).

@@ -59,7 +59,14 @@ const onProgress = (e: RebutEvent) => {
   }
 };
 
-const v: Verdict = await rebut(client, input, { chain: val("--chain"), llm, onProgress });
+let v: Verdict;
+try {
+  v = await rebut(client, input, { chain: val("--chain"), llm, onProgress });
+} catch (e) {
+  // rebut() throws only when search/general itself fails — say so in one line instead of a stack trace
+  console.error(paint(`Nansen search failed: ${(e as Error).message.slice(0, 160)} — try again in a minute`, "31"));
+  process.exit(3);
+}
 if (flag("--ask-nansen") && v.resolved) {
   if (!json) console.log(paint(`\nasking Nansen's agent (agent/fast, ${AGENT_CREDITS} credits)…`, "90"));
   v.agent = await askNansenAgent(process.env.NANSEN_API_KEY as string, v.claim.raw, {

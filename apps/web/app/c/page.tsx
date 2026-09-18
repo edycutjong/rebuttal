@@ -3,8 +3,9 @@ import { cache } from "react";
 import { Rebuttal } from "@/components/Rebuttal";
 import { SiteHeader, SiteFooter } from "@/components/Shell";
 import { PROOF } from "@/lib/proof";
+import { headers } from "next/headers";
 import { rebutFor, cleanClaim } from "@/lib/engine";
-import { budgetExhausted, recordSpend, replayFixture } from "@/lib/guard";
+import { budgetExhausted, recordSpend, replayFixture, ipAllowed, clientIp } from "@/lib/guard";
 import type { Fixture, Verdict } from "@rebuttal/core";
 import pepe from "../../../../fixtures/pepe-aping.json";
 
@@ -17,7 +18,9 @@ const EXAMPLE = pepe as unknown as Fixture;
  */
 const verdictFor = cache(async (q: string): Promise<Verdict | null> => {
   try {
-    const degraded = budgetExhausted();
+    // same per-IP gate and daily ceiling as /api/rebut: a link-preview crawler or a loop over /c?q= cannot spend freely
+    const live = ipAllowed(clientIp(await headers())).ok && !budgetExhausted();
+    const degraded = !live;
     const r = degraded ? await replayFixture(q) : await rebutFor(q);
     if (!r) return null;
     if (!degraded) recordSpend(r.verdict.credits);
@@ -43,7 +46,8 @@ export default async function Permalink({ searchParams }: { searchParams: Promis
   return (
     <>
       <SiteHeader current="home" />
-      <Rebuttal initialQuery={q ?? undefined} initialVerdict={v} example={EXAMPLE.verdict} exampleAgent={EXAMPLE.verdict.agent ?? null} proof={PROOF} />
+      {/* no verdict (gated, failed, or unrecorded past the ceiling) → the claim is prefilled, never auto-run a second time */}
+      <Rebuttal initialQuery={v ? (q ?? undefined) : undefined} initialVerdict={v} prefill={v ? undefined : (q ?? undefined)} example={EXAMPLE.verdict} exampleAgent={EXAMPLE.verdict.agent ?? null} proof={PROOF} />
       <SiteFooter />
     </>
   );

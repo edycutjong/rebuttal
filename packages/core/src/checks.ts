@@ -15,6 +15,8 @@ export type Check = {
   ok: boolean;
   ms: number;
   cached: boolean;
+  /** sha256 of the raw Nansen response this check read (from its own Call, matched by tag — never by position) */
+  responseHash?: string;
   error?: string;
   /** the values that entered decide(), for the trace row */
   values: Record<string, number | string | null>;
@@ -74,17 +76,17 @@ export async function runChecks(
 
   const runners: Record<string, () => Promise<Record<string, number | string | null>>> = {
     flow1d: async () => {
-      evidence.flow1d = snapshot(await flowIntelligence(client, chain, address, "1d"));
+      evidence.flow1d = snapshot(await flowIntelligence(client, chain, address, "1d", { tag: "flow1d" }));
       const s = evidence.flow1d?.[cls];
       return { [`${cls}_net_flow_usd`]: s?.net ?? null, [`${cls}_wallet_count`]: s?.wallets ?? null, fresh_wallets_net_flow_usd: evidence.flow1d?.fresh_wallets.net ?? null, exchange_net_flow_usd: evidence.flow1d?.exchange.net ?? null };
     },
     flow7d: async () => {
-      evidence.flow7d = snapshot(await flowIntelligence(client, chain, address, "7d"));
+      evidence.flow7d = snapshot(await flowIntelligence(client, chain, address, "7d", { tag: "flow7d" }));
       const s = evidence.flow7d?.[cls];
       return { [`${cls}_net_flow_usd`]: s?.net ?? null, [`${cls}_wallet_count`]: s?.wallets ?? null };
     },
     buyers: async () => {
-      const r = await whoBoughtSold(client, chain, address, "BUY", subject, now);
+      const r = await whoBoughtSold(client, chain, address, "BUY", subject, now, { tag: "buyers" });
       named.buyUsd = r.rows.reduce((n, x) => n + (x.bought_volume_usd ?? 0), 0);
       named.buyRows = r.rows.length;
       named.buyers = r.rows.slice(0, 3).map((x) => row(x.address, x.address_label, x.bought_volume_usd));
@@ -92,7 +94,7 @@ export async function runChecks(
       return { bought_volume_usd: Math.round(named.buyUsd), rows: named.buyRows, top: named.buyers[0] ? `${named.buyers[0].label ?? named.buyers[0].address.slice(0, 8)} ${Math.round(named.buyers[0].usd)}` : null };
     },
     sellers: async () => {
-      const r = await whoBoughtSold(client, chain, address, "SELL", subject, now);
+      const r = await whoBoughtSold(client, chain, address, "SELL", subject, now, { tag: "sellers" });
       named.sellUsd = r.rows.reduce((n, x) => n + (x.sold_volume_usd ?? 0), 0);
       named.sellRows = r.rows.length;
       named.sellers = r.rows.slice(0, 3).map((x) => row(x.address, x.address_label, x.sold_volume_usd));
@@ -100,13 +102,13 @@ export async function runChecks(
       return { sold_volume_usd: Math.round(named.sellUsd), rows: named.sellRows, top: named.sellers[0] ? `${named.sellers[0].label ?? named.sellers[0].address.slice(0, 8)} ${Math.round(named.sellers[0].usd)}` : null };
     },
     table: async () => {
-      const rows = await smartMoneyNetflow(client, chain, address);
+      const rows = await smartMoneyNetflow(client, chain, address, { tag: "table" });
       const hit = rows.find((r) => r.token_address.toLowerCase() === address.toLowerCase()) ?? rows[0] ?? null;
       evidence.table = { inTable: !!hit, net24: hit?.net_flow_24h_usd ?? null, net7d: hit?.net_flow_7d_usd ?? null, traders: hit?.trader_count ?? null };
       return { in_table: hit ? "yes" : "no", net_flow_24h_usd: hit?.net_flow_24h_usd ?? null, net_flow_7d_usd: hit?.net_flow_7d_usd ?? null, trader_count: hit?.trader_count ?? null };
     },
     price: async () => {
-      const candles = (await tokenOhlcv(client, chain, address, now)).filter((c) => c.open != null && c.close != null);
+      const candles = (await tokenOhlcv(client, chain, address, now, { tag: "price" })).filter((c) => c.open != null && c.close != null);
       if (candles.length >= 2) {
         const open = candles[0].open as number;
         const close = candles[candles.length - 1].close as number;
@@ -115,7 +117,7 @@ export async function runChecks(
       return { candles: candles.length, open: evidence.price?.open ?? null, close: evidence.price?.close ?? null, change_24h: evidence.price ? Number(evidence.price.change.toFixed(4)) : null };
     },
     holders: async () => {
-      const rows = await holders(client, chain, address, subject === "whales" ? "whale" : "smart_money");
+      const rows = await holders(client, chain, address, subject === "whales" ? "whale" : "smart_money", { tag: "holders" });
       evidence.holders = {
         count: rows.length,
         delta24: rows.reduce((n, r) => n + (r.balance_change_24h ?? 0), 0),
@@ -128,20 +130,23 @@ export async function runChecks(
   };
 
   const checks: Check[] = [];
+  const before = client.calls.length;
   await Promise.all(
     plan.map(async (p) => {
-      const before = client.calls.length;
       const t0 = Date.now();
       let check: Check;
+      // the runners land in any order, so a check finds its own Call by tag — never by index (review finding #1)
+      const own = () => client.calls.slice(before).find((c) => c.tag === p.id);
       try {
         const values = await runners[p.id]();
-        check = { ...p, ok: true, ms: Date.now() - t0, cached: client.calls[before]?.cached ?? false, values };
+        const call = own();
+        check = { ...p, ok: true, ms: Date.now() - t0, cached: call?.cached ?? false, credits: call?.credits ?? p.credits, responseHash: call?.responseHash, values };
         evidence.checksOk++;
       } catch (e) {
-        check = { ...p, ok: false, ms: Date.now() - t0, cached: false, error: (e as Error).message.slice(0, 160), values: {} };
+        check = { ...p, ok: false, ms: Date.now() - t0, cached: false, credits: 0, error: (e as Error).message.slice(0, 160), values: {} };
       }
       checks.push(check);
-      onCheck?.({ type: "check", check, call: client.calls[before] });
+      onCheck?.({ type: "check", check, call: own() });
     }),
   );
   if (named.sides === 2) evidence.named = { buyUsd: named.buyUsd, sellUsd: named.sellUsd, buyRows: named.buyRows, sellRows: named.sellRows, buyers: named.buyers, sellers: named.sellers };

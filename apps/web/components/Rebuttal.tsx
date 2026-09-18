@@ -1,30 +1,30 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Check, Claim, Resolved, Verdict, RebutEvent, Call, AgentRun } from "@rebuttal/core";
+import type { Check, Claim, Resolved, Verdict, RebutEvent, AgentRun } from "@rebuttal/core";
 import { ClaimCard, Trace, VerdictCard, AgentPanel, type PlanRow } from "./Cards";
 import { Example, HowItDecides } from "./Example";
 
 export const EXAMPLES = ["Smart Money is aping $PEPE hard today 🐋", "Smart Money is buying $VVV on Base — net inflows all week", "A whale sold 600,000 UNI tokens, valued at approximately $5.1 million."];
 const AGENT_PRICE = 200;
 
-type Phase = "idle" | "reading" | "checking" | "done" | "error";
-type StreamEvent = RebutEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean };
-type AgentEvent = { type: "tool_call"; name: string } | { type: "delta"; text: string } | { type: "finish" } | { type: "error"; error: string } | { type: "done"; run: AgentRun; replay?: boolean };
-
+/** Same text as core's `rebuttalText` (packages/core/src/rebut.ts) — copied because importing core pulls node:fs into the browser bundle; `guard.test.ts` keeps the two in step. */
 export function rebuttalText(v: Verdict, permalink: string): string {
   const tok = v.resolved ? `$${v.resolved.symbol} (${v.resolved.chain})` : v.claim.token ? `$${v.claim.token}` : "this";
   return [`${v.label} — "${v.claim.raw.slice(0, 120)}${v.claim.raw.length > 120 ? "…" : ""}"`, `${tok}: ${v.reasons.join("; ")}.`, `Checked on Nansen: ${v.checks.filter((c) => c.ok).length}/${v.checks.length} calls, ${v.credits} credits · ${v.hash.slice(0, 12)} · ${permalink}`].join("\n");
 }
 
-export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, proof }: { initialQuery?: string; initialVerdict?: Verdict | null; example: Verdict; exampleAgent?: AgentRun | null; proof: { tests: number; fixtures: number; p50: string; warm: string; credits: string } }) {
-  const [q, setQ] = useState(initialQuery ?? "");
+type Phase = "idle" | "reading" | "checking" | "done" | "error";
+type StreamEvent = RebutEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean };
+type AgentEvent = { type: "tool_call"; name: string } | { type: "delta"; text: string } | { type: "finish" } | { type: "error"; error: string } | { type: "done"; run: AgentRun; replay?: boolean };
+
+export function Rebuttal({ initialQuery, initialVerdict, prefill, example, exampleAgent, proof }: { initialQuery?: string; initialVerdict?: Verdict | null; prefill?: string; example: Verdict; exampleAgent?: AgentRun | null; proof: { tests: number; fixtures: number; p50: string; warm: string; credits: string } }) {
+  const [q, setQ] = useState(initialQuery ?? prefill ?? "");
   const [phase, setPhase] = useState<Phase>(initialVerdict ? "done" : initialQuery ? "reading" : "idle");
   const [input, setInput] = useState<{ text: string; fromUrl: boolean; author?: string } | null>(null);
   const [claim, setClaim] = useState<Claim | null>(initialVerdict?.claim ?? null);
   const [resolved, setResolved] = useState<Resolved | null | undefined>(initialVerdict ? initialVerdict.resolved : undefined);
   const [plan, setPlan] = useState<PlanRow[]>(initialVerdict?.checks ?? []);
   const [checks, setChecks] = useState<Map<string, Check>>(new Map(initialVerdict?.checks.map((c) => [c.id, c]) ?? []));
-  const [calls, setCalls] = useState<Map<string, Call | undefined>>(new Map());
   const [verdict, setVerdict] = useState<Verdict | null>(initialVerdict ?? null);
   const [asOf, setAsOf] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,6 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
             if (e.plan) setPlan(e.plan);
           } else if (e.type === "check") {
             setChecks((m) => new Map(m).set(e.check.id, e.check));
-            setCalls((m) => new Map(m).set(e.check.id, e.call));
           } else if (e.type === "verdict") {
             sawVerdict = true;
             setVerdict(e.verdict);
@@ -94,7 +93,6 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
       setResolved(undefined);
       setPlan([]);
       setChecks(new Map());
-      setCalls(new Map());
       setVerdict(null);
       setAsOf(null);
       setAgent(null);
@@ -256,7 +254,7 @@ export function Rebuttal({ initialQuery, initialVerdict, example, exampleAgent, 
       {!idle && claim && (
         <div className="flow">
           <ClaimCard claim={claim} resolved={resolved} plan={plan.length ? plan : null} text={input?.text} author={input?.author} fromUrl={input?.fromUrl} />
-          {plan.length > 0 && <Trace plan={plan} checks={checks} calls={calls} credits={verdict?.credits ?? 0} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
+          {plan.length > 0 && <Trace plan={plan} checks={checks} credits={verdict?.credits ?? 0} ms={verdict?.ms ?? 0} done={phase === "done"} asOf={asOf} />}
           <VerdictCard verdict={verdict} pending={phase !== "error"} onCopy={copy} onPermalink={copyLink} onAgent={() => askAgent(null)} agentBusy={agent?.busy} agentPrice={AGENT_PRICE} />
           {agent && <AgentPanel run={agent.run} tools={agent.tools} text={agent.text} ours={plan} error={agent.error} busy={agent.busy} />}
         </div>

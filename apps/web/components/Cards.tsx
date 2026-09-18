@@ -1,5 +1,5 @@
 "use client";
-import type { Check, Claim, Resolved, Verdict, AgentRun, Call } from "@rebuttal/core";
+import type { Check, Claim, Resolved, Verdict, AgentRun } from "@rebuttal/core";
 
 const short = (a: string) => (a.length > 16 ? `${a.slice(0, 8)}…${a.slice(-4)}` : a);
 export const fmt = (v: number | string | null): string => {
@@ -65,7 +65,7 @@ export function ClaimCard({ claim, resolved, plan, text, author, fromUrl }: { cl
 }
 
 /** The tool trace: one row per planned Nansen call, filled in as each lands. */
-export function Trace({ plan, checks, calls, credits, ms, done, asOf }: { plan: PlanRow[]; checks: Map<string, Check>; calls: Map<string, Call | undefined>; credits: number; ms: number; done: boolean; asOf?: string | null }) {
+export function Trace({ plan, checks, credits, ms, done, asOf }: { plan: PlanRow[]; checks: Map<string, Check>; credits: number; ms: number; done: boolean; asOf?: string | null }) {
   const landed = plan.filter((p) => checks.has(p.id)).length;
   return (
     <section className="trace" aria-label="tool trace" aria-live="polite">
@@ -86,7 +86,6 @@ export function Trace({ plan, checks, calls, credits, ms, done, asOf }: { plan: 
         <tbody>
           {plan.map((p) => {
             const c = checks.get(p.id);
-            const call = calls.get(p.id);
             return (
               <tr key={p.id} className={c ? (c.ok ? "landed" : "landed failed") : "pending"}>
                 <td className="ep">
@@ -109,7 +108,7 @@ export function Trace({ plan, checks, calls, credits, ms, done, asOf }: { plan: 
                 </td>
                 <td className="meta">
                   {c ? `${c.credits} cr · ${c.ms} ms${c.cached ? " · cached" : ""}` : `${p.credits} cr`}
-                  {call?.responseHash ? <div>{call.responseHash.slice(0, 12)}</div> : null}
+                  {c?.responseHash ? <div>{c.responseHash.slice(0, 12)}</div> : null}
                 </td>
               </tr>
             );
