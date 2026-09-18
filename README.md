@@ -153,7 +153,7 @@ The engine, not decoration — every rule input is a Nansen response field.
 1. **"Smart Money" here means the Smart Trader flow columns plus the Fund / Smart Trader rows named in the trace.** Funds have no separate flow-intelligence column; the who-bought-sold label filter covers them.
 2. **Nansen's Whale label is sparse.** A post's "whale" is usually a big wallet Nansen does not tag; when no Whale-labelled wallet exists in the token the tool says UNVERIFIABLE (`U-NOCLASS`) rather than pretending a CONTRADICTED. In the spike that was 2 of 7 whale claims.
 3. **Ambiguous tickers resolve to the most-traded token among the top-ranked** — `MEME` picks Robinhood-chain "A Meme Coin" over ethereum Memecoin. Name the chain in the claim, or pass `--chain`.
-4. **Coins whose home chain Nansen does not index** (ZEC, XRP, ADA, DOGE, …) are refused unless a chain is named — only bridged copies exist on Nansen and they are not what the post is about.
+4. **Coins whose home chain Nansen does not index** (BTC, ZEC, XRP, ADA, DOGE, …) are refused unless a chain is named — only bridged copies exist on Nansen and they are not what the post is about.
 5. **Two Nansen endpoints can disagree about the same 24 h**: for HYPE, `tgm/flow-intelligence` 1d said Smart Trader +$291K over 263 wallets while `smart-money/netflow` said +$207 over 109 traders. Flow-intelligence is the primary; the table line is context and both numbers are shown.
 6. **The 24 h window can miss a slow accumulation**; the 7 d window and the holders check exist for that, and OVERSTATED is the honest answer when they disagree.
 

@@ -8,7 +8,7 @@ Every input below is a Nansen response field. The LLM never sees this function's
 
 ## 2 · The token
 
-`search/general` (0 credits) → tokens whose symbol or name equals the ticker, on a chain `tgm/flow-intelligence` accepts → the chain named in the text, else **the most-traded (`volume_24h`) among those ranked within `2 × best rank + 50`**. Native coins map to a home chain (ETH → WETH on ethereum, BTC → WBTC, SOL, HYPE → hyperevm `0xeeee…`). Coins whose home chain Nansen does not index (ZEC, XRP, ADA, DOGE, …) are refused at 0 credits unless a chain is named (`U-CHAIN`).
+`search/general` (0 credits) → tokens whose symbol or name equals the ticker, on a chain `tgm/flow-intelligence` accepts → the chain named in the text, else **the most-traded (`volume_24h`) among those ranked within `2 × best rank + 50`**. Native coins map to a home chain (ETH → ethereum `0xeeee…`, SOL, HYPE → hyperevm `0xeeee…`). Coins whose home chain Nansen does not index (BTC, ZEC, XRP, ADA, DOGE, …) are refused at 0 credits unless a chain is named (`U-CHAIN`).
 
 Why not market cap or rank alone (seen live 2026-09-18): bridged PEPE on arbitrum reports $1.553B vs ethereum $1.552B; HYPE on solana ranks 317 vs hyperevm 318. Volume within the rank window picks ethereum PEPE ($1.77M/24 h vs $79K bnb vs $847 arbitrum).
 

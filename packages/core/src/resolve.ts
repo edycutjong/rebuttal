@@ -20,15 +20,16 @@ export type Resolved = {
  * those would answer a question nobody asked. UNVERIFIABLE unless the claim names a chain.
  */
 export const NOT_A_NANSEN_CHAIN: Record<string, string> = {
-  ZEC: "Zcash", XRP: "XRP Ledger", ADA: "Cardano", LTC: "Litecoin", XMR: "Monero", DOT: "Polkadot", ATOM: "Cosmos", XLM: "Stellar",
+  BTC: "Bitcoin", ZEC: "Zcash", XRP: "XRP Ledger", ADA: "Cardano", LTC: "Litecoin", XMR: "Monero", DOT: "Polkadot", ATOM: "Cosmos", XLM: "Stellar",
   ALGO: "Algorand", HBAR: "Hedera", KAS: "Kaspa", BCH: "Bitcoin Cash", DOGE: "Dogecoin", FIL: "Filecoin", ICP: "Internet Computer",
   ETC: "Ethereum Classic", BSV: "BSV", DASH: "Dash", APT: "Aptos", XTZ: "Tezos",
 };
 
-/** Native coins have no contract; Nansen indexes their wrapped form or a placeholder address. */
+/** Native coins have no contract; Nansen indexes them under a placeholder address (or a wrapped form). BTC is a Bitcoin-chain coin: WBTC/cbBTC are different books, so it is refused unless a chain is named. */
 const NATIVE: Record<string, { symbol: string; chain: string; address: string }> = {
-  ETH: { symbol: "WETH", chain: "ethereum", address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" },
-  BTC: { symbol: "WBTC", chain: "ethereum", address: "0x2260fac5e5542a773aa44fbcfb037771d84ecc68" },
+  // native ETH is Nansen's 0xeeee… placeholder on ethereum (rank 314, $199M/24 h) — WETH is a different, quieter book; the
+  // robinhood-chain copy trades more and would win the volume rule without this map
+  ETH: { symbol: "ETH", chain: "ethereum", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
   SOL: { symbol: "SOL", chain: "solana", address: "So11111111111111111111111111111111111111112" },
   HYPE: { symbol: "HYPE", chain: "hyperevm", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
 };
