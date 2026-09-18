@@ -11,8 +11,8 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://rebuttal-edycutjong.vercel.app)
-[![For Judges](https://img.shields.io/badge/⚖️_For-Judges-ef4444?style=for-the-badge)](https://rebuttal-edycutjong.vercel.app/judge)
+[![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://rebuttal.edycu.dev)
+[![For Judges](https://img.shields.io/badge/⚖️_For-Judges-ef4444?style=for-the-badge)](https://rebuttal.edycu.dev/judge)
 [![Built for Nansen Meridian](https://img.shields.io/badge/Nansen-Meridian_Buildathon-7c3aed?style=for-the-badge&labelColor=0a0e13)](https://nansen.ai/campaigns/meridian-buildathon)
 
 <br/>
@@ -218,8 +218,8 @@ docs/               SCORING.md BENCH.md DX-REPORT.md screenshots/
 ## 📽️ Demo Materials
 
 - [DEMO.md](DEMO.md) — verbatim CLI output, the bench, reproduce steps
-- [JUDGE.md](JUDGE.md) — the 30-second path, receipts, limitations (mirrors [/judge](https://rebuttal-edycutjong.vercel.app/judge))
-- Live: [rebuttal-edycutjong.vercel.app](https://rebuttal-edycutjong.vercel.app)
+- [JUDGE.md](JUDGE.md) — the 30-second path, receipts, limitations (mirrors [/judge](https://rebuttal.edycu.dev/judge))
+- Live: [rebuttal.edycu.dev](https://rebuttal.edycu.dev)
 
 ## 📄 License
 

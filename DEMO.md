@@ -40,7 +40,7 @@ $PEPE (ethereum): no Smart Money wallet traded this token in the last 24 h (net 
 Checked on Nansen: 6/6 calls, 10 credits · 4f3cce391567
 ```
 
-Same engine on the web: <https://rebuttal-edycutjong.vercel.app/?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B> — the six rows land one by one, then the verdict card turns red. JSON: `/api/rebut?q=…`. The permalink `/c?q=…` renders the same verdict server-side with an Open Graph card (`/api/og?q=…`).
+Same engine on the web: <https://rebuttal.edycu.dev/?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B> — the six rows land one by one, then the verdict card turns red. JSON: `/api/rebut?q=…`. The permalink `/c?q=…` renders the same verdict server-side with an Open Graph card (`/api/og?q=…`).
 
 ## 2 · A claim the tool CONFIRMS (live, 15 credits, 3.8 s)
 

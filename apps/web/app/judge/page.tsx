@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "The claim, the 30-second path, the receipts, the real reproduce command, and the honest limitations.",
 };
 
-const SITE = "https://rebuttal-edycutjong.vercel.app";
+const SITE = "https://rebuttal.edycu.dev";
 const REPO = "https://github.com/edycutjong/rebuttal";
 const HERO = "Smart Money is aping $PEPE hard today 🐋";
 const heroUrl = `${SITE}/?q=${encodeURIComponent(HERO)}`;

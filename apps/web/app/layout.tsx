@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   // `||`, not `??`: an empty SITE_URL (a sensitive env pulled locally, a blank line in .env) must not throw "Invalid URL" at build time (audit 2026-09-19)
-  metadataBase: new URL(process.env.SITE_URL || "https://rebuttal-edycutjong.vercel.app"),
+  metadataBase: new URL(process.env.SITE_URL || "https://rebuttal.edycu.dev"),
   title: "Rebuttal — is Smart Money really buying? Checked on Nansen",
   description: "Paste “Smart Money is buying $X”. Six Nansen calls decide whether it's true — CONFIRMED, OVERSTATED, CONTRADICTED or UNVERIFIABLE — and show the trace that decided it.",
   openGraph: {

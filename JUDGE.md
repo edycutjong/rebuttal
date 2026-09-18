@@ -1,6 +1,6 @@
 # For the judge
 
-Mirror of <https://rebuttal-edycutjong.vercel.app/judge> — no login, no key, no setup.
+Mirror of <https://rebuttal.edycu.dev/judge> — no login, no key, no setup.
 
 **Paste "Smart Money is buying $X". Six Nansen calls decide whether it's true — and show their work.**
 
@@ -8,10 +8,10 @@ One sentence in → one of four words out (CONFIRMED · OVERSTATED · CONTRADICT
 
 ## The 30-second path
 
-1. Open <https://rebuttal-edycutjong.vercel.app/?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B>. The claim card reads **Smart Money · buying · PEPE (ethereum, most traded of the same-name tokens — 14 at the recording, 13 on 2026-09-19)**, six trace rows land as each call returns, and the verdict card turns red: **CONTRADICTED · C-NOBODY** — no Smart Money wallet traded PEPE in 24 h while 89 Smart Money traders sit on its table. Cold ≈ 4 s, cached ≈ 0 s.
+1. Open <https://rebuttal.edycu.dev/?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B>. The claim card reads **Smart Money · buying · PEPE (ethereum, most traded of the same-name tokens — 14 at the recording, 13 on 2026-09-19)**, six trace rows land as each call returns, and the verdict card turns red: **CONTRADICTED · C-NOBODY** — no Smart Money wallet traded PEPE in 24 h while 89 Smart Money traders sit on its table. Cold ≈ 4 s, cached ≈ 0 s.
 2. Press **Ask Nansen's agent** (200 credits, printed on the button): Nansen's own `agent/fast` streams its `tool_calls` into the violet panel beside our trace. Two agents, same claim, two traces.
-3. Open <https://rebuttal-edycutjong.vercel.app/?q=A%20whale%20sold%20600%2C000%20UNI%20tokens%2C%20valued%20at%20approximately%20%245.1%20million.> — a claim the tool **CONFIRMS** (whale holders' balances fell $548K in 24 h at the recording (fixtures/uni-whale-sold.json; $532K on the DEMO run — flows are priced live)), so it is seen agreeing, not just contradicting.
-4. Open <https://rebuttal-edycutjong.vercel.app/api/rebut?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B> — the same verdict as JSON, same hash as the CLI prints.
+3. Open <https://rebuttal.edycu.dev/?q=A%20whale%20sold%20600%2C000%20UNI%20tokens%2C%20valued%20at%20approximately%20%245.1%20million.> — a claim the tool **CONFIRMS** (whale holders' balances fell $548K in 24 h at the recording (fixtures/uni-whale-sold.json; $532K on the DEMO run — flows are priced live)), so it is seen agreeing, not just contradicting.
+4. Open <https://rebuttal.edycu.dev/api/rebut?q=Smart%20Money%20is%20aping%20%24PEPE%20hard%20today%20%F0%9F%90%8B> — the same verdict as JSON, same hash as the CLI prints.
 
 ## Receipts
 
