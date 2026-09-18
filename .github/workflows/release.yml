@@ -1,0 +1,76 @@
+name: release
+
+# Automatic semantic versioning from Conventional Commits, gated on the CI/CD pipeline passing on main:
+#   feat: → minor · fix:/perf: → patch · "!" or BREAKING CHANGE → major · anything else → no release.
+# On a release: bump every package.json (root, apps/web, packages/*), commit "chore(release): vX.Y.Z [skip ci]",
+# tag that commit, publish a GitHub Release with generated notes. The [skip ci] keeps the bump from re-running CI.
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types: [completed]
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the version commit + tag, create the Release
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0 # full history — we read commits since the last tag
+
+      - name: Compute next version from Conventional Commits
+        id: ver
+        run: |
+          set -euo pipefail
+          LAST=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || echo "")
+          if [ -z "$LAST" ]; then RANGE=""; CUR="0.0.0"; else RANGE="${LAST}..HEAD"; CUR="${LAST#v}"; fi
+          LOG=$(git log --format=%B $RANGE)
+          if [ -z "$(echo "$LOG" | tr -d '[:space:]')" ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          BUMP=none
+          echo "$LOG" | grep -qE '^[a-z]+(\(.+\))?!:|^BREAKING CHANGE:' && BUMP=major
+          [ "$BUMP" = none ] && echo "$LOG" | grep -qE '^feat(\(.+\))?:'       && BUMP=minor
+          [ "$BUMP" = none ] && echo "$LOG" | grep -qE '^(fix|perf)(\(.+\))?:' && BUMP=patch
+          if [ "$BUMP" = none ]; then
+            echo "No releasable commits since ${LAST:-the beginning}."; echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          IFS=. read -r MA MI PA <<< "$CUR"
+          case "$BUMP" in major) MA=$((MA+1)); MI=0; PA=0 ;; minor) MI=$((MI+1)); PA=0 ;; patch) PA=$((PA+1)) ;; esac
+          NEXT="v${MA}.${MI}.${PA}"
+          echo "Bump: $BUMP  ${LAST:-none} -> $NEXT"
+          { echo "next=$NEXT"; echo "bump=$BUMP"; echo "skip=false"; } >> "$GITHUB_OUTPUT"
+
+      - name: Bump package.json versions (root + every workspace + lockfile, offline)
+        if: steps.ver.outputs.skip == 'false'
+        run: |
+          set -euo pipefail
+          V="${{ steps.ver.outputs.next }}"; V="${V#v}"
+          node scripts/bump-version.mjs "$V"
+          npm ci --ignore-scripts --no-audit --no-fund >/dev/null   # proves the lockfile still satisfies npm ci
+          git diff --stat -- package.json package-lock.json 'apps/*/package.json' 'packages/*/package.json'
+
+      - name: Commit, tag and publish the release
+        if: steps.ver.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT: ${{ steps.ver.outputs.next }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(release): ${NEXT} [skip ci]"
+          git tag -a "${NEXT}" -m "${NEXT}"
+          git push origin HEAD:main
+          git push origin "${NEXT}"
+          gh release create "${NEXT}" --generate-notes --title "${NEXT}"
+          echo "## Released ${NEXT} (${{ steps.ver.outputs.bump }})" >> "$GITHUB_STEP_SUMMARY"

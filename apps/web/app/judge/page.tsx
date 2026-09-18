@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "The claim, the 30-second path, the receipts, the real reproduce command, and the honest limitations.",
 };
 
-const SITE = "https://rebuttal-edycutjong.vercel.app";
+const SITE = "https://rebuttal.edycu.dev";
 const REPO = "https://github.com/edycutjong/rebuttal";
 const HERO = "Smart Money is aping $PEPE hard today 🐋";
 const heroUrl = `${SITE}/?q=${encodeURIComponent(HERO)}`;
@@ -40,7 +40,7 @@ export default function Judge() {
             <a href={heroUrl}>
               <code>{SITE}/?q=Smart Money is aping $PEPE…</code>
             </a>
-            . The claim card reads <b>Smart Money · buying · PEPE (ethereum, most traded of 14 same-name)</b>, six trace rows land as each call returns, and
+            . The claim card reads <b>Smart Money · buying · PEPE (ethereum, most traded of the same-name tokens — 14 at the recording, 13 on 2026-09-19)</b>, six trace rows land as each call returns, and
             the verdict card turns red: <b>CONTRADICTED · C-NOBODY</b> — no Smart Money wallet traded PEPE in 24 h while 89 Smart Money traders sit on its
             table. Cold ≈ 4 s, cached ≈ 0 s.
           </li>
@@ -53,7 +53,7 @@ export default function Judge() {
             <a href={`${SITE}/?q=${encodeURIComponent("A whale sold 600,000 UNI tokens, valued at approximately $5.1 million.")}`}>
               <code>{SITE}/?q=A whale sold 600,000 UNI…</code>
             </a>
-            — a claim the tool <b>CONFIRMS</b> (whale holders&apos; balances fell $502K in 24 h), so it is seen agreeing, not just contradicting.
+            — a claim the tool <b>CONFIRMS</b> (whale holders&apos; balances fell $548K in 24 h at the recording (fixtures/uni-whale-sold.json; $532K on the DEMO run — flows are priced live)), so it is seen agreeing, not just contradicting.
           </li>
           <li>
             Open{" "}
@@ -70,8 +70,9 @@ export default function Judge() {
             <tr>
               <th>Hero claim, live</th>
               <td>
-                <code>{HERO}</code>: <b>10 credits · 7 calls · 3.7 s cold</b> · 2026-09-18 · CONTRADICTED / C-NOBODY · hash <code>0f5da7e87546</code> — output
-                verbatim in <a href={`${REPO}/blob/main/DEMO.md`}>DEMO.md</a>, recorded in <code>fixtures/pepe-aping.json</code>
+                <code>{HERO}</code>: <b>10 credits · 7 calls · 3.5 s cold</b> · 2026-09-18 · CONTRADICTED / C-NOBODY · hash <code>e21a8a19ae59</code> (recorded fixture; the DEMO run
+                printed <code>4f3cce391567</code> before the hash record gained the whale fields) — output verbatim in <a href={`${REPO}/blob/main/DEMO.md`}>DEMO.md</a>, recorded in{" "}
+                <code>fixtures/pepe-aping.json</code>
               </td>
             </tr>
             <tr>
@@ -100,7 +101,7 @@ export default function Judge() {
               <th>Tests</th>
               <td>
                 <b>{PROOF.tests} tests</b> (vitest): the extractor on every spike claim, every rule with live-shaped evidence, the client&apos;s retry and cache,
-                the SSE parser, the oEmbed path, a route boundary suite · <b>20,000 generated cases</b> on <code>decide()</code> and <code>extractClaim()</code>{" "}
+                the SSE parser, the oEmbed path, a route boundary suite · <b>23,000 generated cases</b> on <code>decide()</code> and <code>extractClaim()</code>{" "}
                 (fast-check: purity, the buying/selling mirror, never-throws)
               </td>
             </tr>
@@ -114,7 +115,7 @@ export default function Judge() {
             <tr>
               <th>Spend guard</th>
               <td>
-                6 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (
+                10 checks per IP per minute, 2,000 live credits per day, then recorded replays (labelled); the agent button 2 per IP and 4 per day (
                 <code>apps/web/lib/guard.ts</code>)
               </td>
             </tr>

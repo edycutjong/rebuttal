@@ -23,8 +23,8 @@ export function Example({ verdict, agent, onRun }: { verdict: Verdict; agent: Ag
       </div>
       <div className="flow">
         <ClaimCard claim={v.claim} resolved={v.resolved} plan={v.checks} />
-        <Trace plan={v.checks} checks={new Map(v.checks.map((c) => [c.id, c]))} calls={new Map(v.checks.map((c, i) => [c.id, v.provenance.filter((p) => p.endpoint !== "search/general")[i]]))} credits={v.credits} ms={v.ms} done asOf={v.provenance[0] ? new Date(v.now).toISOString() : null} />
-        <VerdictCard verdict={v} compact />
+        <Trace plan={v.checks} checks={new Map(v.checks.map((c) => [c.id, c]))} credits={v.credits} calls={v.calls} ms={v.ms} done asOf={v.provenance[0] ? new Date(v.now).toISOString() : null} />
+        <VerdictCard verdict={v} compact replay />
         {agent && <AgentPanel run={agent} tools={agent.toolCalls} text={agent.text} ours={v.checks} busy={false} />}
       </div>
       <p className="example-more">{agent ? "the violet panel is Nansen's own agent on the same claim, recorded once (200 credits) — live it is a button with the price on it" : "live, the “Ask Nansen's agent” button runs the same claim through agent/fast (200 credits) and shows its tool list beside this trace"}</p>
@@ -81,7 +81,7 @@ export function HowItDecides({ proof }: { proof: { tests: number; fixtures: numb
           verdicts replay offline
         </li>
         <li>
-          <b>{proof.tests}</b> tests · <b>20,000</b> property cases
+          <b>{proof.tests}</b> tests · <b>23,000</b> property cases
         </li>
       </ul>
     </section>

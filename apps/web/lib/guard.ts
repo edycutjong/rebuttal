@@ -15,7 +15,7 @@ import { CachedNansenClient, fixtureStore, listFixtures, readFixture, rebut, typ
  * Counters live in instance memory: a ceiling, not accounting. Vercel may run several instances, so the true daily
  * spend is bounded by the ceilings × instances — still two orders of magnitude under the balance.
  */
-export const IP_PER_MIN = Number(process.env.GUARD_IP_PER_MIN ?? 6);
+export const IP_PER_MIN = Number(process.env.GUARD_IP_PER_MIN ?? 10); // 0-credit refusals count too, and a judge who types garbage five times still deserves a live run
 export const DAILY_CREDITS = Number(process.env.GUARD_DAILY_CREDITS ?? 2000);
 export const AGENT_IP_PER_DAY = Number(process.env.GUARD_AGENT_IP_PER_DAY ?? 2);
 export const AGENT_PER_DAY = Number(process.env.GUARD_AGENT_PER_DAY ?? 4);
@@ -86,6 +86,7 @@ export function resetGuard(): void {
 }
 
 export const BUDGET_MESSAGE = "Today's live Nansen budget is used up — this is a replay of a recorded run.";
+export const RATE_MESSAGE = "Too many checks from your address this minute — this is a replay of a recorded run, not a live one.";
 export const NO_FIXTURE_MESSAGE = "Today's live Nansen budget is used up and this claim has no recorded run. Try one of the example claims, or come back tomorrow.";
 
 function fixturesDir(): string | undefined {
@@ -108,15 +109,16 @@ export function fixtureFor(q: string): Fixture | undefined {
 }
 
 /** The offline fallback: the fixture's recorded responses under the same engine and clock, labelled as a replay. */
-export async function replayFixture(q: string, opts: Pick<RebutOptions, "onProgress"> = {}): Promise<{ verdict: Verdict; oldestHit?: string } | undefined> {
+export async function replayFixture(q: string, opts: Pick<RebutOptions, "onProgress"> & { reason?: "budget" | "rate" } = {}): Promise<{ verdict: Verdict; oldestHit?: string } | undefined> {
   const f = fixtureFor(q);
   if (!f) return undefined;
+  const msg = opts.reason === "rate" ? RATE_MESSAGE : BUDGET_MESSAGE;
   const c = new CachedNansenClient("nsn_offline_replay_no_network", { store: fixtureStore(f), offline: true });
   const onProgress: RebutOptions["onProgress"] = (e) => {
-    if (e.type === "verdict" && !e.verdict.warnings.includes(BUDGET_MESSAGE)) e.verdict.warnings.push(BUDGET_MESSAGE);
+    if (e.type === "verdict" && !e.verdict.warnings.includes(msg)) e.verdict.warnings.push(msg);
     opts.onProgress?.(e);
   };
   const verdict = await rebut(c, f.input, { now: f.now, chain: f.options.chain, claim: f.claim, llm: null, onProgress });
-  if (!verdict.warnings.includes(BUDGET_MESSAGE)) verdict.warnings.push(BUDGET_MESSAGE);
+  if (!verdict.warnings.includes(msg)) verdict.warnings.push(msg);
   return { verdict, oldestHit: c.oldestHit ?? f.recordedAt };
 }

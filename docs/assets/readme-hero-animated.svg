@@ -52,7 +52,7 @@
   <g transform="translate(584 282)">
     
     <text x="0" y="0" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" letter-spacing="-.5" fill="#ef4444">CONTRADICTED</text>
-    <text x="196" y="0" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8b9bab">rule C-NOBODY · hash 0f5da7e87546</text>
+    <text x="196" y="0" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8b9bab">rule C-NOBODY · hash e21a8a19ae59</text>
     <text x="0" y="18.5" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="12.5" fill="#b6c2cf">no Smart Money wallet traded PEPE in 24 h · 89 Smart Money traders on its table · fresh wallets bought $1.14M</text>
   </g>
   </g>
@@ -75,7 +75,7 @@
   <g transform="translate(584 282)" data-story="beat-3" opacity="0">
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.60;.66;.96;1" dur="8s" repeatCount="indefinite" />
     <text x="0" y="0" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" letter-spacing="-.5" fill="#ef4444">CONTRADICTED</text>
-    <text x="196" y="0" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8b9bab">rule C-NOBODY · hash 0f5da7e87546</text>
+    <text x="196" y="0" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8b9bab">rule C-NOBODY · hash e21a8a19ae59</text>
     <text x="0" y="18.5" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="12.5" fill="#b6c2cf">no Smart Money wallet traded PEPE in 24 h · 89 Smart Money traders on its table · fresh wallets bought $1.14M</text>
   </g>
   </g>

@@ -20,21 +20,31 @@ describe("resolveToken", () => {
     );
     expect(await resolveToken(c, "HYPE")).toMatchObject({ chain: "hyperevm", sameName: 1 });
   });
-  it("ETH resolves to WETH on ethereum via the native map", async () => {
-    const c = fakeClient(() => searchTokens([{ chain: "ethereum", address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", symbol: "WETH", name: "Wrapped Ether", rank: 3 }]));
-    expect(await resolveToken(c, "ETH")).toMatchObject({ chain: "ethereum", symbol: "WETH" });
+  it("ETH resolves to native ETH (0xeeee…) on ethereum, not the robinhood copy that trades more (live search 2026-09-18)", async () => {
+    const c = fakeClient(() =>
+      searchTokens([
+        { chain: "hyperliquid", address: "ETH", symbol: "ETH", name: "ETH", rank: 23 },
+        { chain: "base", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", symbol: "ETH", name: "Ethereum", rank: 313, volume_24h: 2.9e7 },
+        { chain: "ethereum", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", symbol: "ETH", name: "Ethereum", rank: 314, volume_24h: 1.99e8 },
+        { chain: "robinhood", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", symbol: "ETH", name: "Ether", rank: 604, volume_24h: 2.78e8 },
+      ]),
+    );
+    expect(await resolveToken(c, "ETH")).toMatchObject({ chain: "ethereum", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" });
   });
   it("falls back to the known address when search has no same-name native", async () => {
     const c = fakeClient(() => searchTokens([]));
-    expect(await resolveToken(c, "BTC")).toMatchObject({ chain: "ethereum", symbol: "WBTC", by: "only match" });
+    expect(await resolveToken(c, "HYPE")).toMatchObject({ chain: "hyperevm", symbol: "HYPE", by: "only match" });
   });
   it("a chain hint wins over volume", async () => {
     const r = await resolveToken(fakeClient(pepeRoutes()), "PEPE", "bnb");
     expect(r).toMatchObject({ chain: "bnb", by: "chain hint (bnb)" });
   });
-  it("a chain hint with no match on that chain falls back to the default pick", async () => {
-    const r = await resolveToken(fakeClient(pepeRoutes()), "PEPE", "solana");
-    expect(r).toMatchObject({ chain: "ethereum" });
+  it("a chain hint with no match on that chain is null (U-TOKEN with the chain), never a silent pick of another chain's book", async () => {
+    // the unfiltered search has no solana PEPE; the chain-filtered follow-up (0 credits) finds none either
+    const c = fakeClient((endpoint, body) => (endpoint === "search/general" && body.chain === "solana" ? searchTokens([]) : pepeRoutes()(endpoint, body)));
+    expect(await resolveToken(c, "PEPE", "solana")).toBeNull();
+    expect(c.calls.map((x) => x.body.chain)).toEqual([undefined, "solana"]);
+    expect(c.creditsSpent).toBe(0);
   });
   it("null when Nansen knows no token by that name", async () => {
     expect(await resolveToken(fakeClient(() => searchTokens([])), "XQZPLM")).toBeNull();
@@ -54,6 +64,7 @@ describe("resolveToken", () => {
   });
   it("lists the coins whose home chain Nansen does not index", () => {
     expect(NOT_A_NANSEN_CHAIN.ZEC).toBe("Zcash");
+    expect(NOT_A_NANSEN_CHAIN.BTC).toBe("Bitcoin");
     expect(NOT_A_NANSEN_CHAIN.PEPE).toBeUndefined();
   });
 });

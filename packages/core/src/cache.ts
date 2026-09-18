@@ -108,6 +108,7 @@ export class CachedNansenClient extends NansenClient {
         attempts: 0,
         totalMs: 0,
         ok: true,
+        tag: opts.tag,
       });
       if (!this.oldestHit || hit.storedAt < this.oldestHit) this.oldestHit = hit.storedAt;
       return JSON.parse(hit.text) as T;
@@ -118,14 +119,21 @@ export class CachedNansenClient extends NansenClient {
     try {
       raw = await this.postRaw(endpoint, body, opts);
     } catch (e) {
-      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0);
+      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag);
       throw e;
     }
-    const { text, ms, status, attempts, totalMs } = raw;
+    const { text, ms, status, attempts, totalMs, credits } = raw;
+    let parsed: T;
+    try {
+      parsed = JSON.parse(text) as T; // a non-JSON 200 must never be stored — it would replay (and throw) for an hour
+    } catch (e) {
+      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag);
+      throw e;
+    }
     this.calls.push({
       endpoint,
       body,
-      credits: CREDITS[endpoint] ?? 1,
+      credits: credits ?? CREDITS[endpoint] ?? 1,
       ms,
       cached: false,
       status,
@@ -134,14 +142,10 @@ export class CachedNansenClient extends NansenClient {
       attempts,
       totalMs,
       ok: true,
+      tag: opts.tag,
     });
     this.store.set(key, { storedAt: new Date().toISOString(), ttlMs: this.ttlMs, endpoint, body, text });
-    return JSON.parse(text) as T;
-  }
-
-  /** Credits actually spent on the network: cached hits and failed calls are recorded at 0. */
-  override get creditsSpent(): number {
-    return this.calls.reduce((n, c) => n + c.credits, 0);
+    return parsed;
   }
 }
 

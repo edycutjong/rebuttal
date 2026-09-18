@@ -1,0 +1,49 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript-typescript"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      # Code-scanning upload needs a public repo or GitHub Advanced Security. The repo is private until submission
+      # day, so until then the analysis still runs and its SARIF is kept as an artifact; once public, it uploads.
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          upload: ${{ github.event.repository.private && 'never' || 'always' }}
+          output: codeql-results
+
+      - name: Keep the SARIF when it cannot be uploaded (private repo)
+        if: github.event.repository.private
+        uses: actions/upload-artifact@v7
+        with:
+          name: codeql-sarif
+          path: codeql-results/
+          retention-days: 14

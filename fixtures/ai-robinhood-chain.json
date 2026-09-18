@@ -193,11 +193,11 @@
     "label": "OVERSTATED",
     "ruleId": "O-FLAT",
     "reasons": [
-      "Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $209K)",
+      "Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $31K)",
       "flat within the noise threshold — no exit to speak of",
       "7 d: −$10K"
     ],
-    "threshold": 209370,
+    "threshold": 30536,
     "evidence": {
       "flow1d": {
         "smart_trader": {
@@ -304,11 +304,12 @@
         "id": "flow1d",
         "endpoint": "tgm/flow-intelligence",
         "window": "1d",
-        "credits": 1,
+        "credits": 0,
         "decides": "Whales net flow and wallet count, last 24 h — the primary signal",
         "ok": true,
-        "ms": 326,
-        "cached": false,
+        "ms": 9,
+        "cached": true,
+        "responseHash": "97dfdc2a3e65ed3eab7892e11b7983360a9b6995e4175489ef098c1c64aab697",
         "values": {
           "whale_net_flow_usd": 0,
           "whale_wallet_count": 1,
@@ -320,11 +321,12 @@
         "id": "flow7d",
         "endpoint": "tgm/flow-intelligence",
         "window": "7d",
-        "credits": 1,
+        "credits": 0,
         "decides": "Whales net flow over the week — blip or trend",
         "ok": true,
-        "ms": 349,
-        "cached": false,
+        "ms": 9,
+        "cached": true,
+        "responseHash": "63652a940dab7ab75b90c94d487e6349781296f1cfdac15121aca5c53c49a03b",
         "values": {
           "whale_net_flow_usd": -10365.09114855792,
           "whale_wallet_count": 1
@@ -334,11 +336,12 @@
         "id": "buyers",
         "endpoint": "tgm/who-bought-sold",
         "window": "BUY 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Whales bought, by USD",
         "ok": true,
-        "ms": 3308,
-        "cached": false,
+        "ms": 9,
+        "cached": true,
+        "responseHash": "c6ba511bc6b2dda397a1e4bc43e6f0cb4b7d726939a4aa70870f107ab7ef6916",
         "values": {
           "bought_volume_usd": 292,
           "rows": 1,
@@ -349,11 +352,12 @@
         "id": "sellers",
         "endpoint": "tgm/who-bought-sold",
         "window": "SELL 24h",
-        "credits": 1,
+        "credits": 0,
         "decides": "who among Whales sold, by USD",
         "ok": true,
-        "ms": 677,
-        "cached": false,
+        "ms": 8,
+        "cached": true,
+        "responseHash": "0fd459834431cc5070021e43c587a26d91abdee3b0965349824f85679660787c",
         "values": {
           "sold_volume_usd": 330,
           "rows": 1,
@@ -364,11 +368,12 @@
         "id": "table",
         "endpoint": "smart-money/netflow",
         "window": "token filter",
-        "credits": 5,
+        "credits": 0,
         "decides": "is the token on the Smart Money net-flow table at all",
         "ok": true,
-        "ms": 1472,
-        "cached": false,
+        "ms": 8,
+        "cached": true,
+        "responseHash": "8f04fa6d2a81be73597e96f245a77d3e737197c655e2b7167103922198cf15b5",
         "values": {
           "in_table": "yes",
           "net_flow_24h_usd": -1343523.5513981944,
@@ -380,11 +385,12 @@
         "id": "price",
         "endpoint": "tgm/token-ohlcv",
         "window": "1h × 24",
-        "credits": 1,
+        "credits": 0,
         "decides": "did the price already move — is the claim late",
         "ok": true,
-        "ms": 2176,
-        "cached": false,
+        "ms": 8,
+        "cached": true,
+        "responseHash": "ebe391e8319c8c423be09378a34dd2f4613b55935b2fb81f2423e85f5428a4d0",
         "values": {
           "candles": 25,
           "open": 0.287212413508357,
@@ -396,11 +402,12 @@
         "id": "holders",
         "endpoint": "tgm/holders",
         "window": "whale",
-        "credits": 5,
+        "credits": 0,
         "decides": "Whales holders and whether their balances grew",
         "ok": true,
-        "ms": 1656,
-        "cached": false,
+        "ms": 8,
+        "cached": true,
+        "responseHash": "939e2413bb80b0dc4371d3c56be2bf3a91e4e959346304f2b31d598a6edf161d",
         "values": {
           "holders": 1,
           "value_usd": 26470,
@@ -410,9 +417,9 @@
       }
     ],
     "prose": {
-      "text": "The data show that the single tracked whale sold $0 in the past 24 hours, well within the $209 K noise threshold. Over the last 7 days the net change was only –$10 K, far less than the claimed 12 % price impact.",
-      "source": "llm",
-      "ms": 1037
+      "text": "Nansen only partly agrees that Whales are selling AI on robinhood. Whales net sold $0 in 24 h (whale holders' 24 h balance change × price, 1 wallet; threshold $31K) — flat within the noise threshold — no exit to speak of.",
+      "source": "template",
+      "ms": 0
     },
     "provenance": [
       {
@@ -423,8 +430,8 @@
           "limit": 50
         },
         "credits": 0,
-        "ms": 458,
-        "cached": false,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "tokens[].symbol",
@@ -436,8 +443,8 @@
           "tokens[].market_cap"
         ],
         "responseHash": "04a34fca60b3489c592f2096ab2ba3fcbb3119489fb24d623f6f7252261e1969",
-        "attempts": 1,
-        "totalMs": 458,
+        "attempts": 0,
+        "totalMs": 0,
         "ok": true
       },
       {
@@ -447,9 +454,9 @@
           "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
           "timeframe": "1d"
         },
-        "credits": 1,
-        "ms": 326,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[0].smart_trader_net_flow_usd (1d)",
@@ -466,9 +473,10 @@
           "data[0].public_figure_wallet_count (1d)"
         ],
         "responseHash": "97dfdc2a3e65ed3eab7892e11b7983360a9b6995e4175489ef098c1c64aab697",
-        "attempts": 1,
-        "totalMs": 326,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "flow1d"
       },
       {
         "endpoint": "tgm/flow-intelligence",
@@ -477,9 +485,9 @@
           "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
           "timeframe": "7d"
         },
-        "credits": 1,
-        "ms": 344,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[0].smart_trader_net_flow_usd (7d)",
@@ -496,132 +504,10 @@
           "data[0].public_figure_wallet_count (7d)"
         ],
         "responseHash": "63652a940dab7ab75b90c94d487e6349781296f1cfdac15121aca5c53c49a03b",
-        "attempts": 1,
-        "totalMs": 348,
-        "ok": true
-      },
-      {
-        "endpoint": "tgm/who-bought-sold",
-        "body": {
-          "chain": "robinhood",
-          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
-          "buy_or_sell": "SELL",
-          "date": {
-            "from": "2026-09-17T10:00:00Z",
-            "to": "2026-09-18T10:00:00Z"
-          },
-          "pagination": {
-            "page": 1,
-            "per_page": 100
-          },
-          "filters": {
-            "include_smart_money_labels": [
-              "Whale"
-            ]
-          },
-          "order_by": [
-            {
-              "field": "sold_volume_usd",
-              "direction": "DESC"
-            }
-          ]
-        },
-        "credits": 1,
-        "ms": 672,
-        "cached": false,
-        "status": 200,
-        "fieldsUsed": [
-          "data[].sold_volume_usd (SELL 24h)",
-          "data[].address (SELL 24h)",
-          "data[].address_label (SELL 24h)",
-          "pagination.is_last_page (SELL 24h)"
-        ],
-        "responseHash": "0fd459834431cc5070021e43c587a26d91abdee3b0965349824f85679660787c",
-        "attempts": 1,
-        "totalMs": 676,
-        "ok": true
-      },
-      {
-        "endpoint": "smart-money/netflow",
-        "body": {
-          "chains": [
-            "robinhood"
-          ],
-          "filters": {
-            "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
-            "include_stablecoins": true,
-            "include_native_tokens": true
-          },
-          "pagination": {
-            "page": 1,
-            "per_page": 10
-          }
-        },
-        "credits": 5,
-        "ms": 920,
-        "cached": false,
-        "status": 200,
-        "fieldsUsed": [
-          "data[].net_flow_24h_usd",
-          "data[].net_flow_7d_usd",
-          "data[].trader_count",
-          "data[].token_symbol"
-        ],
-        "responseHash": "8f04fa6d2a81be73597e96f245a77d3e737197c655e2b7167103922198cf15b5",
-        "attempts": 1,
-        "totalMs": 1468,
-        "ok": true
-      },
-      {
-        "endpoint": "tgm/holders",
-        "body": {
-          "chain": "robinhood",
-          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
-          "label_type": "whale",
-          "pagination": {
-            "page": 1,
-            "per_page": 100
-          }
-        },
-        "credits": 5,
-        "ms": 646,
-        "cached": false,
-        "status": 200,
-        "fieldsUsed": [
-          "data[].address_label (whale)",
-          "data[].balance_change_24h (whale)",
-          "data[].balance_change_7d (whale)",
-          "data[].value_usd (whale)"
-        ],
-        "responseHash": "939e2413bb80b0dc4371d3c56be2bf3a91e4e959346304f2b31d598a6edf161d",
-        "attempts": 1,
-        "totalMs": 1655,
-        "ok": true
-      },
-      {
-        "endpoint": "tgm/token-ohlcv",
-        "body": {
-          "chain": "robinhood",
-          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
-          "timeframe": "1h",
-          "date": {
-            "from": "2026-09-17T10:00:00Z",
-            "to": "2026-09-18T10:00:00Z"
-          }
-        },
-        "credits": 1,
-        "ms": 1169,
-        "cached": false,
-        "status": 200,
-        "fieldsUsed": [
-          "data[].open",
-          "data[].close",
-          "data[].interval_start"
-        ],
-        "responseHash": "ebe391e8319c8c423be09378a34dd2f4613b55935b2fb81f2423e85f5428a4d0",
-        "attempts": 1,
-        "totalMs": 2175,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "flow7d"
       },
       {
         "endpoint": "tgm/who-bought-sold",
@@ -649,9 +535,9 @@
             }
           ]
         },
-        "credits": 1,
-        "ms": 3304,
-        "cached": false,
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
         "status": 200,
         "fieldsUsed": [
           "data[].bought_volume_usd (BUY 24h)",
@@ -660,34 +546,153 @@
           "pagination.is_last_page (BUY 24h)"
         ],
         "responseHash": "c6ba511bc6b2dda397a1e4bc43e6f0cb4b7d726939a4aa70870f107ab7ef6916",
-        "attempts": 1,
-        "totalMs": 3308,
-        "ok": true
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "buyers"
+      },
+      {
+        "endpoint": "tgm/who-bought-sold",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "buy_or_sell": "SELL",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          },
+          "filters": {
+            "include_smart_money_labels": [
+              "Whale"
+            ]
+          },
+          "order_by": [
+            {
+              "field": "sold_volume_usd",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].sold_volume_usd (SELL 24h)",
+          "data[].address (SELL 24h)",
+          "data[].address_label (SELL 24h)",
+          "pagination.is_last_page (SELL 24h)"
+        ],
+        "responseHash": "0fd459834431cc5070021e43c587a26d91abdee3b0965349824f85679660787c",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "sellers"
+      },
+      {
+        "endpoint": "smart-money/netflow",
+        "body": {
+          "chains": [
+            "robinhood"
+          ],
+          "filters": {
+            "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+            "include_stablecoins": true,
+            "include_native_tokens": true
+          },
+          "pagination": {
+            "page": 1,
+            "per_page": 10
+          }
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].net_flow_24h_usd",
+          "data[].net_flow_7d_usd",
+          "data[].trader_count",
+          "data[].token_symbol"
+        ],
+        "responseHash": "8f04fa6d2a81be73597e96f245a77d3e737197c655e2b7167103922198cf15b5",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "table"
+      },
+      {
+        "endpoint": "tgm/token-ohlcv",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "timeframe": "1h",
+          "date": {
+            "from": "2026-09-17T10:00:00Z",
+            "to": "2026-09-18T10:00:00Z"
+          }
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].open",
+          "data[].close",
+          "data[].interval_start"
+        ],
+        "responseHash": "ebe391e8319c8c423be09378a34dd2f4613b55935b2fb81f2423e85f5428a4d0",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "price"
+      },
+      {
+        "endpoint": "tgm/holders",
+        "body": {
+          "chain": "robinhood",
+          "token_address": "0x2e8c31162b855a2ffa90f6f8634643ad6f111e18",
+          "label_type": "whale",
+          "pagination": {
+            "page": 1,
+            "per_page": 100
+          }
+        },
+        "credits": 0,
+        "ms": 0,
+        "cached": true,
+        "status": 200,
+        "fieldsUsed": [
+          "data[].address_label (whale)",
+          "data[].balance_change_24h (whale)",
+          "data[].balance_change_7d (whale)",
+          "data[].value_usd (whale)"
+        ],
+        "responseHash": "939e2413bb80b0dc4371d3c56be2bf3a91e4e959346304f2b31d598a6edf161d",
+        "attempts": 0,
+        "totalMs": 0,
+        "ok": true,
+        "tag": "holders"
       }
     ],
-    "credits": 15,
+    "credits": 0,
     "calls": 8,
-    "ms": 5527,
-    "hash": "1f90767d6683fea2d7c061aab4f28e22236669fd4360ddc51fcf68eaee5f6e72",
+    "ms": 12,
+    "hash": "49f0e6ee2b59640d3c48663ed465be65f5f2a53f18a20d77013809e62c37013f",
     "warnings": [
       "2 tokens named AI on Nansen — checked the chain hint (robinhood)"
     ],
     "llm": {
-      "extract": {
-        "used": true,
-        "ms": 723,
-        "model": "openai/gpt-oss-120b"
-      },
-      "narrate": {
-        "used": true,
-        "ms": 1037,
-        "model": "openai/gpt-oss-120b"
-      }
+      "extract": null,
+      "narrate": null
     },
     "rules": {
       "floorUsd": 5000,
       "shareOfFlow": 0.01,
-      "freshMult": 3,
       "staleMove": 0.2,
       "minWallets": 3,
       "minWhales": 1,

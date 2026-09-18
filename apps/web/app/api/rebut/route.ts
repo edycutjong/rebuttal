@@ -9,7 +9,7 @@ export const maxDuration = 60;
 
 /**
  * GET /api/rebut?q=<claim or x.com URL>[&chain=base]      → Verdict JSON
- * GET /api/rebut?q=…&stream=1                              → NDJSON: {type:input} · {type:claim} · {type:resolved} ·
+ * GET /api/rebut?q=…&stream=1[&fresh=1]                    → NDJSON (fresh=1: bypass cache reads — every call live, same guard): {type:input} · {type:claim} · {type:resolved} ·
  *                                                             {type:check}×N (as each Nansen call lands) · {type:verdict} · {type:prose}
  * Same engine, same hash as the CLI. Spend guard (lib/guard.ts): 429 past the per-IP rate; past the daily credit
  * ceiling a recorded fixture replays at 0 credits (labelled in `warnings`, `degraded: true`) or the request gets a 503.
@@ -29,10 +29,11 @@ export async function GET(req: NextRequest) {
     );
   }
   const degraded = budgetExhausted();
+  const fresh = url.searchParams.get("fresh") === "1";
 
   if (url.searchParams.get("stream") !== "1") {
     try {
-      const r = degraded ? await replayFixture(q) : await rebutFor(q, chain);
+      const r = degraded ? await replayFixture(q) : await rebutFor(q, chain, { fresh });
       if (!r) return Response.json({ error: NO_FIXTURE_MESSAGE }, { status: 503, headers: { "retry-after": "3600", "cache-control": "no-store" } });
       if (!degraded) recordSpend(r.verdict.credits);
       return Response.json({ ...r.verdict, asOf: r.oldestHit ?? null, degraded }, { headers: { "cache-control": "no-store" } });
@@ -54,7 +55,7 @@ export async function GET(req: NextRequest) {
         }
       };
       try {
-        const r = degraded ? await replayFixture(q, { onProgress: send }) : await rebutFor(q, chain, { onProgress: send });
+        const r = degraded ? await replayFixture(q, { onProgress: send }) : await rebutFor(q, chain, { onProgress: send, fresh });
         if (!r) send({ type: "error", message: NO_FIXTURE_MESSAGE });
         else {
           if (!degraded) recordSpend(r.verdict.credits);
