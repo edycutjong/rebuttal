@@ -23,7 +23,9 @@
     "test:coverage": "vitest run --coverage",
     "typecheck:web": "tsc -p apps/web/tsconfig.json --noEmit",
     "ci": "npm run typecheck && npm run typecheck:web && npm run test:coverage && npm run verify && npm run check",
-    "release": "node scripts/release.mjs"
+    "release": "node scripts/release.mjs",
+    "e2e": "node scripts/smoke.mjs",
+    "ci:full": "npm run ci && npm run build && npm run e2e"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",
