@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: "Stage 1 · Quality"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ${{ github.event_name == 'push' && fromJSON('[20, 22, 24]') || fromJSON('[20]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the readiness check scans the whole git history for keys and kitchen files
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - name: Type check (core, scripts, web)
+        run: npm run typecheck && npx tsc -p apps/web/tsconfig.json --noEmit
+      - name: Unit + property + boundary tests with coverage (no key, no network)
+        run: npm run test:coverage
+      - name: Offline replay of 13 recorded rebuttals (no key, no network, no LLM)
+        run: npm run verify
+      - name: Submission readiness (README claims vs tree, kitchen/secret scan, history scan)
+        run: npm run check
+      - uses: actions/upload-artifact@v4
+        if: matrix.node-version == 20
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  security:
+    name: "Stage 2 · Security"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: TruffleHog secret scan (full history, verified only)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: npm audit (production deps, high + critical)
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
+
+  build:
+    name: "Stage 3 · Build"
+    needs: [quality]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Next.js production build (no API key — nothing is fetched at build time)
+        run: npm run build
+
+  deploy-gate:
+    name: "Stage 4 · Deploy gate"
+    needs: [quality, security, build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "all gates green — production is deployed from this commit with vercel deploy --prod (see docs)"

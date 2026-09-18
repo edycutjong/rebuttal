@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-labelledby="t d">
+<title id="t">Rebuttal mark — the claim bar turns red as the Nansen rows land</title>
+<desc id="d">Three stacked bars on a dark plate. A scan sweeps down; the middle bar — the claim — turns red: A tweet's claim becomes six Nansen trace rows and one word: CONTRADICTED.</desc>
+<!-- STORYBOARD (master dur 6s)
+  0-10%   steady state (poster): plate, grey / red / grey bars — the static icon
+  10-30%  beat-2 trigger: the middle bar drops to grey (three identical bars: nothing decided yet); a blue scan sweeps down the plate
+  30-56%  beat-3 mechanism: the middle bar turns red — the claim, struck — and a thin red ring draws around the plate
+  56-84%  resolution: red bar persists; the ring breathes once
+  84-100% seam: overlays fade out, poster returns — frame 0 and frame 100% are the same picture
+-->
+<defs>
+  <clipPath id="p"><rect width="64" height="64" rx="14"/></clipPath>
+</defs>
+<rect width="64" height="64" rx="14" fill="#0a0e13"/>
+<rect x="10" y="14" width="44" height="10" rx="3" fill="#2c3b4b"/>
+<rect x="10" y="40" width="44" height="10" rx="3" fill="#2c3b4b"/>
+<!-- the claim bar: red at rest, grey while nothing is decided, red again at the verdict -->
+<rect x="10" y="27" width="44" height="10" rx="3" fill="#ef4444">
+  <animate attributeName="fill" values="#ef4444;#ef4444;#2c3b4b;#2c3b4b;#ef4444;#ef4444;#ef4444" keyTimes="0;.10;.16;.30;.40;.96;1" dur="6s" repeatCount="indefinite"/>
+</rect>
+<!-- the scan: a blue band sweeping down the plate while the rows land -->
+<g clip-path="url(#p)">
+  <rect x="0" y="-8" width="64" height="8" fill="#38bdf8" opacity="0" data-story="beat-2">
+    <animate attributeName="opacity" values="0;0;.35;.35;0;0" keyTimes="0;.14;.16;.30;.32;1" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="y" values="-8;-8;64;64" keyTimes="0;.14;.30;1" dur="6s" repeatCount="indefinite"/>
+  </rect>
+</g>
+<!-- the ring: draws at the verdict, breathes, fades before the seam -->
+<rect x="1.5" y="1.5" width="61" height="61" rx="13" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0" data-story="beat-3" stroke-dasharray="244" stroke-dashoffset="244">
+  <animate attributeName="opacity" values="0;0;.9;.9;.5;.9;0;0" keyTimes="0;.30;.36;.56;.70;.84;.94;1" dur="6s" repeatCount="indefinite"/>
+  <animate attributeName="stroke-dashoffset" values="244;244;0;0" keyTimes="0;.30;.44;1" dur="6s" repeatCount="indefinite"/>
+</rect>
+</svg>

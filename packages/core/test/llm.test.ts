@@ -110,3 +110,20 @@ describe("keysFromEnv", () => {
     expect(keysFromEnv({})).toEqual([]);
   });
 });
+
+describe("prose that disputes the verdict is discarded (live finding 2026-09-18: a CONFIRMED whale sale narrated as 'not supported')", () => {
+  it("proseConsistent per label", async () => {
+    const { proseConsistent } = await import("../src/llm.js");
+    expect(proseConsistent("CONFIRMED", "Thus the reported sale is not supported.")).toBe(false);
+    expect(proseConsistent("CONFIRMED", "Whale holders sold $532K net in 24 h; the direction holds.")).toBe(true);
+    expect(proseConsistent("CONTRADICTED", "The data supports the claim.")).toBe(false);
+    expect(proseConsistent("CONTRADICTED", "No Smart Money wallet traded it.")).toBe(true);
+    expect(proseConsistent("OVERSTATED", "Nansen fully supports the claim.")).toBe(false);
+    expect(proseConsistent("UNVERIFIABLE", "This confirms the claim.")).toBe(false);
+  });
+  it("narrateWithLlm falls back to the template when the model disputes the label", async () => {
+    const r = await narrateWithLlm("s", { keys: ["a"], label: "CONFIRMED", fetchImpl: async () => textReply("Whales sold only $532K, far below $5.1M, so the claim is not supported by the data.") });
+    expect(r.text).toBeNull();
+    expect(r.status.error).toMatch(/disputed/);
+  });
+});

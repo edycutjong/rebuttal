@@ -121,19 +121,35 @@ export async function extractWithLlm(text: string, opts: LlmOptions): Promise<{ 
   return { claim: { token, type, subject, chain }, status: { used: true, ms: r.ms, model } };
 }
 
+/**
+ * Prose that disputes the decided label is thrown away (seen live: a CONFIRMED whale sale narrated as "not supported"
+ * because the model compared Nansen's $532K to the post's $5.1M). Per label, the words that would contradict it.
+ */
+const DISPUTES: Record<string, RegExp> = {
+  CONFIRMED: /\b(not supported|unsupported|does ?n['o]?t support|contradict|overstat|exaggerat|false|disagree|not (?:true|confirmed|borne out)|no evidence|fails? to)/i,
+  OVERSTATED: /\b(fully (?:supports?|confirms?)|entirely (?:true|accurate)|contradict|false|completely (?:false|wrong))/i,
+  CONTRADICTED: /\b(supports? the claim|confirms? the claim|is (?:true|accurate|correct)|agrees? with the claim|borne out)/i,
+  UNVERIFIABLE: /\b(confirms?|contradicts?|supports? the claim|is (?:true|false))\b/i,
+};
+export function proseConsistent(label: string, text: string): boolean {
+  const re = DISPUTES[label];
+  return re ? !re.test(text) : true;
+}
+
 /** Two sentences from the decided verdict. The label is passed as a fact; the model may not dispute it. */
-export async function narrateWithLlm(summary: string, opts: LlmOptions): Promise<{ text: string | null; status: LlmStatus }> {
+export async function narrateWithLlm(summary: string, opts: LlmOptions & { label?: string }): Promise<{ text: string | null; status: LlmStatus }> {
   const model = opts.model ?? MODEL;
   if (!opts.keys.length) return { text: null, status: { used: false, ms: 0, error: "no GROQ key", model } };
   const r = await chat({ ...opts, timeoutMs: opts.timeoutMs ?? 4000 }, [
     {
       role: "system",
       content:
-        "You write the two-sentence rebuttal under a fact-check card. Use ONLY the numbers given. Do not change the verdict. Do not add advice, hedges, emojis or questions. Plain prose, at most 45 words total, no bullet points, no markdown.",
+        "You write the two-sentence rebuttal under a fact-check card. The verdict is already decided and is a fact you must agree with: CONFIRMED = Nansen supports the claim, OVERSTATED = partly, CONTRADICTED = Nansen shows the opposite, UNVERIFIABLE = cannot be checked. Use ONLY the evidence numbers given; the claim's own figures are not evidence and must not be compared against them. Do not add advice, hedges, emojis or questions. Plain prose, at most 45 words total, no bullet points, no markdown.",
     },
     { role: "user", content: summary },
   ]);
   const text = r?.content?.trim().replace(/\s+/g, " ") ?? null;
   if (!text || text.length < 20 || text.length > 400) return { text: null, status: { used: false, ms: r?.ms ?? 0, error: "unusable prose", model } };
+  if (opts.label && !proseConsistent(opts.label, text)) return { text: null, status: { used: false, ms: r?.ms ?? 0, error: "prose disputed the verdict — discarded", model } };
   return { text, status: { used: true, ms: r?.ms ?? 0, model } };
 }

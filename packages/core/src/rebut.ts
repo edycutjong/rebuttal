@@ -100,6 +100,7 @@ function summaryForLlm(claim: Claim, resolved: Resolved | null, d: Decision): st
     `Token: ${resolved ? `${resolved.symbol} (${resolved.name}) on ${resolved.chain}` : claim.token}`,
     `Subject: ${subjectName(claim.subject)}; claim type: ${claim.type}`,
     `Evidence lines: ${d.reasons.join(" | ")}`,
+    `Meaning of the verdict: ${{ CONFIRMED: "Nansen's numbers support the claim's direction", OVERSTATED: "Nansen partly supports it — say what is real and what is not", CONTRADICTED: "Nansen shows the opposite of the claim", UNVERIFIABLE: "the claim cannot be checked against Nansen — say why" }[d.label]}.`,
     "Write two sentences for a reader who has 30 seconds.",
   ].join("\n");
 }
@@ -225,7 +226,7 @@ export async function rebut(client: NansenClient, input: string, opts: RebutOpti
   const proseP = (async (): Promise<Prose> => {
     const template = templateProse(claim, resolved, d);
     if (!llmOpts) return { text: template, source: "template", ms: 0 };
-    const r = await narrateWithLlm(summaryForLlm(claim, resolved, d), llmOpts);
+    const r = await narrateWithLlm(summaryForLlm(claim, resolved, d), { ...llmOpts, label: d.label });
     llm.narrate = r.status;
     return r.text ? { text: r.text, source: "llm", ms: r.status.ms } : { text: template, source: "template", ms: r.status.ms };
   })();
