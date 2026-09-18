@@ -1,13 +1,20 @@
 version: 2
 updates:
+  # The root block is workspace-aware: it found and bumped next (apps/web) and zod (packages/core) from "/".
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 5
     groups:
-      dev:
-        dependency-type: development
+      # one PR for every non-major npm update (prod + dev); majors stay separate so each migration is its own review
+      minor-and-patch:
+        update-types: ["minor", "patch"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns: ["*"]
