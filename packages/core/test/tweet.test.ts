@@ -20,6 +20,12 @@ describe("tweet URLs", () => {
     });
     expect(t).toEqual({ text: "Whales have been accumulating $EDEL. ezhomi.base.eth bought 5.33M $EDEL ($98K) & more pic.twitter.com/x", author: "lookonchain" });
   });
+  it("decodes entities in one pass — an escaped ampersand never re-decodes what follows it (CodeQL js/double-escaping)", async () => {
+    const t = await fetchTweetText("https://x.com/a/status/12345", {
+      fetchImpl: async () => oembed("<p>&amp;lt;b&amp;gt; is text, &lt;i&gt; was markup, &#x24;1 &#36;2 &apos;q&apos; &quot;q&quot; &unknown; &#1114112;</p>"),
+    });
+    expect(t?.text).toBe("&lt;b&gt; is text, <i> was markup, $1 $2 'q' \"q\" &unknown; &#1114112;");
+  });
   it("returns null on a non-200, a missing html, a timeout, or a non-status URL", async () => {
     expect(await fetchTweetText("https://x.com/a/status/1", { fetchImpl: async () => new Response("", { status: 404 }) })).toBeNull();
     expect(await fetchTweetText("https://x.com/a/status/1", { fetchImpl: async () => new Response("{}", { status: 200 }) })).toBeNull();
