@@ -140,7 +140,7 @@ The engine, not decoration — every rule input is a Nansen response field.
 | Cold latency | p50 **4.0 s** · p95 **5.0 s** (13 claims × 2 runs, live, LLM on) | [docs/BENCH.md](docs/BENCH.md) |
 | Warm latency | p50 **2 ms** | [docs/BENCH.md](docs/BENCH.md) |
 | Credits per rebuttal | mean **10.0**, max 15; 0 of 154 live calls failed | [docs/BENCH.md](docs/BENCH.md) |
-| Clean clone → first verdict | **21 s** (clone 2 · install 3 · live rebuttal 3 · verify <1 · tests 4 · build 9) | timed on a fresh clone, 2026-09-18 |
+| Clean clone → first verdict | **19 s** (clone 2 · install 3 · live rebuttal 2 · verify 1 · tests 3 · build 8) | timed on a fresh clone at HEAD, 2026-09-18 |
 
 ### Honesty
 
@@ -185,7 +185,7 @@ npm run dev                                                              # http:
 
 Optional: `export GROQ_API_KEY=…` (or `GROQ_API_KEYS=a,b,c`) turns on the LLM extractor and the two-sentence prose. Without it the rules extractor and the template run, and the output says so — the verdict is identical.
 
-Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-18 11:00 UTC): clone 2 s · install 3 s · first live rebuttal 3 s (10 credits) · `verify` < 1 s · tests 4 s · `next build` 9 s — **21 s of machine time** plus pasting the API key.
+Measured on a clean clone from GitHub (macOS, Node 22, warm npm cache, 2026-09-18 12:35 UTC, HEAD): clone 2 s · install 3 s · first live rebuttal 2 s (10 credits) · `verify` 1 s · tests 3 s · `next build` 8 s — **19 s of machine time** plus pasting the API key.
 
 ## 🧪 Testing & CI
 
