@@ -48,6 +48,9 @@ Every rebuttal streams its **tool trace** as the calls land: endpoint, window, t
 |---|---|---|
 | ![claim card: Smart Money buying, PEPE on ethereum, read by LLM, plan 6 checks 10 credits](docs/screenshots/02-claim.png) | ![trace rows landing one by one, the verdict still deciding](docs/screenshots/03-trace-landing.png) | ![the PEPE verdict on a phone](docs/screenshots/06-mobile.png) |
 
+<p align="center"><img src="docs/screenshots/07-rail-live.png" alt="The Nansen call rail on the right of the page at 1920×1080, mid-run: two rows already green with their credits, latency and hash, five still pending with a pulsing ring; the counters read 2 calls · 1 cr; the trace table on the left fills in the same rows" width="100%"></p>
+<p align="center"><sub>The <b>Nansen call rail</b> (right): every call as it leaves and lands — <code>POST endpoint</code> · token · window · credits · ms · sha256 — from the same <code>Call</code> objects the trace prints. Below 1280 px it docks as a bottom sheet.</sub></p>
+
 ## 💡 The Problem & Solution
 
 ### The Problem

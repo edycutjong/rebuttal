@@ -258,7 +258,7 @@ export function Rail({ rows, groups, symbols, onClear, onRunExample }: { rows: R
             <span className="rail-title">Live call log</span>
           </div>
           <span className="rail-counts" aria-label={`${calls} calls, ${credits} credits, ${secs.toFixed(1)} seconds`}>
-            {callsShown} {calls === 1 ? "call" : "calls"} · {creditsShown} cr · {secsShown} s
+            {callsShown} {callsShown === "1" ? "call" : "calls"} · {creditsShown} cr · {secsShown} s
           </span>
         </header>
         {rows.length === 0 ? (
