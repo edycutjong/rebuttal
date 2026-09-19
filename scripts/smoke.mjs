@@ -76,6 +76,9 @@ async function run(base, { live, hasKey }) {
   const home = await get(base, "/");
   check("GET / renders", home.status === 200 && /rebuttal/i.test(home.text), `${home.status}`);
   check("GET / footer shows the package version", home.text.includes(version), version);
+  // the Nansen call rail is server-rendered with the recorded example's calls (replayed · 0 cr) — the empty page already shows the shape
+  const railRows = (home.text.match(/class="rail-row replayed call"/g) ?? []).length;
+  check("GET / serves the Nansen call rail with the example's replayed calls", home.text.includes('aria-label="Nansen API calls"') && railRows >= 6, `${railRows} replayed rows`);
   const judge = await get(base, "/judge");
   check("GET /judge renders", judge.status === 200 && /judge/i.test(judge.text), `${judge.status}`);
   const og = await get(base, `/api/og?q=${encodeURIComponent(HERO)}`);

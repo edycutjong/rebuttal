@@ -9,5 +9,7 @@ const config: NextConfig = {
   // lib/guard.ts replays a recorded fixture once the day's live credit budget is spent — ship them with the function
   outputFileTracingIncludes: { "/api/rebut": ["../../fixtures/*.json"], "/api/og": ["../../fixtures/*.json"], "/c": ["../../fixtures/*.json"] },
   turbopack: {},
+  // Next 16 dev writes AGENTS.md / CLAUDE.md into apps/web by default — this repo is public and keeps no agent files
+  agentRules: false,
 };
 export default config;

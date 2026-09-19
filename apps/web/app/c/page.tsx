@@ -44,11 +44,11 @@ export default async function Permalink({ searchParams }: { searchParams: Promis
   const q = cleanClaim((await searchParams).q ?? "");
   const v = q ? await verdictFor(q) : null;
   return (
-    <>
+    <div className="with-rail">
       <SiteHeader current="home" />
       {/* no verdict (gated, failed, or unrecorded past the ceiling) → the claim is prefilled, never auto-run a second time */}
       <Rebuttal initialQuery={v ? (q ?? undefined) : undefined} initialVerdict={v} prefill={v ? undefined : (q ?? undefined)} example={EXAMPLE.verdict} exampleAgent={EXAMPLE.verdict.agent ?? null} proof={PROOF} />
       <SiteFooter />
-    </>
+    </div>
   );
 }

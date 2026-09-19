@@ -12,10 +12,10 @@ const EXAMPLE = pepe as unknown as Fixture;
 export default async function Home({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const sp = await searchParams;
   return (
-    <>
+    <div className="with-rail">
       <SiteHeader current="home" />
       <Rebuttal initialQuery={sp.q} example={EXAMPLE.verdict} exampleAgent={EXAMPLE.verdict.agent ?? null} proof={PROOF} />
       <SiteFooter />
-    </>
+    </div>
   );
 }
