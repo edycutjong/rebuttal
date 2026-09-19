@@ -44,7 +44,7 @@ body {
   min-height: 100vh;
 }
 a { color: var(--accent); text-decoration: none; }
-a:hover, a:focus-visible { text-decoration: underline; outline: none; }
+a:hover, a:focus-visible { text-decoration: underline; }
 button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 code { font-family: var(--mono); font-size: 0.92em; background: rgba(255, 255, 255, 0.05); padding: 1px 5px; border-radius: 5px; }
@@ -97,7 +97,7 @@ code { font-family: var(--mono); font-size: 0.92em; background: rgba(255, 255, 2
 .search button:disabled { opacity: 0.6; cursor: wait; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .chip { border: 1px solid var(--border-2); background: transparent; color: var(--text-2); border-radius: 999px; padding: 6px 12px; min-height: 36px; font-size: 13px; font-weight: 500; transition: border-color 120ms, color 120ms, background 120ms; }
-.chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--text); outline: none; }
+.chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--text); }
 .chip.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 .chip.on:hover { filter: brightness(1.12); color: var(--accent-ink); }
 
@@ -121,7 +121,7 @@ code { font-family: var(--mono); font-size: 0.92em; background: rgba(255, 255, 2
 .badge.muted { background: transparent; border: 1px solid var(--border); color: var(--muted); }
 .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .btn { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-2); background: transparent; color: var(--text); font-weight: 600; transition: background 120ms, border-color 120ms, transform 120ms; }
-.btn:hover, .btn:focus-visible { border-color: var(--accent); background: rgba(56, 189, 248, 0.08); outline: none; }
+.btn:hover, .btn:focus-visible { border-color: var(--accent); background: rgba(56, 189, 248, 0.08); }
 .btn:active { transform: scale(0.97); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 .btn.primary { background: var(--real); border-color: var(--real); color: var(--real-ink); }
@@ -299,7 +299,7 @@ main.wrap { container-type: inline-size; }
 .rail-foot a { white-space: nowrap; }
 .rail-foot code { font-size: 11px; }
 .rail-clear { background: none; border: 0; padding: 0; color: var(--accent); font-size: 12px; text-decoration: none; transition: color 120ms; }
-.rail-clear:hover, .rail-clear:focus-visible { text-decoration: underline; outline: none; }
+.rail-clear:hover, .rail-clear:focus-visible { text-decoration: underline; }
 
 /* ── /judge — a static page for one reader ───────────────────────────────────────────────────────────────── */
 .judge { max-width: 820px; padding-top: 32px; }
@@ -329,3 +329,12 @@ main.wrap { container-type: inline-size; }
   .trace table td.ep { width: auto; }
   .trace td.meta div { display: inline; margin-left: 6px; }
 }
+
+/* ── 404 — same shell, product voice ─────────────────────────────────────────────────────────────────────── */
+.nf { max-width: 640px; text-align: left; padding-top: 48px; }
+.nf h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 12px; }
+.nf h1 .no { color: var(--impostor); }
+.nf p { color: var(--text-2); font-size: 17px; margin: 0 0 12px; }
+.nf ul { color: var(--text-2); padding-left: 20px; margin: 0 0 20px; }
+.nf li { margin: 6px 0; }
+.nf code { font-size: 0.9em; }
