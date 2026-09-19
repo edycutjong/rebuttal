@@ -111,7 +111,7 @@ git clone https://github.com/edycutjong/rebuttal.git && cd rebuttal && npm insta
 export NANSEN_API_KEY=nsn_…                                   # https://app.nansen.ai/api
 npm run rebuttal -- "Smart Money is aping \$PEPE hard today" --explain   # 10 credits, live
 npm run verify                                                # 13/13, 0 credits
-npm test                                                      # 234 tests
+npm test                                                      # 235 tests
 npm run bench -- --runs 1                                     # ≈ 130 credits, rewrites docs/BENCH.md
 ```
 

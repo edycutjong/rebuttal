@@ -35,6 +35,20 @@ describe("runChecks", () => {
     expect(evidence.price?.change).toBeCloseTo(0.0694, 3);
     expect(c.creditsSpent).toBe(10);
   });
+  it("a check's ms is its own Call's time — network time when clean, the whole wall time when an attempt was retried", async () => {
+    let ohlcvHits = 0;
+    const routes = pepeRoutes();
+    const c = fakeClient((e, b) => (e === "tgm/token-ohlcv" && ohlcvHits++ === 0 ? new Response("busy", { status: 503 }) : routes(e, b)));
+    const { checks } = await runChecks(c, claim(), resolved, NOW);
+    const price = checks.find((k) => k.id === "price")!;
+    const call = c.calls.find((x) => x.tag === "price")!;
+    expect(call.attempts).toBe(2);
+    expect(price.ok).toBe(true);
+    expect(price.ms).toBe(call.totalMs); // the hidden 750 ms retry wait stays visible in the trace row and the rail
+    expect(price.ms).toBeGreaterThanOrEqual(700);
+    const flow = checks.find((k) => k.id === "flow1d")!;
+    expect(flow.ms).toBe(c.calls.find((x) => x.tag === "flow1d")!.ms);
+  });
   it("the who-bought-sold window is the last 24 h floored to the hour, with the subject's labels", async () => {
     const bodies: Record<string, unknown>[] = [];
     const c = fakeClient((e, b) => {

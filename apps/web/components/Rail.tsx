@@ -30,6 +30,8 @@ export const RAIL_CAP = 200;
 const AGENT_PRICE = 200;
 export const shortAddr = (a: string) => (a.length > 16 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a);
 const short = (h: string | undefined | null) => (h ? h.slice(0, 8) : null);
+/** Same as core's `callMs`: network time, or the wall time when an attempt was retried (a hidden timeout stays visible). */
+const callMs = (c: Call) => (c.attempts > 1 ? c.totalMs : c.ms);
 
 function rowsFromCalls(group: number, calls: Call[], status: "replayed" | "provenance"): RailRow[] {
   return calls.map((c, i) => ({
@@ -41,7 +43,7 @@ function rowsFromCalls(group: number, calls: Call[], status: "replayed" | "prove
     params: summarize(c),
     status: status === "replayed" ? "replayed" : !c.ok ? "error" : c.cached ? "cached" : "live",
     credits: status === "replayed" ? 0 : c.credits,
-    ms: status === "replayed" || c.cached ? null : c.ms,
+    ms: status === "replayed" || c.cached ? null : callMs(c),
     hash: short(c.responseHash),
     error: c.error,
   }));
@@ -88,8 +90,12 @@ export function useRail(initial?: { calls: Call[]; label: string; kind: "replaye
     setState((s) => ({ ...s, groups: [...s.groups, { id, label, kind, startedAt: Date.now(), ms: null, done: false }] }));
     return id;
   }, []);
-  const finishGroup = useCallback((id: number, ms: number | null) => {
-    setState((s) => ({ ...s, groups: s.groups.map((g) => (g.id === id ? { ...g, done: true, ms: ms ?? Date.now() - g.startedAt } : g)) }));
+  /** Close a run. Rows still pending when the stream closes (a newer query superseded it, or it ended early) are marked so — never left shimmering. */
+  const finishGroup = useCallback((id: number, ms: number | null, reason = "cancelled") => {
+    setState((s) => ({
+      groups: s.groups.map((g) => (g.id === id ? { ...g, done: true, ms: ms ?? Date.now() - g.startedAt } : g)),
+      rows: s.rows.map((r) => (r.group === id && r.status === "pending" ? { ...r, status: "error", error: reason } : r)),
+    }));
   }, []);
   const onCall = useCallback((group: number, e: CallEvent) => {
     setState((s) => {
@@ -108,7 +114,7 @@ export function useRail(initial?: { calls: Call[]; label: string; kind: "replaye
         params: summarize(c),
         status: !c.ok ? "error" : c.cached ? "cached" : "live",
         credits: c.credits,
-        ms: c.cached ? null : c.ms,
+        ms: c.cached ? null : callMs(c),
         hash: short(c.responseHash),
         error: c.error,
       };
@@ -179,7 +185,15 @@ export function useRail(initial?: { calls: Call[]; label: string; kind: "replaye
     }),
     [],
   );
-  const clear = useCallback(() => setState({ rows: [], groups: [] }), []);
+  /** Clear the log. A run still streaming keeps its header and its pending rows, so what lands next has somewhere to land. */
+  const clear = useCallback(
+    () =>
+      setState((s) => {
+        const open = new Set(s.groups.filter((g) => !g.done).map((g) => g.id));
+        return { groups: s.groups.filter((g) => open.has(g.id)), rows: s.rows.filter((r) => open.has(r.group) && r.status === "pending") };
+      }),
+    [],
+  );
   return { ...state, startGroup, finishGroup, onCall, agent, clear };
 }
 
@@ -299,7 +313,9 @@ export function Rail({ rows, groups, symbols, onClear, onRunExample }: { rows: R
                                 : r.status === "replayed"
                                   ? "0 cr · replayed"
                                   : r.status === "error"
-                                    ? `0 cr · ${r.error === "timeout" ? "timeout" : "error"}`
+                                    ? r.error === "cancelled" || r.error === "stream closed"
+                                      ? r.error
+                                      : `${r.credits} cr · ${r.error === "timeout" || /did not finish/.test(r.error ?? "") ? "timeout" : "error"}`
                                     : r.status === "pending"
                                       ? `${r.credits} cr · …`
                                       : `${r.credits} cr`}

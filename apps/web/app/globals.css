@@ -267,7 +267,7 @@ main.wrap { container-type: inline-size; }
 .rail-group span { font-family: var(--mono); color: var(--text-2); }
 .rail-group i { font-style: italic; }
 .rail-row { position: relative; display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 14px; font-size: 12.5px; animation: rail-in 240ms var(--ease) 1; transition: background 120ms; }
-.rail-row:hover { background: rgba(255, 255, 255, 0.025); }
+.rail-row:hover { background: rgba(255, 255, 255, 0.045); }
 @keyframes rail-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 /* a pending row turning live: one green wash and the dot pops — the truth landing, nothing else */
 .rail-row.live { animation: rail-land 700ms var(--ease) 1; }

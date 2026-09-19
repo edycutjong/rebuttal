@@ -54,6 +54,9 @@ export function planChecks(claim: Claim, resolved: Resolved): Array<Omit<Check, 
   return plan;
 }
 
+/** The latency a reader should see for a call: its network time, or the whole wall time when an attempt was retried. */
+export const callMs = (c: Call): number => (c.attempts > 1 ? c.totalMs : c.ms);
+
 const row = (address: string, label: string | null | undefined, usd: number | null | undefined): NamedRow => ({ address, label: label ?? null, usd: usd ?? 0 });
 
 /**
@@ -141,8 +144,9 @@ export async function runChecks(
       try {
         const values = await runners[p.id]();
         const call = own();
-        // ms = the Call's own network time when it has one, so the trace row and the live call rail print the same number
-        check = { ...p, ok: true, ms: call && call.ok ? call.ms : Date.now() - t0, cached: call?.cached ?? false, credits: call?.credits ?? p.credits, responseHash: call?.responseHash, values };
+        // ms = the Call's own time, so the trace row and the live call rail print the same number: the network time of a clean
+        // call, the wall time including the failed attempt when it was retried (a hidden 8 s timeout must stay visible)
+        check = { ...p, ok: true, ms: call && call.ok ? callMs(call) : Date.now() - t0, cached: call?.cached ?? false, credits: call?.credits ?? p.credits, responseHash: call?.responseHash, values };
         evidence.checksOk++;
       } catch (e) {
         check = { ...p, ok: false, ms: Date.now() - t0, cached: false, credits: 0, error: (e instanceof Error ? e.message : String(e)).slice(0, 160), values: {} };

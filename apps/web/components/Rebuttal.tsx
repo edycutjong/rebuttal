@@ -127,7 +127,7 @@ export function Rebuttal({
       setPhase("error");
     } finally {
       setNarrating(false);
-      rail.finishGroup(group, groupMs);
+      rail.finishGroup(group, groupMs, ctrl.signal.aborted ? "cancelled" : "stream closed");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
