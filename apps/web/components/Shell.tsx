@@ -18,7 +18,7 @@ export function Mark({ size = 24 }: { size?: number }) {
 export function SiteHeader({ current }: { current: "home" | "judge" }) {
   return (
     <header className="site-header">
-      <Link href="/" className="brand" aria-label="Rebuttal — home">
+      <Link href="/" className="brand">
         <Mark />
         <span className="brand-name">rebuttal</span>
         <span className="brand-tag">is Smart Money really buying · on Nansen</span>

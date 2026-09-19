@@ -197,7 +197,7 @@ export function VerdictCard({ verdict, pending, narrating, replay, onCopy, onPer
             Permalink
           </button>
           {v.resolved && onAgent && (
-            <button className="btn agent" onClick={onAgent} disabled={agentBusy} aria-label={`Ask Nansen's agent, ${agentPrice} credits`}>
+            <button className="btn agent" onClick={onAgent} disabled={agentBusy}>
               {agentBusy ? "Asking Nansen's agent…" : "Ask Nansen's agent"}
               <span className="price">{agentPrice} credits</span>
             </button>
