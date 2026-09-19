@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { CachedNansenClient, fixtureStore, listFixtures, readFixture, rebut, type Fixture, type RebutOptions, type Verdict } from "@rebuttal/core";
+import { CachedNansenClient, fixtureStore, listFixtures, readFixture, rebut, type CallEvent, type Fixture, type RebutOptions, type Verdict } from "@rebuttal/core";
 
 /**
  * Spend guard for the public routes. The key is server-only and every rebuttal costs real Nansen credits (≤ 15), the
@@ -111,11 +111,11 @@ export function fixtureFor(q: string): Fixture | undefined {
 }
 
 /** The offline fallback: the fixture's recorded responses under the same engine and clock, labelled as a replay. */
-export async function replayFixture(q: string, opts: Pick<RebutOptions, "onProgress"> & { reason?: "budget" | "rate" } = {}): Promise<{ verdict: Verdict; oldestHit?: string } | undefined> {
+export async function replayFixture(q: string, opts: Pick<RebutOptions, "onProgress"> & { reason?: "budget" | "rate"; onCall?: (e: CallEvent) => void } = {}): Promise<{ verdict: Verdict; oldestHit?: string } | undefined> {
   const f = fixtureFor(q);
   if (!f) return undefined;
   const msg = opts.reason === "rate" ? RATE_MESSAGE : BUDGET_MESSAGE;
-  const c = new CachedNansenClient("nsn_offline_replay_no_network", { store: fixtureStore(f), offline: true });
+  const c = new CachedNansenClient("nsn_offline_replay_no_network", { store: fixtureStore(f), offline: true, onCall: opts.onCall });
   const onProgress: RebutOptions["onProgress"] = (e) => {
     if (e.type === "verdict" && !e.verdict.warnings.includes(msg)) e.verdict.warnings.push(msg);
     opts.onProgress?.(e);

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { rebutFor, cleanClaim, CHAINS, MAX_CLAIM } from "@/lib/engine";
 import { clientIp, ipAllowed, budgetExhausted, recordSpend, replayFixture, NO_FIXTURE_MESSAGE } from "@/lib/guard";
-import type { RebutEvent } from "@rebuttal/core";
+import type { CallEvent, RebutEvent } from "@rebuttal/core";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,7 +10,8 @@ export const maxDuration = 60;
 /**
  * GET /api/rebut?q=<claim or x.com URL>[&chain=base]      → Verdict JSON
  * GET /api/rebut?q=…&stream=1[&fresh=1]                    → NDJSON (fresh=1: bypass cache reads — every call live, same guard): {type:input} · {type:claim} · {type:resolved} ·
- *                                                             {type:check}×N (as each Nansen call lands) · {type:verdict} · {type:prose}
+ *                                                             {type:call phase:start|end}×N (every Nansen call as it leaves and lands — the page's rail) ·
+ *                                                             {type:check}×N (as each check's numbers are read) · {type:verdict} · {type:prose}
  * Same engine, same hash as the CLI. Spend guard (lib/guard.ts): 429 past the per-IP rate; past the daily credit
  * ceiling a recorded fixture replays at 0 credits (labelled in `warnings`, `degraded: true`) or the request gets a 503.
  */
@@ -46,7 +47,7 @@ export async function GET(req: NextRequest) {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       let closed = false;
-      const send = (e: RebutEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean }) => {
+      const send = (e: RebutEvent | CallEvent | { type: "error"; message: string } | { type: "asOf"; asOf: string | null; degraded: boolean }) => {
         if (closed) return;
         try {
           controller.enqueue(enc.encode(JSON.stringify(e) + "\n"));
@@ -55,7 +56,7 @@ export async function GET(req: NextRequest) {
         }
       };
       try {
-        const r = degraded ? await replayFixture(q, { onProgress: send }) : await rebutFor(q, chain, { onProgress: send, fresh });
+        const r = degraded ? await replayFixture(q, { onProgress: send, onCall: send }) : await rebutFor(q, chain, { onProgress: send, onCall: send, fresh });
         if (!r) send({ type: "error", message: NO_FIXTURE_MESSAGE });
         else {
           if (!degraded) recordSpend(r.verdict.credits);

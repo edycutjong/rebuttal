@@ -141,7 +141,8 @@ export async function runChecks(
       try {
         const values = await runners[p.id]();
         const call = own();
-        check = { ...p, ok: true, ms: Date.now() - t0, cached: call?.cached ?? false, credits: call?.credits ?? p.credits, responseHash: call?.responseHash, values };
+        // ms = the Call's own network time when it has one, so the trace row and the live call rail print the same number
+        check = { ...p, ok: true, ms: call && call.ok ? call.ms : Date.now() - t0, cached: call?.cached ?? false, credits: call?.credits ?? p.credits, responseHash: call?.responseHash, values };
         evidence.checksOk++;
       } catch (e) {
         check = { ...p, ok: false, ms: Date.now() - t0, cached: false, credits: 0, error: (e instanceof Error ? e.message : String(e)).slice(0, 160), values: {} };

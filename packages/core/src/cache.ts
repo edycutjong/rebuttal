@@ -96,30 +96,35 @@ export class CachedNansenClient extends NansenClient {
     const hit = this.ttlMs > 0 || this.offline ? this.store.get(key) : undefined;
     const fresh = hit && Date.now() - Date.parse(hit.storedAt) < this.ttlMs;
     if (hit && (fresh || this.offline)) {
-      this.calls.push({
-        endpoint,
-        body,
-        credits: 0,
-        ms: 0,
-        cached: true,
-        status: 200,
-        fieldsUsed,
-        responseHash: sha256(hit.text),
-        attempts: 0,
-        totalMs: 0,
-        ok: true,
-        tag: opts.tag,
-      });
+      // a hit is announced and recorded in one breath: the rail shows it as a grey "cached" row, never as pending
+      this.record(
+        {
+          endpoint,
+          body,
+          credits: 0,
+          ms: 0,
+          cached: true,
+          status: 200,
+          fieldsUsed,
+          responseHash: sha256(hit.text),
+          attempts: 0,
+          totalMs: 0,
+          ok: true,
+          tag: opts.tag,
+        },
+        this.begin(endpoint, body, opts.tag),
+      );
       if (!this.oldestHit || hit.storedAt < this.oldestHit) this.oldestHit = hit.storedAt;
       return JSON.parse(hit.text) as T;
     }
     if (this.offline) throw new Error(`NANSEN_OFFLINE=1 and no cached response for ${endpoint} ${JSON.stringify(body)}`);
     const t0 = Date.now();
+    const seq = this.begin(endpoint, body, opts.tag);
     let raw: Awaited<ReturnType<NansenClient["postRaw"]>>;
     try {
       raw = await this.postRaw(endpoint, body, opts);
     } catch (e) {
-      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag);
+      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag, seq);
       throw e;
     }
     const { text, ms, status, attempts, totalMs, credits } = raw;
@@ -127,23 +132,26 @@ export class CachedNansenClient extends NansenClient {
     try {
       parsed = JSON.parse(text) as T; // a non-JSON 200 must never be stored — it would replay (and throw) for an hour
     } catch (e) {
-      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag);
+      this.recordFailure(endpoint, body, fieldsUsed, e, Date.now() - t0, opts.tag, seq);
       throw e;
     }
-    this.calls.push({
-      endpoint,
-      body,
-      credits: credits ?? CREDITS[endpoint] ?? 1,
-      ms,
-      cached: false,
-      status,
-      fieldsUsed,
-      responseHash: sha256(text),
-      attempts,
-      totalMs,
-      ok: true,
-      tag: opts.tag,
-    });
+    this.record(
+      {
+        endpoint,
+        body,
+        credits: credits ?? CREDITS[endpoint] ?? 1,
+        ms,
+        cached: false,
+        status,
+        fieldsUsed,
+        responseHash: sha256(text),
+        attempts,
+        totalMs,
+        ok: true,
+        tag: opts.tag,
+      },
+      seq,
+    );
     this.store.set(key, { storedAt: new Date().toISOString(), ttlMs: this.ttlMs, endpoint, body, text });
     return parsed;
   }
