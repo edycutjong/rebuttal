@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE), // lib/site.ts: SITE_URL only when it parses as http(s), else the canonical domain
   title: "Rebuttal — is Smart Money really buying? Checked on Nansen",
-  description: "Paste “Smart Money is buying $X”. Six Nansen calls decide whether it's true — CONFIRMED, OVERSTATED, CONTRADICTED or UNVERIFIABLE — and show the trace that decided it.",
+  description: "Paste “Smart Money is buying $X”. Six Nansen calls return CONFIRMED, OVERSTATED, CONTRADICTED or UNVERIFIABLE — with the trace that decided it.",
   openGraph: {
     type: "website",
     url: "/",
