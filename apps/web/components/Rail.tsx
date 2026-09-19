@@ -338,7 +338,7 @@ export function Rail({ rows, groups, symbols, onClear, onRunExample }: { rows: R
         )}
         <footer className="rail-foot">
           <span>
-            session · {sessionCalls} {sessionCalls === 1 ? "call" : "calls"} · {sessionCredits} credits
+            session · {sessionCalls} {sessionCalls === 1 ? "call" : "calls"} · {sessionCredits} {sessionCredits === 1 ? "credit" : "credits"}
             {rows.length > 0 && (
               <>
                 {" · "}
