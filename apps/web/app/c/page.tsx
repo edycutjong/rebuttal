@@ -35,7 +35,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   if (!q) return { title: "Rebuttal" };
   const v = await verdictFor(q);
   const title = v ? `${v.label} — ${q.slice(0, 80)}` : `Rebuttal — ${q.slice(0, 80)}`;
-  const description = v ? v.reasons.slice(0, 2).join(" · ") : "Paste the tweet. Six Nansen calls decide whether it's true.";
+  const description = v ? v.reasons.slice(0, 2).join(" · ") : "Paste the tweet. Six Nansen calls decide whether it's true, with the full trace that decided it.";
   const og = `/api/og?q=${encodeURIComponent(q)}`;
   return { title, description, openGraph: { title, description, images: [{ url: og, width: 1200, height: 630 }] }, twitter: { card: "summary_large_image", title, description, images: [og] }, alternates: { canonical: `/c?q=${encodeURIComponent(q)}` } };
 }
