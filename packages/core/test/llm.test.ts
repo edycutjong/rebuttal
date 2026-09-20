@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { chat, extractWithLlm, narrateWithLlm, keysFromEnv } from "../src/llm";
 import { rebut } from "../src/rebut";
 import { fakeClient, pepeRoutes } from "./helpers";
@@ -16,10 +16,18 @@ describe("chat — key rotation and budgets", () => {
       if (k === "kbad") return new Response('{"error":{"message":"Organization has been restricted."}}', { status: 400 });
       return textReply("ok");
     };
-    // 3 keys; the start index depends on the clock, so every key is a valid starting point and all paths are exercised
-    const r = await chat({ keys: ["k429", "kbad", "kgood"], fetchImpl, timeoutMs: 2000 }, [{ role: "user", content: "hi" }]);
-    expect(r?.content).toBe("ok");
-    expect(used[used.length - 1]).toBe("kgood");
+    // the start index is `floor(Date.now()/1000) % keys.length` — pin the clock (Date only; real timers still run
+    // the abort/setTimeout machinery) so the rotation deterministically starts at k429 and visits all three keys,
+    // rather than leaving it to which wall-clock second the test happens to run in (a real, if rare, CI flake)
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(0);
+    try {
+      const r = await chat({ keys: ["k429", "kbad", "kgood"], fetchImpl, timeoutMs: 2000 }, [{ role: "user", content: "hi" }]);
+      expect(r?.content).toBe("ok");
+      expect(used).toEqual(["k429", "kbad", "kgood"]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
   it("returns null on a genuine 400 (bad request) without trying every key", async () => {
     let n = 0;
@@ -52,6 +60,34 @@ describe("chat — key rotation and budgets", () => {
     expect(r.claim).toBeNull();
     expect(r.status.error).toMatch(/no GROQ key/);
   });
+  it("chat() with an empty key list returns null without ever fetching", async () => {
+    let n = 0;
+    expect(await chat({ keys: [], fetchImpl: async () => (n++, textReply("x")) }, [{ role: "user", content: "hi" }])).toBeNull();
+    expect(n).toBe(0);
+  });
+  it("with no fetchImpl given, it falls back to the global fetch", async () => {
+    vi.stubGlobal("fetch", async () => textReply("from global fetch"));
+    const r = await chat({ keys: ["a"] }, [{ role: "user", content: "hi" }]);
+    expect(r?.content).toBe("from global fetch");
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+  it("a request that outlasts the remaining budget stops rotating keys instead of trying the next one", async () => {
+    let n = 0;
+    const fetchImpl: typeof fetch = async () => {
+      n++;
+      await new Promise((r) => setTimeout(r, 120));
+      return new Response("slow", { status: 429 }); // would normally rotate to the next key…
+    };
+    // …but the budget (100ms) is already spent by the time the loop gets back around to check it
+    expect(await chat({ keys: ["a", "b"], fetchImpl, timeoutMs: 100 }, [{ role: "user", content: "hi" }])).toBeNull();
+    expect(n).toBe(1);
+  });
+  it("a res.text() that itself rejects on a non-retryable status still returns null, not a throw", async () => {
+    const fetchImpl: typeof fetch = async () => ({ ok: false, status: 400, text: () => Promise.reject(new Error("boom")) }) as unknown as Response;
+    expect(await chat({ keys: ["a"], fetchImpl }, [{ role: "user", content: "hi" }])).toBeNull();
+  });
 });
 
 describe("extractWithLlm validation", () => {
@@ -69,6 +105,11 @@ describe("extractWithLlm validation", () => {
     const fetchImpl: typeof fetch = async () => new Response(JSON.stringify({ choices: [{ message: { tool_calls: [{ function: { arguments: "{not json" } }] } }] }), { status: 200 });
     expect((await extractWithLlm("x", { keys: ["a"], fetchImpl })).claim).toBeNull();
   });
+  it("a tool call with no token field at all is treated as an empty (rejected) token", async () => {
+    const r = await extractWithLlm("x", { keys: ["a"], fetchImpl: async () => toolReply({ type: "buying", subject: "smart_money" }) });
+    expect(r.claim).toBeNull();
+    expect(r.status.error).toMatch(/bad token ""/);
+  });
 });
 
 describe("narrateWithLlm guards", () => {
@@ -79,6 +120,11 @@ describe("narrateWithLlm guards", () => {
   it("collapses whitespace in usable prose", async () => {
     const r = await narrateWithLlm("s", { keys: ["a"], fetchImpl: async () => textReply("Smart Money  net sold\n$212K in 24 h. The buyers were fresh wallets.") });
     expect(r.text).toBe("Smart Money net sold $212K in 24 h. The buyers were fresh wallets.");
+  });
+  it("no keys → nothing is fetched, template prose", async () => {
+    const r = await narrateWithLlm("s", { keys: [] });
+    expect(r.text).toBeNull();
+    expect(r.status.error).toMatch(/no GROQ key/);
   });
 });
 
@@ -120,6 +166,7 @@ describe("prose that disputes the verdict is discarded (live finding 2026-09-18:
     expect(proseConsistent("CONTRADICTED", "No Smart Money wallet traded it.")).toBe(true);
     expect(proseConsistent("OVERSTATED", "Nansen fully supports the claim.")).toBe(false);
     expect(proseConsistent("UNVERIFIABLE", "This confirms the claim.")).toBe(false);
+    expect(proseConsistent("SOME_UNKNOWN_LABEL", "anything at all")).toBe(true);
   });
   it("narrateWithLlm falls back to the template when the model disputes the label", async () => {
     const r = await narrateWithLlm("s", { keys: ["a"], label: "CONFIRMED", fetchImpl: async () => textReply("Whales sold only $532K, far below $5.1M, so the claim is not supported by the data.") });

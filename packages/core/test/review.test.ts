@@ -1,5 +1,5 @@
 /** Regression tests named for the independent code review of 2026-09-18 (findings #1, #6, #9, #10, #12). */
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { NansenClient } from "../src/client";
 import { CachedNansenClient, MemoryCache } from "../src/cache";
 import { runChecks } from "../src/checks";
@@ -8,6 +8,17 @@ import { extractClaim, mergeClaims } from "../src/claim";
 import { hashRecord } from "../src/rebut";
 import { fakeClient, pepeRoutes, claim, evidence, snap, PEPE_ETH } from "./helpers";
 import type { Resolved } from "../src/resolve";
+
+// A real shell with NANSEN_OFFLINE=1 exported must not change what this suite asserts — the CachedNansenClient
+// instances built below rely on the default (live) path, so the ambient env is neutralized around this file.
+const REAL_NANSEN_OFFLINE = process.env.NANSEN_OFFLINE;
+beforeEach(() => {
+  delete process.env.NANSEN_OFFLINE;
+});
+afterEach(() => {
+  if (REAL_NANSEN_OFFLINE === undefined) delete process.env.NANSEN_OFFLINE;
+  else process.env.NANSEN_OFFLINE = REAL_NANSEN_OFFLINE;
+});
 
 const resolved: Resolved = { chain: "ethereum", address: PEPE_ETH, symbol: "PEPE", name: "Pepe", marketCap: 1.5e9, sameName: 3, by: "test", others: [] };
 const NOW = Date.UTC(2026, 8, 18, 12, 30);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { NansenClient } from "../src/client";
+import { NansenClient, summarizeParams, clientFromEnv, CREDITS } from "../src/client";
 import { fakeClient } from "./helpers";
 
 describe("NansenClient", () => {
@@ -69,6 +69,73 @@ describe("review fix F5: retried attempts are visible", () => {
     await c.post("tgm/holders", {});
     expect(c.calls[0].attempts).toBe(2);
   });
+});
+
+describe("summarizeParams", () => {
+  it("a short address is not truncated", () => {
+    expect(summarizeParams("tgm/holders", { chain: "ethereum", token_address: "0x1", label_type: "whale" })).toBe("ethereum · 0x1 · whale");
+  });
+  it("an unparsable date range is dropped from the line, not shown as NaN", () => {
+    expect(summarizeParams("tgm/token-ohlcv", { chain: "ethereum", token_address: "0x1", timeframe: "1h", date: { from: "not-a-date", to: "also-not" } })).toBe("ethereum · 0x1 · 1h");
+  });
+  it("agent/expert is summarized the same way as agent/fast, long text is ellipsized, short text and a missing text both print cleanly", () => {
+    expect(summarizeParams("agent/expert", { text: "x".repeat(50) })).toBe(`"${"x".repeat(40)}…"`);
+    expect(summarizeParams("agent/fast", { text: "short" })).toBe('"short"');
+    expect(summarizeParams("agent/fast", {})).toBe('""');
+  });
+  it("search/general with no query or result_type still prints a scannable (empty) line", () => {
+    expect(summarizeParams("search/general", {})).toBe('"" · all');
+  });
+  it("a body with none of the known shape falls back to its first keys", () => {
+    expect(summarizeParams("account", { foo: 1, bar: 2, baz: 3, qux: 4 })).toBe("foo, bar, baz");
+  });
+});
+
+describe("clientFromEnv", () => {
+  it("reads NANSEN_API_KEY from the environment", () => {
+    const prev = process.env.NANSEN_API_KEY;
+    process.env.NANSEN_API_KEY = "nsn_test_key_0000000000000000000000";
+    try {
+      expect(clientFromEnv()).toBeInstanceOf(NansenClient);
+    } finally {
+      if (prev === undefined) delete process.env.NANSEN_API_KEY;
+      else process.env.NANSEN_API_KEY = prev;
+    }
+  });
+  it("falls back to an empty string when NANSEN_API_KEY is unset, which the client rejects", () => {
+    const prev = process.env.NANSEN_API_KEY;
+    delete process.env.NANSEN_API_KEY;
+    try {
+      expect(() => clientFromEnv()).toThrow(/NANSEN_API_KEY/);
+    } finally {
+      if (prev !== undefined) process.env.NANSEN_API_KEY = prev;
+    }
+  });
+});
+
+describe("credits fallback chain", () => {
+  it("begin() prices an unlisted endpoint's start event at 1 credit", async () => {
+    const events: Array<{ phase: string; credits?: number }> = [];
+    const c = fakeClient(() => ({ ok: 1 }), { onCall: (e) => events.push(e.phase === "start" ? { phase: e.phase, credits: e.credits } : { phase: e.phase }) });
+    expect(CREDITS["totally/unknown-endpoint"]).toBeUndefined();
+    await c.post("totally/unknown-endpoint", {});
+    expect(events[0]).toEqual({ phase: "start", credits: 1 });
+  });
+  it("a live call to an unlisted endpoint with no reported cost is recorded at 1 credit", async () => {
+    const c = fakeClient(() => ({ ok: 1 }));
+    await c.post("totally/unknown-endpoint", {});
+    expect(c.calls[0].credits).toBe(1);
+  });
+});
+
+describe("RateLimiter", () => {
+  it("a second call beyond the per-second cap waits for the window to roll over", async () => {
+    const c = fakeClient(() => ({ ok: 1 }), { rps: 1 });
+    const t0 = Date.now();
+    await c.post("tgm/holders", {});
+    await c.post("tgm/holders", {});
+    expect(Date.now() - t0).toBeGreaterThanOrEqual(900);
+  }, 10_000);
 });
 
 describe("per-call options", () => {

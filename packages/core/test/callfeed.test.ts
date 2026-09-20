@@ -1,7 +1,18 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { NansenClient, summarizeParams, type CallEvent } from "../src/client";
 import { CachedNansenClient, MemoryCache } from "../src/cache";
 import { fakeClient } from "./helpers";
+
+// A real shell with NANSEN_OFFLINE=1 exported must not change what this suite asserts — the CachedNansenClient
+// built below relies on the default (live) path, so the ambient env is neutralized around this file.
+const REAL_NANSEN_OFFLINE = process.env.NANSEN_OFFLINE;
+beforeEach(() => {
+  delete process.env.NANSEN_OFFLINE;
+});
+afterEach(() => {
+  if (REAL_NANSEN_OFFLINE === undefined) delete process.env.NANSEN_OFFLINE;
+  else process.env.NANSEN_OFFLINE = REAL_NANSEN_OFFLINE;
+});
 
 const KEY = "nsn_test_key_0000000000000000000000";
 const PEPE = "0x6982508145454ce325ddbe47a25d4ec3d2311933";

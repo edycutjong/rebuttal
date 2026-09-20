@@ -42,10 +42,25 @@ describe("decide — buying claims about Smart Money", () => {
     const d = decide(claim(), evidence({ flow1d: sm(2_000, 5) }));
     expect(d).toMatchObject({ label: "OVERSTATED", ruleId: "O-SMALL" });
   });
+  it("O-SMALL also names who-bought-sold's buyers/sellers when who-bought-sold answered too", () => {
+    const d = decide(claim(), evidence({ flow1d: sm(2_000, 5), named: { buyUsd: 180, sellUsd: 20, buyRows: 2, sellRows: 1, buyers: [], sellers: [] } }));
+    expect(d).toMatchObject({ label: "OVERSTATED", ruleId: "O-SMALL" });
+    expect(d.reasons.join(" ")).toMatch(/who-bought-sold names 2 .+ buyers? \(\$180\) and 1 seller \(\$20\)/);
+  });
   it("fresh wallets out-buying Smart Money is context on a CONFIRMED, never a downgrade (live VVV 2026-09-18: SM +$100K, fresh +$74M, #2 on the SM table)", () => {
     const d = decide(claim(), evidence({ flow1d: sm(99_702, 4, { fresh_wallets: { net: 73_914_417, wallets: 0 }, top_pnl: { net: -1_496_391, wallets: 30 } }), flow7d: sm(115_136, 9), table: { inTable: true, net24: 99_702, net7d: 115_136, traders: 21 } }));
     expect(d).toMatchObject({ label: "CONFIRMED", ruleId: "A-FLOW" });
     expect(d.reasons.join(" ")).toMatch(/fresh wallets net bought \$73.91M — retail is the bigger buyer/);
+  });
+  it("the mirror image on a selling claim: fresh wallets dumping harder reads 'retail is the bigger seller'", () => {
+    const sellVVV = claim({ type: "selling" });
+    const d = decide(sellVVV, evidence({ flow1d: sm(-99_702, 4, { fresh_wallets: { net: -73_914_417, wallets: 0 }, top_pnl: { net: -1_496_391, wallets: 30 } }), flow7d: sm(-115_136, 9), table: { inTable: true, net24: -99_702, net7d: -115_136, traders: 21 } }));
+    expect(d).toMatchObject({ label: "CONFIRMED", ruleId: "A-FLOW" });
+    expect(d.reasons.join(" ")).toMatch(/fresh wallets net sold \$73.91M — retail is the bigger seller/);
+  });
+  it("claim.type defaults to 'buying' when absent", () => {
+    const noType = { ...claim(), type: undefined };
+    expect(decide(noType, evidence({ flow1d: sm(99_702, 4) }))).toMatchObject({ label: "CONFIRMED" });
   });
   it("O-7D: a one-day blip against a week of selling", () => {
     const d = decide(claim(), evidence({ flow1d: sm(60_000, 8), flow7d: sm(-500_000, 40) }));
@@ -58,6 +73,12 @@ describe("decide — buying claims about Smart Money", () => {
   it("O-FEW: one or two wallets, not the class", () => {
     const d = decide(claim(), evidence({ flow1d: sm(60_000, 2) }));
     expect(d).toMatchObject({ label: "OVERSTATED", ruleId: "O-FEW" });
+    expect(d.reasons.join(" ")).toMatch(/2 wallets —/);
+  });
+  it("O-FEW: singular 'wallet' when there is exactly one", () => {
+    const d = decide(claim(), evidence({ flow1d: sm(60_000, 1) }));
+    expect(d).toMatchObject({ label: "OVERSTATED", ruleId: "O-FEW" });
+    expect(d.reasons.join(" ")).toMatch(/1 wallet —/);
   });
   it("A-FLOW: confirmed when the flow is over the threshold, wallets ≥ 3, nothing undercuts it", () => {
     const d = decide(claim(), evidence({ flow1d: sm(120_000, 14), flow7d: sm(400_000, 40), table: { inTable: true, net24: 120_000, net7d: 400_000, traders: 30 }, price: { open: 1, close: 1.05, change: 0.05, candles: 25 } }));

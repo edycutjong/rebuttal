@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractClaim, findChain, findToken, findType, findSubject, mergeClaims, validClaim } from "../src/claim";
+import { extractClaim, findChain, findToken, findType, findSubject, mergeClaims, validClaim, negatedProblem } from "../src/claim";
 
 /** The ten spike claims (specs/spike-claims.md) plus the hero phrasing: what the rules extractor must read. */
 const SPIKE: Array<[string, string, string, string | undefined]> = [
@@ -51,6 +51,9 @@ describe("findToken precedence", () => {
   it("numbers with K/M suffix are not tickers", () => {
     expect(findToken("bought 12M of it")).toBeUndefined();
   });
+  it("among two bare candidates, the one before the verb and the one after are both weighed — the closer one (here, after) wins", () => {
+    expect(findToken("ABC is up, smart money bought DEF")).toBe("DEF");
+  });
 });
 
 describe("findChain", () => {
@@ -60,6 +63,12 @@ describe("findChain", () => {
     expect(findChain("$AI on Robinhood Chain")).toBe("robinhood");
     expect(findChain("smart money on base is buying")).toBe("base");
     expect(findChain("#sol whales")).toBe("solana");
+  });
+  it("a trailing word after the chain name does not get pulled into the match", () => {
+    expect(findChain("SM buying $X on ethereum classic")).toBe("ethereum");
+  });
+  it("reads a bare '<chain> chain' phrase with no preceding 'on'", () => {
+    expect(findChain("PEPE, arbitrum chain deployment, is pumping")).toBe("arbitrum");
   });
   it("returns undefined when no chain is named ('on' + something else)", () => {
     expect(findChain("bought it on Monday")).toBeUndefined();
@@ -152,5 +161,31 @@ describe("mergeClaims (LLM never overrides a $TICKER, chain must be in the text)
   it("a subject keyword in the text beats the model's subject", () => {
     expect(mergeClaims(extractClaim("Whales have been accumulating $EDEL"), { token: "EDEL", type: "buying", subject: "smart_money" }).subject).toBe("whales");
     expect(mergeClaims(extractClaim("everyone buying $X"), { token: "X", type: "buying", subject: "whales" }).subject).toBe("whales");
+  });
+  it("the negated fallback verb, when the model gives none, is read from the rules' own text", () => {
+    const r = extractClaim("Smart Money is NOT buying $PEPE");
+    const m = mergeClaims(r, { token: "PEPE" });
+    expect(m.problem).toMatch(/Smart Money is buying \$PEPE/);
+  });
+  it("no token from either side → problem is the missing-token message", () => {
+    const r = extractClaim("smart money is loading up hard");
+    expect(r.token).toBeUndefined();
+    const m = mergeClaims(r, { type: "buying" });
+    expect(m.token).toBeUndefined();
+    expect(m.problem).toMatch(/no token found/);
+  });
+  it("a token but no verb on either side → problem is the not-a-flow-claim message", () => {
+    const r = extractClaim("$PEPE was mentioned by whales");
+    expect(r.type).toBeUndefined();
+    const m = mergeClaims(r, { token: "PEPE" });
+    expect(m.type).toBeUndefined();
+    expect(m.problem).toMatch(/not a flow claim/);
+  });
+});
+
+describe("negatedProblem", () => {
+  it("names the token when there is one, and falls back to a placeholder when there isn't", () => {
+    expect(negatedProblem({ raw: "x", subject: "smart_money", extractor: "rules", token: "PEPE" }, "buying")).toMatch(/Smart Money is buying \$PEPE/);
+    expect(negatedProblem({ raw: "x", extractor: "rules" })).toMatch(/Smart Money is buying \$X/);
   });
 });

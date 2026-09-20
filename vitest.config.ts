@@ -6,7 +6,13 @@ export default defineConfig({
     testTimeout: 60_000,
     include: ["packages/**/test/**/*.test.ts"],
     environment: "node",
-    coverage: { provider: "v8", include: ["packages/core/src/**"], reporter: ["text", "html", "lcov"], reportsDirectory: "coverage" },
+    coverage: {
+      provider: "v8",
+      include: ["packages/core/src/**"],
+      reporter: ["text", "html", "lcov"],
+      reportsDirectory: "coverage",
+      thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
+    },
   },
   resolve: {
     alias: {

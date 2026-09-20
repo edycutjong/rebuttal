@@ -81,6 +81,21 @@ describe("#4 trace values are formatted by field, not by magnitude", () => {
     expect(fmtValue("in_table", "yes")).toBe("yes");
     expect(fmtValue("x", null)).toBe("—");
   });
+  it("USD scales up to B, down to a plain dollar amount, and signs a negative", () => {
+    expect(fmtValue("value_usd", 2_340_000_000)).toBe("$2.34B");
+    expect(fmtValue("value_usd", 5_600_000)).toBe("$5.60M");
+    expect(fmtValue("value_usd", 42)).toBe("$42");
+    expect(fmtValue("value_usd", -42)).toBe("−$42");
+  });
+  it("token amounts scale up to B and M, sign a positive, and fall back to a plain count under 1000", () => {
+    expect(fmtValue("balance_change_24h", 2_340_000_000)).toBe("+2.34B tokens");
+    expect(fmtValue("balance_change_24h", 5_600_000)).toBe("+5.60M tokens");
+    expect(fmtValue("balance_change_24h", 42)).toBe("+42 tokens");
+    expect(fmtValue("balance_change_24h", 4.2)).toBe("+4.20 tokens");
+  });
+  it("an unrecognized numeric field that is not an integer falls back to two decimal places", () => {
+    expect(fmtValue("some_ratio", 1.23456)).toBe("1.23");
+  });
   it("the web copy equals core's", () => {
     for (const [k, v] of [["balance_change_7d", -55117], ["sold_volume_usd", 3.8], ["open", 2460.69], ["change_24h", -0.3], ["rows", 2]] as const) expect(fmt(k, v)).toBe(fmtValue(k, v));
   });

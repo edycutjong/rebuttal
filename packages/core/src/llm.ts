@@ -150,6 +150,7 @@ export async function narrateWithLlm(summary: string, opts: LlmOptions & { label
   ]);
   const text = r?.content?.trim().replace(/\s+/g, " ") ?? null;
   if (!text || text.length < 20 || text.length > 400) return { text: null, status: { used: false, ms: r?.ms ?? 0, error: "unusable prose", model } };
-  if (opts.label && !proseConsistent(opts.label, text)) return { text: null, status: { used: false, ms: r?.ms ?? 0, error: "prose disputed the verdict — discarded", model } };
-  return { text, status: { used: true, ms: r?.ms ?? 0, model } };
+  // `text` is only ever non-null when `r` is (see above), and chat() always sets a numeric `ms` on a non-null result
+  if (opts.label && !proseConsistent(opts.label, text)) return { text: null, status: { used: false, ms: r!.ms, error: "prose disputed the verdict — discarded", model } };
+  return { text, status: { used: true, ms: r!.ms, model } };
 }

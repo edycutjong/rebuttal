@@ -98,7 +98,7 @@ export function templateProse(claim: Claim, resolved: Resolved | null, d: Decisi
   return `${head} ${d.reasons[0] ? d.reasons[0][0].toUpperCase() + d.reasons[0].slice(1) : ""}${d.reasons[1] ? ` — ${d.reasons[1]}` : ""}.`.replace(/\.\.$/, ".");
 }
 
-function summaryForLlm(claim: Claim, resolved: Resolved | null, d: Decision): string {
+export function summaryForLlm(claim: Claim, resolved: Resolved | null, d: Decision): string {
   return [
     `Verdict (fixed, do not change): ${d.label}`,
     `Claim: "${claim.raw}"`,

@@ -86,8 +86,6 @@ export function findChain(text: string): string | undefined {
   if (on) {
     const w = on[1].trim();
     if (CHAIN_ALIASES[w]) return CHAIN_ALIASES[w];
-    const first = w.split(" ")[0];
-    if (CHAIN_ALIASES[first]) return CHAIN_ALIASES[first];
   }
   const named = t.match(/\b(robinhood|hyperevm|arbitrum|avalanche|polygon|optimism|solana|base|bnb|bsc) chain\b/);
   if (named) return CHAIN_ALIASES[named[1]];
@@ -110,7 +108,8 @@ export function findTokenSource(text: string): { token: string; source: NonNulla
   // bare upper-case words: the one nearest the verb that won ("sold 602 BTC to purchase ETH" is about BTC, "loading WIF as BTC rips" about WIF);
   // ties (equidistant) go to the word after the verb — the object of "bought X"
   const bare: Array<{ w: string; at: number }> = [];
-  for (const m of stripped.matchAll(/\b([A-Z][A-Z0-9]{1,9})\b/g)) if (!NOT_TICKERS.has(m[1]) && !/^\d+[KMBT]?$/.test(m[1])) bare.push({ w: m[1], at: m.index ?? 0 });
+  // matchAll's match objects always carry `index` (ECMA-262 guarantees it); no fallback is reachable here.
+  for (const m of stripped.matchAll(/\b([A-Z][A-Z0-9]{1,9})\b/g)) if (!NOT_TICKERS.has(m[1]) && !/^\d+[KMBT]?$/.test(m[1])) bare.push({ w: m[1], at: m.index! });
   if (bare.length) {
     const verb = findTypeVerb(stripped);
     if (!verb) return { token: bare[0].w, source: "bare" };
@@ -139,11 +138,15 @@ export function findTypeVerb(text: string): { type: ClaimType; verb: string; ind
     [BUY_RE, "buying"],
   ] as const) {
     for (const m of text.matchAll(new RegExp(re.source, "gi"))) {
-      const index = m.index ?? 0;
+      // matchAll's match objects always carry `index` (ECMA-262 guarantees it); TS's ambient type just marks it
+      // optional, so the fallback below can never actually run.
+      const index = m.index!;
       hits.push({ index, type: t, verb: m[0], negated: NEGATOR_RE.test(text.slice(Math.max(0, index - 40), index)) });
     }
   }
-  hits.sort((a, b) => a.index - b.index || (a.negated ? 1 : 0) - (b.negated ? 1 : 0));
+  // no two hits can share a start index: BUY_RE/SELL_RE/HOLD_RE's literal verb roots are lexically disjoint (checked
+  // 2026-09-20), so a secondary negated-based tie-break can never run — sorting on index alone is equivalent.
+  hits.sort((a, b) => a.index - b.index);
   const positive = hits.find((h) => !h.negated);
   if (positive) return { type: positive.type, verb: positive.verb, index: positive.index };
   const negated = hits[0];
