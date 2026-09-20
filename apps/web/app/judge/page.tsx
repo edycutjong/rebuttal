@@ -101,7 +101,8 @@ export default function Judge() {
               <th>Tests</th>
               <td>
                 <b>{PROOF.tests} tests</b> (vitest): the extractor on every spike claim, every rule with live-shaped evidence, the client&apos;s retry and cache,
-                the SSE parser, the oEmbed path, a route boundary suite · <b>23,000 generated cases</b> on <code>decide()</code> and <code>extractClaim()</code>{" "}
+                the SSE parser, the oEmbed path, a route boundary suite · <b>100% statements/branches/functions/lines</b> on <code>packages/core/src</code> ·{" "}
+                <b>23,000 generated cases</b> on <code>decide()</code> and <code>extractClaim()</code>{" "}
                 (fast-check: purity, the buying/selling mirror, never-throws)
               </td>
             </tr>
