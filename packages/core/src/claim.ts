@@ -80,8 +80,16 @@ const WHALE_RE = /\b(whales?|large holders?|top holders?|big wallets?|mega walle
 const EVM_ADDR = /^0x[0-9a-fA-F]{40}$/;
 const SOL_ADDR = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 
+/** Every chain alias, exposed so a test can assert the no-nesting invariant findChain's multi-word pass relies on. */
+export const CHAIN_ALIAS_KEYS = Object.keys(CHAIN_ALIASES);
+/** Aliases containing a space: the `on <chain>` match below is lazy and stops at the first word ("binance"). */
+const MULTIWORD_ALIASES = CHAIN_ALIAS_KEYS.filter((k) => k.includes(" "));
+
 export function findChain(text: string): string | undefined {
   const t = text.toLowerCase();
+  // order-independent: no multi-word alias is contained in another, so at most one can match (a test enforces that)
+  const multi = MULTIWORD_ALIASES.find((a) => new RegExp(`\\b${a}\\b`).test(t));
+  if (multi) return CHAIN_ALIASES[multi];
   const on = t.match(/\bon (?:the )?([a-z ]{2,20}?)(?: chain| network| mainnet)?\b(?=[\s.,;:!?)]|$)/);
   if (on) {
     const w = on[1].trim();
