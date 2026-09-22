@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync, renameSync, unlinkSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { NansenClient, sha256, CREDITS, type ClientOptions, type CallOptions } from "./client";
 
@@ -27,7 +27,21 @@ export class DiskCache implements CacheStore {
     }
   }
   set(key: string, entry: CacheEntry) {
-    writeFileSync(this.path(key), JSON.stringify(entry));
+    // write-then-rename: `writeFileSync` truncates in place, so a concurrent reader could parse a half-written file and
+    // fall back to a live call. rename(2) is atomic within a directory — a reader sees the old entry or the new one.
+    const p = this.path(key);
+    const tmp = `${p}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
+    try {
+      writeFileSync(tmp, JSON.stringify(entry));
+      renameSync(tmp, p);
+    } catch (e) {
+      try {
+        if (existsSync(tmp)) unlinkSync(tmp);
+      } catch {
+        /* the temp file is already gone */
+      }
+      throw e;
+    }
   }
 }
 

@@ -1,5 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { findChain, extractClaim, CHAIN_ALIAS_KEYS } from "../src/claim";
+import { mkdirSync, mkdtempSync, rmSync, readdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { DiskCache, type CacheEntry } from "../src/cache";
 
 /**
  * Outside architecture review, round 3 (2026-09-23) — findings verified against the code, then fixed.
@@ -35,5 +39,49 @@ describe("a2a r01 · multi-word chain names survive the `on <chain>` match", () 
 
   it("no chain phrase → no chain", () => {
     expect(findChain("Smart Money is buying $PEPE")).toBeUndefined();
+  });
+});
+
+describe("a2a r01 · DiskCache.set is atomic", () => {
+  let dir: string;
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), "rebuttal-cache-test-"));
+  });
+  afterEach(() => rmSync(dir, { recursive: true, force: true }));
+
+  const entry = (text: string): CacheEntry => ({ storedAt: new Date().toISOString(), ttlMs: 1000, endpoint: "tgm/holders", body: {}, text });
+
+  it("a reader never sees a half-written file: the previous entry stays readable until the new one lands", () => {
+    const c = new DiskCache(dir);
+    c.set("k", entry('{"a":1}'));
+    // rename(2) is atomic within the directory, so the only two observable states are the old value and the new one
+    c.set("k", entry('{"a":2}'));
+    expect(JSON.parse(c.get("k")!.text)).toEqual({ a: 2 });
+  });
+
+  it("leaves no temp file behind on success", () => {
+    const c = new DiskCache(dir);
+    c.set("k", entry('{"a":1}'));
+    expect(readdirSync(dir).filter((f) => f.endsWith(".tmp"))).toEqual([]);
+  });
+
+  it("a rename that fails cleans up the temp file it already wrote", () => {
+    const c = new DiskCache(dir);
+    mkdirSync(join(dir, "blocked.json")); // a directory where the entry should go: rename(2) cannot replace it
+    expect(() => c.set("blocked", entry('{"a":1}'))).toThrow();
+    expect(readdirSync(dir).filter((f) => f.endsWith(".tmp"))).toEqual([]);
+  });
+
+  it("a write that fails cleans up its temp file and still throws", () => {
+    const c = new DiskCache(dir);
+    c.set("k", entry('{"a":1}'));
+    const boom = new Error("ENOSPC");
+    const spy = vi.spyOn(JSON, "stringify").mockImplementationOnce(() => {
+      throw boom;
+    });
+    expect(() => c.set("k", entry('{"a":2}'))).toThrow("ENOSPC");
+    spy.mockRestore();
+    expect(readdirSync(dir).filter((f) => f.endsWith(".tmp"))).toEqual([]);
+    expect(JSON.parse(c.get("k")!.text)).toEqual({ a: 1 }); // the old entry survived
   });
 });
