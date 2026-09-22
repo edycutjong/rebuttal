@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { DiskCache, type CacheEntry } from "../src/cache";
 import { NansenClient, RateLimiter } from "../src/client";
 import { CachedNansenClient } from "../src/cache";
+import { ipAllowed, resetGuard, IP_PER_MIN } from "../../../apps/web/lib/guard";
 
 /**
  * Outside architecture review, round 3 (2026-09-23) — findings verified against the code, then fixed.
@@ -148,5 +149,32 @@ describe("a2a r01 · a caller that hangs up stops the spend", () => {
     const fetchImpl = (async () => new Response('{"ok":true}', { status: 200 })) as unknown as typeof fetch;
     const c = new CachedNansenClient(key, { fetchImpl, signal: ctrl.signal, store: { get: () => undefined, set: () => {} } });
     await expect(c.post("tgm/holders", {})).resolves.toEqual({ ok: true });
+  });
+});
+
+describe("a2a r01 · the rate-limit map evicts expired windows instead of flushing every visitor", () => {
+  beforeEach(() => resetGuard());
+  afterEach(() => resetGuard());
+
+  it("crossing the 5,000-address bound does not lift the gate on an address that is already at its limit", () => {
+    const now = Date.now();
+    const victim = "1.2.3.4";
+    for (let i = 0; i < IP_PER_MIN; i++) expect(ipAllowed(victim, now).ok).toBe(true);
+    expect(ipAllowed(victim, now).ok).toBe(false); // at the ceiling
+
+    // a scan from 5,000 fresh addresses in the same window — this used to call hits.clear()
+    for (let i = 0; i < 5_000; i++) ipAllowed(`10.0.${(i >> 8) & 255}.${i & 255}`, now);
+
+    expect(ipAllowed(victim, now).ok).toBe(false); // still gated: the scan cannot buy anyone a fresh window
+  });
+
+  it("windows that have fully expired are dropped, so memory is still bounded", () => {
+    const t0 = Date.now();
+    for (let i = 0; i < 5_000; i++) ipAllowed(`10.1.${(i >> 8) & 255}.${i & 255}`, t0);
+    const later = t0 + 120_000; // two minutes on: every one of those windows is expired
+    for (let i = 0; i < 5_000; i++) ipAllowed(`10.2.${(i >> 8) & 255}.${i & 255}`, later);
+    const fresh = "9.9.9.9";
+    for (let i = 0; i < IP_PER_MIN; i++) expect(ipAllowed(fresh, later).ok).toBe(true);
+    expect(ipAllowed(fresh, later).ok).toBe(false); // the map is still doing its job after the eviction pass
   });
 });

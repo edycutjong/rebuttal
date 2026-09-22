@@ -36,7 +36,9 @@ export function ipAllowed(ip: string, now = Date.now()): { ok: true } | { ok: fa
     return { ok: false, retryAfter: Math.max(1, Math.ceil((recent[0] + WINDOW_MS - now) / 1000)) };
   }
   recent.push(now);
-  if (hits.size >= 5000) hits.clear(); // bound memory under a distributed scan; a cleared window only errs toward allowing
+  // bound memory under a distributed scan by dropping only windows that have fully expired — `hits.clear()` here
+  // reset every live visitor's counter at once, so 5,000 genuine addresses in one minute lifted the gate for all of them
+  if (hits.size >= 5000) for (const [k, ts] of hits) if (ts.every((t) => now - t >= WINDOW_MS)) hits.delete(k);
   hits.set(ip, recent);
   return { ok: true };
 }
