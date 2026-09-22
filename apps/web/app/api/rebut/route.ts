@@ -44,6 +44,11 @@ export async function GET(req: NextRequest) {
   }
 
   const enc = new TextEncoder();
+  // A closed tab must stop the spend: `send()` only notices the reader is gone when an enqueue throws, and the six
+  // checks run in parallel, so without this the whole ≤ 15-credit verdict is still paid for after the page is gone.
+  const hangup = new AbortController();
+  if (req.signal.aborted) hangup.abort();
+  else req.signal.addEventListener("abort", () => hangup.abort(), { once: true });
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       let closed = false;
@@ -56,14 +61,14 @@ export async function GET(req: NextRequest) {
         }
       };
       try {
-        const r = degraded ? await replayFixture(q, { onProgress: send, onCall: send }) : await rebutFor(q, chain, { onProgress: send, onCall: send, fresh });
+        const r = degraded ? await replayFixture(q, { onProgress: send, onCall: send }) : await rebutFor(q, chain, { onProgress: send, onCall: send, fresh, signal: hangup.signal });
         if (!r) send({ type: "error", message: NO_FIXTURE_MESSAGE });
         else {
           if (!degraded) recordSpend(r.verdict.credits);
           send({ type: "asOf", asOf: r.oldestHit ?? null, degraded });
         }
       } catch (e) {
-        send({ type: "error", message: (e as Error).message });
+        if (!hangup.signal.aborted) send({ type: "error", message: (e as Error).message });
       } finally {
         if (!closed) {
           closed = true;
@@ -74,6 +79,9 @@ export async function GET(req: NextRequest) {
           }
         }
       }
+    },
+    cancel() {
+      hangup.abort();
     },
   });
   return new Response(stream, { headers: { "content-type": "application/x-ndjson; charset=utf-8", "cache-control": "no-store", "x-accel-buffering": "no" } });

@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DiskCache, type CacheEntry } from "../src/cache";
 import { NansenClient, RateLimiter } from "../src/client";
+import { CachedNansenClient } from "../src/cache";
 
 /**
  * Outside architecture review, round 3 (2026-09-23) — findings verified against the code, then fixed.
@@ -105,5 +106,47 @@ describe("a2a r01 · one rate limiter can pace several clients", () => {
     await a.post("tgm/holders", {});
     await b.post("tgm/holders", {});
     expect(take).toHaveBeenCalledTimes(2); // both clients went through the same bucket
+  });
+});
+
+describe("a2a r01 · a caller that hangs up stops the spend", () => {
+  const key = "nsn_test_key";
+
+  it("an already-aborted signal makes no network call at all", async () => {
+    const ctrl = new AbortController();
+    ctrl.abort();
+    const fetchImpl = vi.fn(async () => new Response('{"ok":true}', { status: 200 })) as unknown as typeof fetch;
+    const c = new NansenClient(key, { fetchImpl, signal: ctrl.signal });
+    await expect(c.post("tgm/holders", {})).rejects.toThrow();
+    expect(fetchImpl).not.toHaveBeenCalled();
+    expect(c.calls.at(-1)!.ok).toBe(false); // the abandoned call still appears in provenance
+    expect(c.creditsSpent).toBe(0);
+  });
+
+  it("an abort mid-flight is not retried — the retry is exactly the spend the signal exists to stop", async () => {
+    const ctrl = new AbortController();
+    const fetchImpl = vi.fn(async (_url: string, init?: RequestInit) => {
+      ctrl.abort();
+      throw Object.assign(new Error("aborted"), { name: "AbortError", signal: init?.signal });
+    }) as unknown as typeof fetch;
+    const c = new NansenClient(key, { fetchImpl, signal: ctrl.signal });
+    await expect(c.post("tgm/holders", {})).rejects.toThrow();
+    expect(fetchImpl).toHaveBeenCalledTimes(1); // one attempt, not two
+  });
+
+  it("without a caller signal a timeout still gets its one retry", async () => {
+    const fetchImpl = vi.fn(async () => {
+      throw Object.assign(new Error("timed out"), { name: "AbortError" });
+    }) as unknown as typeof fetch;
+    const c = new NansenClient(key, { fetchImpl, timeoutMs: 20 });
+    await expect(c.post("tgm/holders", {})).rejects.toThrow();
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+
+  it("a live signal that never fires changes nothing", async () => {
+    const ctrl = new AbortController();
+    const fetchImpl = (async () => new Response('{"ok":true}', { status: 200 })) as unknown as typeof fetch;
+    const c = new CachedNansenClient(key, { fetchImpl, signal: ctrl.signal, store: { get: () => undefined, set: () => {} } });
+    await expect(c.post("tgm/holders", {})).resolves.toEqual({ ok: true });
   });
 });
