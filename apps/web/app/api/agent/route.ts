@@ -25,6 +25,11 @@ export async function POST(req: NextRequest) {
   const ip = clientIp(req.headers);
   const refusal = agentAllowed(ip);
   if (refusal) return Response.json({ error: refusal, credits: AGENT_CREDITS }, { status: 429, headers: { "cache-control": "no-store" } });
+  // same hang-up contract as /api/rebut: this route can hold a Nansen SSE stream open for 60 s, so a closed tab must
+  // stop the relay rather than read deltas to the timeout
+  const hangup = new AbortController();
+  if (req.signal.aborted) hangup.abort();
+  else req.signal.addEventListener("abort", () => hangup.abort(), { once: true });
   const enc = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -38,10 +43,10 @@ export async function POST(req: NextRequest) {
         }
       };
       try {
-        const run = await askNansenAgent(process.env.NANSEN_API_KEY as string, q, { onEvent: send, timeoutMs: 60_000 });
+        const run = await askNansenAgent(process.env.NANSEN_API_KEY as string, q, { onEvent: send, timeoutMs: 60_000, signal: hangup.signal });
         send({ type: "done", run });
       } catch (e) {
-        send({ type: "error", error: (e as Error).message });
+        if (!hangup.signal.aborted) send({ type: "error", error: (e as Error).message });
       } finally {
         if (!closed) {
           closed = true;
@@ -52,6 +57,9 @@ export async function POST(req: NextRequest) {
           }
         }
       }
+    },
+    cancel() {
+      hangup.abort();
     },
   });
   return new Response(stream, { headers: { "content-type": "application/x-ndjson; charset=utf-8", "cache-control": "no-store", "x-accel-buffering": "no" } });

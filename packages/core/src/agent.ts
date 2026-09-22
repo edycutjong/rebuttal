@@ -11,13 +11,16 @@ export const AGENT_CREDITS = 200;
 export async function askNansenAgent(
   apiKey: string,
   text: string,
-  opts: { timeoutMs?: number; fetchImpl?: typeof fetch; baseUrl?: string; onEvent?: (e: AgentEvent) => void } = {},
+  opts: { timeoutMs?: number; fetchImpl?: typeof fetch; baseUrl?: string; onEvent?: (e: AgentEvent) => void; signal?: AbortSignal } = {},
 ): Promise<AgentRun> {
   const fetchImpl = opts.fetchImpl ?? fetch;
   const timeoutMs = opts.timeoutMs ?? 60_000;
   const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  // one composed signal for both the fetch AND the read-loop race below — a caller that hangs up mid-stream has to
+  // break the loop too, not just the initial request, or the relay keeps reading deltas nobody will see
+  const signal = opts.signal ? AbortSignal.any([ctrl.signal, opts.signal]) : ctrl.signal;
   const run: AgentRun = { text: "", toolCalls: [], ms: 0, credits: AGENT_CREDITS, timedOut: false, firstByteMs: null };
   const seen = new Set<string>();
   try {
@@ -25,7 +28,7 @@ export async function askNansenAgent(
       method: "POST",
       headers: { apikey: apiKey, "content-type": "application/json", accept: "text/event-stream" },
       body: JSON.stringify({ text: text.slice(0, 1000) }),
-      signal: ctrl.signal,
+      signal,
     });
     if (!res.ok || !res.body) {
       run.error = `HTTP ${res.status}: ${(await res.text().catch(() => "")).slice(0, 160)}`;
@@ -36,7 +39,7 @@ export async function askNansenAgent(
     const dec = new TextDecoder();
     let buf = "";
     // the timer must also cut a stream that is still trickling deltas past the budget, not only the initial fetch
-    const aborted = new Promise<never>((_, rej) => ctrl.signal.addEventListener("abort", () => rej(Object.assign(new Error("aborted"), { name: "AbortError" }))));
+    const aborted = new Promise<never>((_, rej) => signal.addEventListener("abort", () => rej(Object.assign(new Error("aborted"), { name: "AbortError" }))));
     const handle = (raw: string) => {
       const line = raw.trim();
       if (!line.startsWith("data:")) return;
@@ -86,8 +89,13 @@ export async function askNansenAgent(
   } catch (e) {
     ctrl.abort();
     if ((e as Error).name === "AbortError") {
-      run.timedOut = true;
-      run.error = `Nansen's agent did not finish in ${Math.round(timeoutMs / 1000)} s`;
+      // a caller hanging up is not a timeout — saying "did not finish in 60 s" about a run the reader abandoned
+      // after 2 s would be a false statement in the provenance the whole product is built on
+      if (opts.signal?.aborted) run.error = "cancelled — the reader closed the connection";
+      else {
+        run.timedOut = true;
+        run.error = `Nansen's agent did not finish in ${Math.round(timeoutMs / 1000)} s`;
+      }
     } else run.error = (e as Error).message.slice(0, 160);
   } finally {
     clearTimeout(timer);
