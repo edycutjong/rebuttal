@@ -156,6 +156,12 @@ function decideHolding(claim: Claim, e: Evidence, rules: Rules, T7: number, R: (
   const h = e.holders;
   const net7 = e.flow7d?.[cls]?.net ?? null;
   if (!h && net7 == null) return R("UNVERIFIABLE", "U-HOLD", [`no ${who} holders or 7 d flow data for this token`]);
+  // Same gate the flow path uses (U-NOCLASS above): a holders page of 0 rows, or a holders call that failed while the
+  // 7 d flow answered with no wallets, is not evidence about the class — it is the absence of the class. Without this,
+  // 0 holders fell to O-HOLDERS ("partly true") and a failed holders check fell all the way to A-HOLD ("confirmed"),
+  // both asserting something about a cohort Nansen tags nobody in. JUDGE.md: "when no Whale-labelled wallet exists in
+  // the token the tool says UNVERIFIABLE rather than pretending".
+  if (!presence(e, cls)) return R("UNVERIFIABLE", "U-NOCLASS", [`Nansen tags no wallet as ${who} in this token (24 h, 7 d, holders) — the wallet in the post is not one Nansen labels`]);
   const lines: string[] = [];
   if (h) lines.push(`${h.count} ${who} holders on page 1, ${fmtUsd(h.valueUsd)} held, 7 d balance change ${h.delta7d >= 0 ? "+" : ""}${h.delta7d.toFixed(0)} tokens`);
   if (net7 != null) lines.push(`7 d ${who} net flow ${fmtUsd(net7)} (threshold ${fmtUsd(T7)})`);
