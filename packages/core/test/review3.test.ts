@@ -4,6 +4,7 @@ import { mkdirSync, mkdtempSync, rmSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DiskCache, type CacheEntry } from "../src/cache";
+import { NansenClient, RateLimiter } from "../src/client";
 
 /**
  * Outside architecture review, round 3 (2026-09-23) — findings verified against the code, then fixed.
@@ -83,5 +84,26 @@ describe("a2a r01 · DiskCache.set is atomic", () => {
     spy.mockRestore();
     expect(readdirSync(dir).filter((f) => f.endsWith(".tmp"))).toEqual([]);
     expect(JSON.parse(c.get("k")!.text)).toEqual({ a: 1 }); // the old entry survived
+  });
+});
+
+describe("a2a r01 · one rate limiter can pace several clients", () => {
+  it("clients sharing a limiter do not exceed rps across them", async () => {
+    const limiter = new RateLimiter(2);
+    const t0 = Date.now();
+    // 4 takes at 2 rps: the 3rd and 4th must wait out the first rolling second
+    await Promise.all([limiter.take(), limiter.take(), limiter.take(), limiter.take()]);
+    expect(Date.now() - t0).toBeGreaterThanOrEqual(900);
+  });
+
+  it("an injected limiter is used instead of a fresh one", async () => {
+    const limiter = new RateLimiter(5);
+    const take = vi.spyOn(limiter, "take");
+    const fetchImpl = (async () => new Response('{"ok":true}', { status: 200 })) as unknown as typeof fetch;
+    const a = new NansenClient("nsn_test_key", { limiter, fetchImpl });
+    const b = new NansenClient("nsn_test_key", { limiter, fetchImpl });
+    await a.post("tgm/holders", {});
+    await b.post("tgm/holders", {});
+    expect(take).toHaveBeenCalledTimes(2); // both clients went through the same bucket
   });
 });

@@ -41,6 +41,10 @@ export type ClientOptions = {
   fetchImpl?: typeof fetch;
   /** observer for the live call feed (see CallEvent); errors thrown by it are swallowed so a UI bug cannot break a verdict */
   onCall?: (e: CallEvent) => void;
+  /** share one bucket across clients — a server builds a client per request, and `rps` is a property of the key, not the request */
+  limiter?: RateLimiter;
+  /** caller's cancellation (a closed HTTP stream): aborts the in-flight call and stops the retry, so a dropped page stops spending */
+  signal?: AbortSignal;
 };
 
 const shortAddr = (a: string) => (a.length > 16 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a);
@@ -109,8 +113,8 @@ export function sha256(text: string): string {
   return createHash("sha256").update(text).digest("hex");
 }
 
-/** Minimal token bucket: at most `rps` requests per rolling second. */
-class RateLimiter {
+/** Minimal token bucket: at most `rps` requests per rolling second. Share one instance to pace concurrent clients. */
+export class RateLimiter {
   private timestamps: number[] = [];
   constructor(private rps: number) {}
   async take(): Promise<void> {
@@ -131,6 +135,7 @@ export class NansenClient {
   private limiter: RateLimiter;
   protected timeoutMs: number;
   private fetchImpl: typeof fetch;
+  private signal?: AbortSignal;
   /** Every call made through this client, in order. */
   readonly calls: Call[] = [];
   private onCall?: (e: CallEvent) => void;
@@ -144,10 +149,11 @@ export class NansenClient {
       throw new Error("NANSEN_API_KEY missing or malformed (expected nsn_…)");
     }
     this.baseUrl = opts.baseUrl ?? "https://api.nansen.ai/api/v1";
-    this.limiter = new RateLimiter(opts.rps ?? 5); // Nansen cap is 300/min; a rebuttal is ≤ 8 calls, so 5 rps never waits more than ~1 s
+    this.limiter = opts.limiter ?? new RateLimiter(opts.rps ?? 5); // Nansen cap is 300/min; a rebuttal is ≤ 8 calls, so 5 rps never waits more than ~1 s
     this.timeoutMs = opts.timeoutMs ?? 8000; // Nansen occasionally hangs; 8 s + one retry caps a call at ~17 s, and the checks run in parallel
     this.fetchImpl = opts.fetchImpl ?? fetch;
     this.onCall = opts.onCall;
+    this.signal = opts.signal;
   }
 
   private emit(e: CallEvent) {
@@ -226,14 +232,17 @@ export class NansenClient {
       attemptsMade = attempt + 1;
       await this.limiter.take();
       const started = Date.now();
+      if (this.signal?.aborted) throw withAttempts(new DOMException("caller aborted", "AbortError"), attemptsMade);
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+      // the call dies on whichever comes first: our timeout, or the caller hanging up
+      const signal = this.signal ? AbortSignal.any([ctrl.signal, this.signal]) : ctrl.signal;
       try {
         const res = await this.fetchImpl(url, {
           method: "POST",
           headers: { apikey: this.apiKey, "content-type": "application/json", accept: "application/json" },
           body: JSON.stringify(body),
-          signal: ctrl.signal,
+          signal,
         });
         const text = await res.text();
         const ms = Date.now() - started;
@@ -253,7 +262,8 @@ export class NansenClient {
         return { text, ms, status: res.status, attempts: attempt + 1, totalMs: Date.now() - t0, credits: Number.isFinite(used) && res.headers.has("x-nansen-credits-used") ? used : undefined };
       } catch (e) {
         lastErr = e;
-        if (attempt === maxAttempts - 1 || !(e instanceof Error && e.name === "AbortError")) throw withAttempts(e, attemptsMade);
+        // a caller who hung up gets no retry — retrying an abandoned request is the spend this signal exists to stop
+        if (this.signal?.aborted || attempt === maxAttempts - 1 || !(e instanceof Error && e.name === "AbortError")) throw withAttempts(e, attemptsMade);
       } finally {
         clearTimeout(timer);
       }

@@ -1,4 +1,4 @@
-import { CachedNansenClient, DiskCache, rebut, envLlm, type CallEvent, type RebutOptions, type Verdict } from "@rebuttal/core";
+import { CachedNansenClient, DiskCache, RateLimiter, rebut, envLlm, type CallEvent, type RebutOptions, type Verdict } from "@rebuttal/core";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -8,12 +8,17 @@ import { tmpdir } from "node:os";
  */
 const dir = process.env.VERCEL ? join(tmpdir(), "rebuttal-cache") : join(process.cwd(), "../../.cache");
 let store: DiskCache | undefined;
+// One bucket per instance, not per request: every route builds its own client (it must — `calls`, `oldestHit` and the
+// credit total are per-verdict state), but the 5 rps cap belongs to the API KEY, so two concurrent visitors that each
+// fire six parallel checks pace against one another instead of bursting to 12 rps and collecting 429s.
+const limiter = new RateLimiter(5);
 
-export function client(fresh = false, onCall?: (e: CallEvent) => void): CachedNansenClient {
+export function client(fresh = false, onCall?: (e: CallEvent) => void, signal?: AbortSignal): CachedNansenClient {
   store ??= new DiskCache(dir);
   // fresh: bypass cache reads (every call live, still written to the cache) — the recording flag, same spend guard
   // onCall: the live call feed for the page's Nansen rail (start → end per call, the same Call objects as provenance)
-  return new CachedNansenClient(process.env.NANSEN_API_KEY ?? "", { store, ttlMs: fresh ? 0 : undefined, onCall });
+  // signal: the reader hung up — stop the in-flight calls rather than paying for a verdict nobody will see
+  return new CachedNansenClient(process.env.NANSEN_API_KEY ?? "", { store, ttlMs: fresh ? 0 : undefined, onCall, limiter, signal });
 }
 
 /** A claim is a sentence or an x.com link: up to 600 chars (a long-form post's text, as rebut() keeps it), no control characters. */
@@ -26,9 +31,9 @@ export function cleanClaim(q: string): string | null {
 }
 export const CHAINS = ["ethereum", "base", "solana", "bnb", "arbitrum", "polygon", "avalanche", "optimism", "hyperevm", "robinhood"] as const;
 
-export async function rebutFor(q: string, chain?: string, opts: Omit<RebutOptions, "chain" | "llm"> & { fresh?: boolean; onCall?: (e: CallEvent) => void } = {}): Promise<{ verdict: Verdict; oldestHit?: string }> {
-  const { fresh, onCall, ...rest } = opts;
-  const c = client(fresh, onCall);
+export async function rebutFor(q: string, chain?: string, opts: Omit<RebutOptions, "chain" | "llm"> & { fresh?: boolean; onCall?: (e: CallEvent) => void; signal?: AbortSignal } = {}): Promise<{ verdict: Verdict; oldestHit?: string }> {
+  const { fresh, onCall, signal, ...rest } = opts;
+  const c = client(fresh, onCall, signal);
   const v = await rebut(c, q, { chain, llm: envLlm(), ...rest });
   return { verdict: v, oldestHit: c.oldestHit };
 }
