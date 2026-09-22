@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { decide, presence } from "../src/decide";
 import { evidence, claim, snap } from "./helpers";
 import { askNansenAgent } from "../src/agent";
+import { httpError } from "../../../apps/web/lib/http";
 
 /**
  * Outside architecture review, round 4 (2026-09-23) — findings verified against the code, then fixed.
@@ -88,5 +89,31 @@ describe("review4 · the agent relay stops when its caller hangs up", () => {
     expect(run.toolCalls).toEqual(["tgm/holders"]);
     expect(run.text).toBe("hi");
     expect(run.error).toBeUndefined();
+  });
+});
+
+describe("review4 · an error message is never the empty string", () => {
+  // HTTP/2 has no reason phrase, so res.statusText is "". Error("") made `{error && <banner/>}` render nothing.
+  const res = (status: number, statusText: string, body?: string) =>
+    new Response(body ?? null, { status, statusText, headers: body ? { "content-type": "application/json" } : {} });
+
+  it("a non-JSON gateway failure over HTTP/2 still yields a message", async () => {
+    await expect(httpError(res(502, "", "<html>Bad Gateway</html>"))).resolves.toBe("HTTP 502");
+  });
+
+  it("our own JSON errors are preserved verbatim", async () => {
+    await expect(httpError(res(429, "", JSON.stringify({ error: "Too many checks from this address — try again in 42 s" })))).resolves.toMatch(/Too many checks/);
+  });
+
+  it("a JSON body with a blank error falls back rather than rendering nothing", async () => {
+    await expect(httpError(res(500, "", JSON.stringify({ error: "   " })))).resolves.toBe("HTTP 500");
+  });
+
+  it("a JSON body with no error key falls back", async () => {
+    await expect(httpError(res(503, "", JSON.stringify({ nope: 1 })))).resolves.toBe("HTTP 503");
+  });
+
+  it("a reason phrase is used when the protocol provides one (HTTP/1.1)", async () => {
+    await expect(httpError(res(504, "Gateway Timeout"))).resolves.toBe("Gateway Timeout");
   });
 });

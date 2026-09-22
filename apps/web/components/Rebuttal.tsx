@@ -4,6 +4,7 @@ import type { Check, Claim, Resolved, Verdict, RebutEvent, AgentRun, CallEvent }
 import { ClaimCard, Trace, VerdictCard, AgentPanel, type PlanRow } from "./Cards";
 import { Example, HowItDecides } from "./Example";
 import { Rail, useRail, shortAddr } from "./Rail";
+import { httpError } from "@/lib/http";
 
 export const EXAMPLES = [
   "Smart Money is aping $PEPE hard today 🐋",
@@ -55,6 +56,8 @@ export function Rebuttal({
   const [toast, setToast] = useState<string | null>(null);
   const [agent, setAgent] = useState<{ run: AgentRun | null; tools: string[]; text: string; error: string | null; busy: boolean } | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  /** askAgent's own controller: the agent stream outlives a new claim otherwise, and it is a separate 200-credit call. */
+  const agentAbortRef = useRef<AbortController | null>(null);
   // the Nansen call rail: on load it holds the recorded example's calls (replayed · 0 cr) or the permalink's own provenance
   const rail = useRail(
     initialVerdict
@@ -78,7 +81,9 @@ export function Rebuttal({
     let groupMs: number | null = null;
     try {
       const res = await fetch(`/api/rebut?q=${encodeURIComponent(term)}&stream=1${fresh ? "&fresh=1" : ""}`, { signal: ctrl.signal });
-      if (!res.ok || !res.body) throw new Error((await res.json().catch(() => ({ error: res.statusText }))).error ?? res.statusText);
+      // HTTP/2 carries no reason phrase, so res.statusText is "" on Vercel: a non-JSON failure (a platform 502/504
+      // HTML page) used to throw Error("") and `{error && …}` rendered nothing at all — a blank screen with no reason.
+      if (!res.ok || !res.body) throw new Error(await httpError(res));
       const reader = res.body.getReader();
       const dec = new TextDecoder();
       let buf = "";
@@ -147,6 +152,7 @@ export function Rebuttal({
       setNarrating(false);
       setAsOf(null);
       setAgent(null);
+      agentAbortRef.current?.abort(); // a new claim supersedes the previous claim's agent comparison
       // the flow renders below the fold on a laptop: bring the claim card into view as the first row lands
       setTimeout(() => document.querySelector(".flow")?.scrollIntoView({ behavior: "smooth", block: "start" }), 250);
       void stream(term);
@@ -156,7 +162,10 @@ export function Rebuttal({
 
   useEffect(() => {
     if (initialQuery && !initialVerdict) void stream(initialQuery);
-    return () => abortRef.current?.abort();
+    return () => {
+      abortRef.current?.abort();
+      agentAbortRef.current?.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -187,17 +196,21 @@ export function Rebuttal({
 
   const askAgent = async () => {
     if (!verdict) return;
+    agentAbortRef.current?.abort();
+    const ctrl = new AbortController();
+    agentAbortRef.current = ctrl;
     setAgent({ run: null, tools: [], text: "", error: null, busy: true });
     const group = rail.startGroup(verdict.claim.raw, "agent");
     rail.agent.start(group, verdict.claim.raw);
     let finished: AgentRun | null = null;
     let failed: string | null = null;
+    let cancelled = false;
     try {
-      const res = await fetch("/api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: verdict.claim.raw }) });
+      const res = await fetch("/api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: verdict.claim.raw }), signal: ctrl.signal });
       if (!res.ok || !res.body) {
-        const j = await res.json().catch(() => ({ error: res.statusText }));
-        failed = j.error ?? res.statusText;
-        setAgent({ run: null, tools: [], text: "", error: failed, busy: false });
+        failed = await httpError(res);
+        // guarded: run() nulls `agent` when a new claim starts, and this must not resurrect the previous claim's panel
+        setAgent((a) => (a ? { run: null, tools: [], text: "", error: failed, busy: false } : a));
         return;
       }
       const reader = res.body.getReader();
@@ -228,11 +241,18 @@ export function Rebuttal({
       }
       setAgent((a) => (a ? { ...a, busy: false } : a));
     } catch (err) {
-      failed = (err as Error).message;
-      setAgent((a) => (a ? { ...a, busy: false, error: failed } : a));
+      // the reader moved on: not an error to show, and not a run to report a duration for
+      if ((err as Error).name === "AbortError") cancelled = true;
+      else {
+        failed = (err as Error).message;
+        setAgent((a) => (a ? { ...a, busy: false, error: failed } : a));
+      }
     } finally {
-      rail.agent.end(group, finished, failed);
-      rail.finishGroup(group, finished?.ms ?? null);
+      if (cancelled) rail.finishGroup(group, null, "cancelled");
+      else {
+        rail.agent.end(group, finished, failed);
+        rail.finishGroup(group, finished?.ms ?? null);
+      }
     }
   };
 
