@@ -9,6 +9,8 @@
 
 <p>The verdict is deterministic arithmetic over Nansen label-class flows — one of four words, the rule that fired, the numbers, a sha256 of the evidence, the full tool trace. An LLM only reads the claim and writes two sentences; when it is down, rules and a template take over and the verdict does not change. <code>npm run verify</code> replays 13 recorded rebuttals offline and reproduces every hash.</p>
 
+<p><b>Only 2 of 8 real whale / Smart Money posts came back CONFIRMED.</b> The recorded set has eight posts from Lookonchain, OnchainLens and OKX (14–18 Sep). Rebuttal took each post's sentence as input, not a feed signal. 3 came back <b>OVERSTATED</b>: the flow was flat, or Smart Money was trimming. 3 came back <b>UNVERIFIABLE</b>: Nansen labels no whale in the token, or doesn't index the chain. To reproduce, run <code>npm run verify</code> (all 13 labels, offline). The <code>source</code> field in <code>scripts/fixture-set.ts</code> says which inputs are real posts. The PEPE hero and the synthetic edge cases are not counted.</p>
+
 <br/>
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://rebuttal.edycu.dev)
@@ -44,6 +46,8 @@
 | `Zcash whales accumulate … $ZEC` | Zcash is not a chain Nansen indexes — refused before any call | **UNVERIFIABLE** · `U-CHAIN` · 0 credits |
 
 Every rebuttal streams its **tool trace** as the calls land: endpoint, window, the fields that entered the rule with their values, credits, latency, cached or live, and the sha256 of the response. The CLI prints the same rows with `--explain`. One button runs the same claim through Nansen's own `agent/fast` (its **200-credit price printed on the button**) and shows its `tool_calls` beside our trace — two agents, one claim.
+
+**Receipts.** Every Nansen call is recorded as a `Call` in the verdict's `provenance`. A `Call` carries the endpoint, the request body, the credits, the ms, the retry attempts, cached or live, and the sha256 of the raw response (`packages/core/src/client.ts`). The CLI prints the plan and its credit cost before the first paid call. `--json` dumps every `Call`. `fixtures/*.json` keep each raw response byte-for-byte, and `npm run verify` replays them with `NANSEN_OFFLINE=1` (`packages/core/src/cache.ts`).
 
 | The claim, as read, and the plan | Rows landing live | Mobile — the trace stacks at 390 px |
 |---|---|---|
