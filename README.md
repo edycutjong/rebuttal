@@ -16,6 +16,7 @@
 [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://rebuttal.edycu.dev)
 [![For Judges](https://img.shields.io/badge/⚖️_For-Judges-ef4444?style=for-the-badge)](https://rebuttal.edycu.dev/judge)
 [![Built for Nansen Meridian](https://img.shields.io/badge/Nansen-Meridian_Buildathon-7c3aed?style=for-the-badge&labelColor=0a0e13)](https://nansen.ai/campaigns/meridian-buildathon)
+[![Submission on X](https://img.shields.io/badge/𝕏_Submission-@edycutjong-000000?style=for-the-badge&labelColor=0a0e13)](https://x.com/edycutjong/status/2102547979173605584)
 
 <br/>
 
