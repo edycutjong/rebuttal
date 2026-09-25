@@ -29,10 +29,10 @@
     "ci:full": "npm run ci && npm run build && npm run e2e"
   },
   "devDependencies": {
-    "@types/node": "^26.6.1",
+    "@types/node": "^26.6.2",
     "@vitest/coverage-v8": "^5.0.1",
-    "fast-check": "^4.10.1",
-    "tsx": "^4.19.0",
+    "fast-check": "^4.10.2",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.0.1"
   },
